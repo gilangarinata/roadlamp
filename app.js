@@ -8,6 +8,8 @@ const process = require('./nodemon.json')
 const productRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/orders');
 const userRoutes = require('./api/routes/users');
+const deviceRoutes = require('./api/routes/devices');
+const hardwareRoutes = require('./api/routes/hardware');
 
 mongoose.connect(process.env.DB_URI, {
     useNewUrlParser: true,
@@ -32,9 +34,11 @@ app.use((req, res, next) => {
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);
 app.use('/users', userRoutes);
+app.use('/devices', deviceRoutes);
+app.use('/hardware', hardwareRoutes);
 
 app.use((req, res, next) => {
-    const error = new Error('Not Found');
+    const error = new Error('Pages Not Found');
     error.status = 404;
     next(error);
 });

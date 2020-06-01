@@ -1,10 +1,15 @@
 const User = require("../models/user");
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const process = require("../../nodemon.json");
+
 
 exports.users_signup = (req, res, next) => {
     User.find({ username: req.body.username })
         .exec()
         .then((user) => {
+            console.log(req.body.username)
             if (user.length > 0) {
                 return res.status(409).json({
                     message: "Username Already Exist.",
@@ -20,6 +25,7 @@ exports.users_signup = (req, res, next) => {
                             _id: new mongoose.Types.ObjectId(),
                             username: req.body.username,
                             email: req.body.email,
+                            position: req.body.position,
                             password: hash,
                         });
                         user
@@ -27,6 +33,11 @@ exports.users_signup = (req, res, next) => {
                             .then((result) => {
                                 res.status(201).json({
                                     message: "User Created Successfully.",
+                                    userCreated: {
+                                        username: result.username,
+                                        email: result.email,
+                                        position: result.position
+                                    }
                                 });
                             })
                             .catch((err) => {
@@ -74,6 +85,12 @@ exports.users_login = (req, res, next) => {
                     return res.status(200).json({
                         message: "Authentication Success.",
                         token: token,
+                        userInfo: {
+                            _id: user[0]._id,
+                            username: user[0].username,
+                            email: user[0].email,
+                            position: user[0].position
+                        }
                     });
                 }
 
