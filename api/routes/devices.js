@@ -9,4 +9,6 @@ router.post("/", checkAuth, DevicesController.device_add);
 
 router.delete("/:deviceId", checkAuth, DevicesController.devices_delete);
 
+router.post("/update_lamp", checkAuth, DevicesController.devices_set_lamp);
+
 module.exports = router;

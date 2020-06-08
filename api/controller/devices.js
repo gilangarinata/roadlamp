@@ -5,8 +5,8 @@ const mongoose = require("mongoose");
 const process = require("../../nodemon.json");
 
 exports.devices_get = (req, res, next) => {
-    const userId = req.params.orderId;
-    Device.find({ userId: userId }).populate('hardware', 'hardwareId name').select('name description _id hardware user').exec().then(device => {
+    const userId = req.params.userId;
+    Device.find({ user: userId }).populate('hardware', 'hardwareId name lamp').select('name description _id hardware user').exec().then(device => {
         if (!device) {
             return res.status(404).json({
                 message: "Devices Not Found."
@@ -20,6 +20,24 @@ exports.devices_get = (req, res, next) => {
         res.status(500).json({
             error: err
         })
+    });
+}
+
+exports.devices_set_lamp = (req, res, next) => {
+    const hardwareId = req.body.hardwareId;
+    const lamp = req.body.lamp;
+
+    const updateOps = {
+        lamp: lamp
+    }
+    Hardware.update({ hardwareId: hardwareId }, { $set: updateOps }).exec().then(result => {
+        res.status(200).json({
+            message: 'Lamp Updated.'
+        })
+    }).catch(err => {
+        res.status(500).json({
+            error: err
+        });
     });
 }
 

@@ -7,6 +7,11 @@ const hardwareSchema = mongoose.Schema({
         required: true,
         default: 0
     },
+    lamp: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
     temperature: {
         type: Number,
         required: true,
