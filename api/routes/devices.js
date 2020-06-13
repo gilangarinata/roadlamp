@@ -11,4 +11,6 @@ router.delete("/:deviceId", checkAuth, DevicesController.devices_delete);
 
 router.post("/update_lamp", checkAuth, DevicesController.devices_set_lamp);
 
+router.post("/update_brightness", DevicesController.devices_set_brightness);
+
 module.exports = router;

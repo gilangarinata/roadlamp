@@ -3,15 +3,19 @@ const mongoose = require("mongoose");
 
 exports.hardware_update_hardware = (req, res, next) => {
     const hardwareId = req.body.hardwareId;
-    Hardware.find({ hardwareId }).exec().then(result => {
+    Hardware.find({ hardwareId }).exec().then(resultHardware => {
         //add new hardware if hardwareId doesn't exist
-        if (result.length < 1) {
+        if (resultHardware.length < 1) {
             const hardware = new Hardware({
                 _id: new mongoose.Types.ObjectId(),
                 name: req.body.name,
-                temperature: req.body.temperature,
-                voltage: req.body.voltage,
-                current: req.body.current,
+                capacity: req.body.capacity,
+                chargingTime: req.body.chargingTime,
+                dischargingTime: req.body.dischargingTime,
+                betteryHealth: req.body.betteryHealth,
+                alarm: req.body.alarm,
+                longitude: req.body.longitude,
+                latitude: req.body.latitude,
                 hardwareId: req.body.hardwareId
             });
 
@@ -29,15 +33,19 @@ exports.hardware_update_hardware = (req, res, next) => {
             //Update particular hardware
         } else {
             const hardware = new Hardware({
-                temperature: req.body.temperature,
-                voltage: req.body.voltage,
-                current: req.body.current,
+                capacity: req.body.capacity,
+                chargingTime: req.body.chargingTime,
+                dischargingTime: req.body.dischargingTime,
+                betteryHealth: req.body.betteryHealth,
+                alarm: req.body.alarm,
+                longitude: req.body.longitude,
+                latitude: req.body.latitude,
             });
 
             Hardware.update({ hardwareId: hardwareId }, { $set: hardware }).exec().then(result => {
                 res.status(200).json({
                     message: 'Value Updated.',
-                    hardware: hardware
+                    hardware: resultHardware
                 })
             }).catch(err => {
                 res.status(500).json({
@@ -45,6 +53,19 @@ exports.hardware_update_hardware = (req, res, next) => {
                 })
             });
         }
+    }).catch(err => {
+        res.status(500).json({
+            error: err
+        })
+    });
+}
+
+exports.hardware_get = (req, res, next) => {
+    const id = req.params.id;
+    Hardware.findById(id).exec().then(hardware => {
+        res.status(200).json({
+            result: hardware
+        })
     }).catch(err => {
         res.status(500).json({
             error: err

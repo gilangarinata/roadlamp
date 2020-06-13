@@ -6,7 +6,7 @@ const process = require("../../nodemon.json");
 
 exports.devices_get = (req, res, next) => {
     const userId = req.params.userId;
-    Device.find({ user: userId }).populate('hardware', 'hardwareId name lamp').select('name description _id hardware user').exec().then(device => {
+    Device.find({ user: userId }).populate('hardware', 'hardwareId name lamp brightness').select('name description _id hardware user').exec().then(device => {
         if (!device) {
             return res.status(404).json({
                 message: "Devices Not Found."
@@ -33,6 +33,24 @@ exports.devices_set_lamp = (req, res, next) => {
     Hardware.update({ hardwareId: hardwareId }, { $set: updateOps }).exec().then(result => {
         res.status(200).json({
             message: 'Lamp Updated.'
+        })
+    }).catch(err => {
+        res.status(500).json({
+            error: err
+        });
+    });
+}
+
+exports.devices_set_brightness = (req, res, next) => {
+    const hardwareId = req.body.hardwareId;
+    const brightness = req.body.brightness;
+
+    const updateOps = {
+        brightness: brightness
+    }
+    Hardware.update({ hardwareId: hardwareId }, { $set: updateOps }).exec().then(result => {
+        res.status(200).json({
+            message: 'Brightness Updated.'
         })
     }).catch(err => {
         res.status(500).json({

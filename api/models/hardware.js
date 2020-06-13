@@ -8,24 +8,43 @@ const hardwareSchema = mongoose.Schema({
         default: 0
     },
     lamp: {
-        type: Boolean,
-        required: true,
-        default: false
+        type: Boolean
     },
-    temperature: {
+    brightness: {
+        type: Number
+    },
+    capacity: {
         type: Number,
         required: true,
         default: 0
     },
-    voltage: {
+    chargingTime: {
         type: Number,
         required: true,
         default: 0
     },
-    current: {
+    dischargingTime: {
         type: Number,
         required: true,
         default: 0
+    },
+    betteryHealth: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+    alarm: {
+        type: String,
+        required: true,
+        default: 0
+    },
+    longitude: {
+        type: String,
+        required: true
+    },
+    latitude: {
+        type: String,
+        required: true
     },
     hardwareId: {
         type: String,
