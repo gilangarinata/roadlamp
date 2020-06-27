@@ -33,6 +33,7 @@ exports.hardware_update_hardware = (req, res, next) => {
             //Update particular hardware
         } else {
             const hardware = new Hardware({
+                name: req.body.name,
                 capacity: req.body.capacity,
                 chargingTime: req.body.chargingTime,
                 dischargingTime: req.body.dischargingTime,
