@@ -72,3 +72,16 @@ exports.hardware_get = (req, res, next) => {
         })
     });
 }
+
+exports.hardware_check = (req, res, next) => {
+    const id = req.params.id;
+    Hardware.find({ hardwareId: id }).exec().then(hardware => {
+        res.status(200).json({
+            result: hardware
+        })
+    }).catch(err => {
+        res.status(500).json({
+            error: err
+        })
+    });
+}
