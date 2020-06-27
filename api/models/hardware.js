@@ -4,8 +4,7 @@ const hardwareSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     name: {
         type: String,
-        required: true,
-        default: 0
+        required: true
     },
     lamp: {
         type: Boolean
