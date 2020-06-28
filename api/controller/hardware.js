@@ -1,5 +1,20 @@
 const Hardware = require("../models/hardware");
 const mongoose = require("mongoose");
+const { doc } = require("prettier");
+
+exports.hardware_get_all = (req, res, next) => {
+    Hardware.find()
+        .exec()
+        .then(docs => {
+            res.status(200).json({
+                count: docs.count,
+                orders: docs
+            });
+        })
+        .catch(err => {
+            res.status(500).json({ error: err })
+        });
+}
 
 exports.hardware_update_hardware = (req, res, next) => {
     const hardwareId = req.body.hardwareId;
