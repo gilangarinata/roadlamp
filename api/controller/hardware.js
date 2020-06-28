@@ -105,7 +105,7 @@ exports.hardware_check = (req, res, next) => {
 }
 
 exports.hardware_delete = (req, res, next) => {
-    User.deleteOne({ hardwareId: req.params.id })
+    Hardware.deleteOne({ hardwareId: req.params.id })
         .exec()
         .then((result) => {
             res.status(200).json({
