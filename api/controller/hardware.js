@@ -16,6 +16,8 @@ exports.hardware_get_all = (req, res, next) => {
         });
 }
 
+
+
 exports.hardware_update_hardware = (req, res, next) => {
     const hardwareId = req.body.hardwareId;
     Hardware.find({ hardwareId }).exec().then(resultHardware => {
@@ -101,3 +103,18 @@ exports.hardware_check = (req, res, next) => {
         })
     });
 }
+
+exports.hardware_delete = (req, res, next) => {
+    User.deleteOne({ hardwareId: req.params.id })
+        .exec()
+        .then((result) => {
+            res.status(200).json({
+                message: "Hardware deleted",
+            });
+        })
+        .catch((err) => {
+            res.status(500).json({
+                error: err,
+            });
+        });
+};
