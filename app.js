@@ -10,6 +10,7 @@ const orderRoutes = require('./api/routes/orders');
 const userRoutes = require('./api/routes/users');
 const deviceRoutes = require('./api/routes/devices');
 const hardwareRoutes = require('./api/routes/hardware');
+const scheduleRoutes = require('./api/routes/schedule');
 
 mongoose.connect(process.env.DB_URI, {
     useNewUrlParser: true,
@@ -36,6 +37,7 @@ app.use('/orders', orderRoutes);
 app.use('/users', userRoutes);
 app.use('/devices', deviceRoutes);
 app.use('/hardware', hardwareRoutes);
+app.use('/schedule', scheduleRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Pages Not Found');
