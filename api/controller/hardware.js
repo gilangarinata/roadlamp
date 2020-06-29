@@ -141,11 +141,15 @@ exports.hardware_update_hardware = (req, res, next) => {
             Hardware.update({ hardwareId: hardwareId }, { $set: hardware }).exec().then(result => {
                 Schedule.find({ hardwareId: hardwareId }).exec().then(schedule => {
                     if (schedule.length > 0) {
+                        var sch = schedule.sort(function(a, b) {
+                            return parseInt(a.hour) - parseInt(b.hour);
+                        });
+
                         res.status(200).json({
                             lamp: resultHardware[0].lamp != null ? resultHardware[0].lamp : false,
                             brightness: resultHardware[0].brightness != null ? resultHardware[0].brightness : 0,
                             count: schedule.length,
-                            schedule: schedule.map(schedule => {
+                            schedule: sch.map(schedule => {
                                 return {
                                     hour: parseInt(schedule.hour),
                                     minute: parseInt(schedule.minute),
@@ -154,11 +158,15 @@ exports.hardware_update_hardware = (req, res, next) => {
                             })
                         })
                     } else {
+                        var sch = schedule.sort(function(a, b) {
+                            return parseInt(a.hour) - parseInt(b.hour);
+                        });
+
                         res.status(200).json({
                             lamp: resultHardware[0].lamp != null ? resultHardware[0].lamp : false,
                             brightness: resultHardware[0].brightness != null ? resultHardware[0].brightness : 0,
                             count: schedule.length,
-                            schedule: schedule.map(schedule => {
+                            schedule: sch.map(schedule => {
                                 return {
                                     hour: schedule.hour,
                                     minute: schedule.minute,
