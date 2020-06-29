@@ -144,6 +144,7 @@ exports.hardware_update_hardware = (req, res, next) => {
                         res.status(200).json({
                             lamp: resultHardware[0].lamp != null ? resultHardware[0].lamp : false,
                             brightness: resultHardware[0].brightness != null ? resultHardware[0].brightness : 0,
+                            count: schedule.length,
                             schedule: schedule.map(schedule => {
                                 return {
                                     hour: schedule.hour,
@@ -156,6 +157,7 @@ exports.hardware_update_hardware = (req, res, next) => {
                         res.status(200).json({
                             lamp: resultHardware[0].lamp != null ? resultHardware[0].lamp : false,
                             brightness: resultHardware[0].brightness != null ? resultHardware[0].brightness : 0,
+                            count: schedule.length,
                             schedule: schedule.map(schedule => {
                                 return {
                                     hour: schedule.hour,
