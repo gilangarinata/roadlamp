@@ -24,7 +24,7 @@ const scheduleSchema = mongoose.Schema({
         require: true
     },
     hardwareId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         require: true
     }
 });

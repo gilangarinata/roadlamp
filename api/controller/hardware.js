@@ -1,6 +1,7 @@
 const Hardware = require("../models/hardware");
 const mongoose = require("mongoose");
 const { doc } = require("prettier");
+const Schedule = require("../models/schedule")
 
 exports.hardware_get_all = (req, res, next) => {
     Hardware.find()
@@ -60,11 +61,26 @@ exports.hardware_update_hardware = (req, res, next) => {
                 latitude: req.body.latitude,
             });
 
+
+
             Hardware.update({ hardwareId: hardwareId }, { $set: hardware }).exec().then(result => {
-                res.status(200).json({
-                    message: 'Value Updated.',
-                    hardware: resultHardware
-                })
+                Schedule.find({ hardwareId: hardwareId }).exec().then(schedule => {
+                    if (schedule.length > 0) {
+                        res.status(200).json({
+                            message: 'Value Updated.',
+                            hardware: resultHardware,
+                            schedule: schedule
+                        })
+                    } else {
+                        res.status(200).json({
+                            message: 'Value Updated.',
+                            hardware: resultHardware,
+                            schedule: 'Belum ada data'
+                        })
+                    }
+                }).catch(err => {
+                    console.log('no schedule found')
+                });
             }).catch(err => {
                 res.status(500).json({
                     error: err

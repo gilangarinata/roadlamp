@@ -2,8 +2,6 @@ const express = require("express");
 const router = express.Router();
 const ScheduleController = require("../controller/schedule");
 
-router.get("/fetch/:id", ScheduleController.schedule_get_hardware);
-
 router.get("/deletes/:id", ScheduleController.schedule_delete);
 
 router.get("/:userId/:hardwareId", ScheduleController.schedule_get);

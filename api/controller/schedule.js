@@ -78,13 +78,7 @@ exports.schedule_add = (req, res, next) => {
         var schedule = `${parseInt(req.body.minute)} ${parseInt(req.body.hour)} * * *`;
         var cron = require('node-cron');
 
-        for (var i = 0; i < 3; i++) {
-            cron.schedule('* * * * * *', () => {
-                console.log('stoped task ' + i);
-            }, {
-                scheduled: true
-            });
-        }
+
 
 
 
