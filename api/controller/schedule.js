@@ -4,37 +4,6 @@ const { use } = require("../routes/users");
 
 const Hardware = require("../models/hardware");
 
-exports.schedule_get_hardware = (req, res, next) => {
-    const id = req.params.id;
-    console.log(id)
-    Hardware.find({ hardwareId: id }).exec().then(hardware => {
-        if (hardware < 1) {
-            return res.status(404).json({
-                message: "id Not Found."
-            })
-        }
-
-        Schedule.find({ hardwareId: hardware._id }).exec().then(result => {
-            res.status(200).json({
-                count: result.length,
-                result: result,
-            })
-        }).catch(err => {
-            console.log(err)
-            res.status(500).json({
-                error: err
-            })
-        });
-
-    }).catch(err => {
-        console.log(err)
-        res.status(500).json({
-            error: err
-        })
-    });
-
-}
-
 exports.schedule_get = (req, res, next) => {
     const userId = req.params.userId;
     const hardwareId = req.params.hardwareId;

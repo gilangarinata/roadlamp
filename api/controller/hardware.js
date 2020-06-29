@@ -19,6 +19,82 @@ exports.hardware_get_all = (req, res, next) => {
 
 
 
+// exports.hardware_update_hardware = (req, res, next) => {
+//     const hardwareId = req.body.hardwareId;
+//     Hardware.find({ hardwareId }).exec().then(resultHardware => {
+//         //add new hardware if hardwareId doesn't exist
+//         if (resultHardware.length < 1) {
+//             const hardware = new Hardware({
+//                 _id: new mongoose.Types.ObjectId(),
+//                 name: req.body.name,
+//                 capacity: req.body.capacity,
+//                 chargingTime: req.body.chargingTime,
+//                 dischargingTime: req.body.dischargingTime,
+//                 betteryHealth: req.body.betteryHealth,
+//                 alarm: req.body.alarm,
+//                 longitude: req.body.longitude,
+//                 latitude: req.body.latitude,
+//                 hardwareId: req.body.hardwareId
+//             });
+
+//             hardware.save().then(result => {
+//                 res.status(200).json({
+//                     message: 'New Hardware Created.',
+//                     hardware: result
+//                 });
+//             }).catch(err => {
+//                 res.status(500).json({
+//                     error: err
+//                 })
+//             });
+
+//             //Update particular hardware
+//         } else {
+//             const hardware = new Hardware({
+//                 name: req.body.name,
+//                 capacity: req.body.capacity,
+//                 chargingTime: req.body.chargingTime,
+//                 dischargingTime: req.body.dischargingTime,
+//                 betteryHealth: req.body.betteryHealth,
+//                 alarm: req.body.alarm,
+//                 longitude: req.body.longitude,
+//                 latitude: req.body.latitude,
+//             });
+
+
+
+//             Hardware.update({ hardwareId: hardwareId }, { $set: hardware }).exec().then(result => {
+//                 Schedule.find({ hardwareId: hardwareId }).exec().then(schedule => {
+//                     if (schedule.length > 0) {
+//                         res.status(200).json({
+//                             message: 'Value Updated.',
+//                             hardware: resultHardware,
+//                             schedule: schedule
+//                         })
+//                     } else {
+//                         res.status(200).json({
+//                             message: 'Value Updated.',
+//                             hardware: resultHardware,
+//                             schedule: 'Belum ada data'
+//                         })
+//                     }
+//                 }).catch(err => {
+//                     console.log('no schedule found')
+//                 });
+//             }).catch(err => {
+//                 res.status(500).json({
+//                     error: err
+//                 })
+//             });
+//         }
+//     }).catch(err => {
+//         res.status(500).json({
+//             error: err
+//         })
+//     });
+// }
+
+
 exports.hardware_update_hardware = (req, res, next) => {
     const hardwareId = req.body.hardwareId;
     Hardware.find({ hardwareId }).exec().then(resultHardware => {
@@ -39,8 +115,7 @@ exports.hardware_update_hardware = (req, res, next) => {
 
             hardware.save().then(result => {
                 res.status(200).json({
-                    message: 'New Hardware Created.',
-                    hardware: result
+                    message: 'New Hardware Created.'
                 });
             }).catch(err => {
                 res.status(500).json({
@@ -67,15 +142,27 @@ exports.hardware_update_hardware = (req, res, next) => {
                 Schedule.find({ hardwareId: hardwareId }).exec().then(schedule => {
                     if (schedule.length > 0) {
                         res.status(200).json({
-                            message: 'Value Updated.',
-                            hardware: resultHardware,
-                            schedule: schedule
+                            lamp: resultHardware[0].lamp != null ? resultHardware[0].lamp : false,
+                            brightness: resultHardware[0].brightness != null ? resultHardware[0].brightness : 0,
+                            schedule: schedule.map(schedule => {
+                                return {
+                                    hour: schedule.hour,
+                                    minute: schedule.minute,
+                                    brightness: schedule.brightness
+                                }
+                            })
                         })
                     } else {
                         res.status(200).json({
-                            message: 'Value Updated.',
-                            hardware: resultHardware,
-                            schedule: 'Belum ada data'
+                            lamp: resultHardware[0].lamp != null ? resultHardware[0].lamp : false,
+                            brightness: resultHardware[0].brightness != null ? resultHardware[0].brightness : 0,
+                            schedule: schedule.map(schedule => {
+                                return {
+                                    hour: schedule.hour,
+                                    minute: schedule.minute,
+                                    brightness: schedule.brightness
+                                }
+                            })
                         })
                     }
                 }).catch(err => {
@@ -93,6 +180,7 @@ exports.hardware_update_hardware = (req, res, next) => {
         })
     });
 }
+
 
 exports.hardware_get = (req, res, next) => {
     const id = req.params.id;
