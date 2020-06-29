@@ -147,8 +147,8 @@ exports.hardware_update_hardware = (req, res, next) => {
                             count: schedule.length,
                             schedule: schedule.map(schedule => {
                                 return {
-                                    hour: schedule.hour,
-                                    minute: schedule.minute,
+                                    hour: parseInt(schedule.hour),
+                                    minute: parseInt(schedule.minute),
                                     brightness: schedule.brightness
                                 }
                             })
