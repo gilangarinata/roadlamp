@@ -140,41 +140,24 @@ exports.hardware_update_hardware = (req, res, next) => {
 
             Hardware.update({ hardwareId: hardwareId }, { $set: hardware }).exec().then(result => {
                 Schedule.find({ hardwareId: hardwareId }).exec().then(schedule => {
-                    if (schedule.length > 0) {
-                        var sch = schedule.sort(function(a, b) {
-                            return parseInt(a.hour) - parseInt(b.hour);
-                        });
+                    var sch = schedule.sort(function(a, b) {
+                        var dateA = new Date("01/01/2020" + " " + String(a.hour) + ":" + String(a.minute) + ":00");
+                        var dateB = new Date("01/01/2020" + " " + String(b.hour) + ":" + String(b.minute) + ":00");
+                        return dateA - dateB;
+                    });
 
-                        res.status(200).json({
-                            lamp: resultHardware[0].lamp != null ? resultHardware[0].lamp : false,
-                            brightness: resultHardware[0].brightness != null ? resultHardware[0].brightness : 0,
-                            count: schedule.length,
-                            schedule: sch.map(schedule => {
-                                return {
-                                    hour: parseInt(schedule.hour),
-                                    minute: parseInt(schedule.minute),
-                                    brightness: schedule.brightness
-                                }
-                            })
+                    res.status(200).json({
+                        lamp: resultHardware[0].lamp != null ? resultHardware[0].lamp : false,
+                        brightness: resultHardware[0].brightness != null ? resultHardware[0].brightness : 0,
+                        count: schedule.length,
+                        schedule: sch.map(schedule => {
+                            return {
+                                hour: schedule.hour,
+                                minute: schedule.minute,
+                                brightness: schedule.brightness
+                            }
                         })
-                    } else {
-                        var sch = schedule.sort(function(a, b) {
-                            return parseInt(a.hour) - parseInt(b.hour);
-                        });
-
-                        res.status(200).json({
-                            lamp: resultHardware[0].lamp != null ? resultHardware[0].lamp : false,
-                            brightness: resultHardware[0].brightness != null ? resultHardware[0].brightness : 0,
-                            count: schedule.length,
-                            schedule: sch.map(schedule => {
-                                return {
-                                    hour: schedule.hour,
-                                    minute: schedule.minute,
-                                    brightness: schedule.brightness
-                                }
-                            })
-                        })
-                    }
+                    })
                 }).catch(err => {
                     console.log('no schedule found')
                 });
