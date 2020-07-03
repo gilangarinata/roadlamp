@@ -3,6 +3,20 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const process = require("../../nodemon.json");
+const { remove } = require("../models/user");
+const { use } = require("../routes/users");
+
+exports.show_all = (req, res, next) => {
+    User.find().exec().then((user) => {
+        res.status(200).json({
+            users: user
+        })
+    }).catch((err) => {
+        res.status(500).json({
+            error: err,
+        });
+    });
+}
 
 
 exports.users_signup = (req, res, next) => {
@@ -119,4 +133,30 @@ exports.users_delete = (req, res, next) => {
                 error: err,
             });
         });
+};
+
+exports.delete_all = (req, res, next) => {
+    var key = req.params.key;
+
+    if (key = "imsuretodelete") {
+        User.remove({})
+            .exec()
+            .then((result) => {
+                res.status(200).json({
+                    message: "User deleted",
+                    result: result
+                });
+            })
+            .catch((err) => {
+                res.status(500).json({
+                    error: err,
+                });
+            });
+    } else {
+        res.status(200).json({
+            message: "wrong key",
+            result: result
+        });
+    }
+
 };

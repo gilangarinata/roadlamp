@@ -33,8 +33,7 @@ const hardwareSchema = mongoose.Schema({
     },
     alarm: {
         type: String,
-        required: true,
-        default: 0
+        default: ""
     },
     longitude: {
         type: String,
@@ -47,6 +46,11 @@ const hardwareSchema = mongoose.Schema({
     hardwareId: {
         type: String,
         require: true
+    },
+    photoPath: {
+        type: String,
+        unique: true,
+        default: null
     }
 });
 

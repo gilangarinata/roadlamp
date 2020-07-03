@@ -20,7 +20,7 @@ mongoose.connect(process.env.DB_URI, {
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
+app.use('/uploads', express.static('uploads'))
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-header', 'Origin, X-Reuested-With,Content-Type, Accept, Authorization');

@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const { use } = require("../routes/users");
 
 const Hardware = require("../models/hardware");
+const e = require("express");
 
 exports.schedule_get = (req, res, next) => {
     const userId = req.params.userId;
@@ -111,4 +112,26 @@ exports.schedule_delete = (req, res, next) => {
                 error: err,
             });
         });
+};
+
+exports.schedule_delete_all = (req, res, next) => {
+    if (req.params.key == "imsuretodelete") {
+        Schedule.remove({})
+            .exec()
+            .then((result) => {
+                res.status(200).json({
+                    message: "All Schedule deleted",
+                    result: result
+                });
+            })
+            .catch((err) => {
+                res.status(500).json({
+                    error: err,
+                });
+            });
+    } else {
+        res.status(500).json({
+            message: "Wrong Key",
+        });
+    }
 };

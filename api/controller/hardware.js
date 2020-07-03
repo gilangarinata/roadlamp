@@ -2,6 +2,11 @@ const Hardware = require("../models/hardware");
 const mongoose = require("mongoose");
 const { doc } = require("prettier");
 const Schedule = require("../models/schedule")
+const Notification = require("../notif/firebase")
+var cron = require('node-cron');
+var lastNotif = 0;
+
+
 
 exports.hardware_get_all = (req, res, next) => {
     Hardware.find()
@@ -16,84 +21,6 @@ exports.hardware_get_all = (req, res, next) => {
             res.status(500).json({ error: err })
         });
 }
-
-
-
-// exports.hardware_update_hardware = (req, res, next) => {
-//     const hardwareId = req.body.hardwareId;
-//     Hardware.find({ hardwareId }).exec().then(resultHardware => {
-//         //add new hardware if hardwareId doesn't exist
-//         if (resultHardware.length < 1) {
-//             const hardware = new Hardware({
-//                 _id: new mongoose.Types.ObjectId(),
-//                 name: req.body.name,
-//                 capacity: req.body.capacity,
-//                 chargingTime: req.body.chargingTime,
-//                 dischargingTime: req.body.dischargingTime,
-//                 betteryHealth: req.body.betteryHealth,
-//                 alarm: req.body.alarm,
-//                 longitude: req.body.longitude,
-//                 latitude: req.body.latitude,
-//                 hardwareId: req.body.hardwareId
-//             });
-
-//             hardware.save().then(result => {
-//                 res.status(200).json({
-//                     message: 'New Hardware Created.',
-//                     hardware: result
-//                 });
-//             }).catch(err => {
-//                 res.status(500).json({
-//                     error: err
-//                 })
-//             });
-
-//             //Update particular hardware
-//         } else {
-//             const hardware = new Hardware({
-//                 name: req.body.name,
-//                 capacity: req.body.capacity,
-//                 chargingTime: req.body.chargingTime,
-//                 dischargingTime: req.body.dischargingTime,
-//                 betteryHealth: req.body.betteryHealth,
-//                 alarm: req.body.alarm,
-//                 longitude: req.body.longitude,
-//                 latitude: req.body.latitude,
-//             });
-
-
-
-//             Hardware.update({ hardwareId: hardwareId }, { $set: hardware }).exec().then(result => {
-//                 Schedule.find({ hardwareId: hardwareId }).exec().then(schedule => {
-//                     if (schedule.length > 0) {
-//                         res.status(200).json({
-//                             message: 'Value Updated.',
-//                             hardware: resultHardware,
-//                             schedule: schedule
-//                         })
-//                     } else {
-//                         res.status(200).json({
-//                             message: 'Value Updated.',
-//                             hardware: resultHardware,
-//                             schedule: 'Belum ada data'
-//                         })
-//                     }
-//                 }).catch(err => {
-//                     console.log('no schedule found')
-//                 });
-//             }).catch(err => {
-//                 res.status(500).json({
-//                     error: err
-//                 })
-//             });
-//         }
-//     }).catch(err => {
-//         res.status(500).json({
-//             error: err
-//         })
-//     });
-// }
-
 
 exports.hardware_update_hardware = (req, res, next) => {
     const hardwareId = req.body.hardwareId;
@@ -123,7 +50,6 @@ exports.hardware_update_hardware = (req, res, next) => {
                 })
             });
 
-            //Update particular hardware
         } else {
             const hardware = new Hardware({
                 name: req.body.name,
@@ -137,7 +63,6 @@ exports.hardware_update_hardware = (req, res, next) => {
             });
 
 
-
             Hardware.update({ hardwareId: hardwareId }, { $set: hardware }).exec().then(result => {
                 Schedule.find({ hardwareId: hardwareId }).exec().then(schedule => {
                     var sch = schedule.sort(function(a, b) {
@@ -145,6 +70,29 @@ exports.hardware_update_hardware = (req, res, next) => {
                         var dateB = new Date("01/01/2020" + " " + String(b.hour) + ":" + String(b.minute) + ":00");
                         return dateA - dateB;
                     });
+
+                    if (lastNotif === 0 && resultHardware[0].alarm.length > 0) {
+                        var payload = {
+                            notification: {
+                                title: "Peringatan Gangguan Device ID : " + resultHardware[0].hardwareId,
+                                body: resultHardware[0].alarm
+                            }
+                        };
+                        var topic = "seti-app-" + resultHardware[0].hardwareId;
+                        Notification.admin.messaging().sendToTopic(topic, payload)
+                            .then(function(response) {
+                                console.log("Successfully sent message:", response);
+                            })
+                            .catch(function(error) {
+                                console.log("Error sending message:", error);
+                            });
+
+                        lastNotif = resultHardware[0].alarm.length;
+                    } else if (lastNotif > 0 && resultHardware[0].alarm.length === 0) {
+                        console.log("2")
+                        lastNotif = 0;
+                    }
+
 
                     res.status(200).json({
                         lamp: resultHardware[0].lamp != null ? resultHardware[0].lamp : false,
@@ -159,7 +107,7 @@ exports.hardware_update_hardware = (req, res, next) => {
                         })
                     })
                 }).catch(err => {
-                    console.log('no schedule found')
+                    console.log(err)
                 });
             }).catch(err => {
                 res.status(500).json({
