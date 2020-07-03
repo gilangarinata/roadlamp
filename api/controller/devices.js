@@ -7,6 +7,7 @@ const process = require("../../nodemon.json");
 const { schedule } = require("node-cron");
 const fs = require("fs");
 const hardware = require("../models/hardware");
+const host = "104.43.171.129";
 
 exports.devices_get = (req, res, next) => {
     const userId = req.params.userId;
@@ -66,7 +67,7 @@ exports.devices_set_brightness = (req, res, next) => {
 exports.device_add_img = (req, res, next) => {
     const hardwareId = req.body.hardwareId;
     const path_image = req.file.path;
-    const base_url = req.protocol + "://" + req.headers.host + '/';
+    const base_url = req.protocol + "://" + host + '/';
 
     const updateOps = {
         photoPath: base_url + path_image
