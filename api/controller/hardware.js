@@ -242,9 +242,8 @@ exports.hardware_history_get_all = (req, res, next) => {
 
 
 exports.hardware_history_get = (req, res, next) => {
-    const date = new Date(req.params.date);
     const hardwareId = req.params.hardwareId;
-    History.find({ date: date })
+    History.find({ hardwareId: hardwareId })
         .exec()
         .then(docs => {
             res.status(200).json({
