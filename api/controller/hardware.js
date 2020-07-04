@@ -2,6 +2,7 @@ const Hardware = require("../models/hardware");
 const mongoose = require("mongoose");
 const { doc } = require("prettier");
 const Schedule = require("../models/schedule")
+const History = require("../models/history")
 const Notification = require("../notif/firebase")
 var cron = require('node-cron');
 var lastNotif = 0;
@@ -163,3 +164,95 @@ exports.hardware_delete = (req, res, next) => {
             });
         });
 };
+
+exports.hardware_update_history = (req, res, next) => {
+    var date = req.body.date;
+    var chargeCapacity = req.body.chargeCapacity;
+    var dischargeCapacity = req.body.dischargeCapacity;
+    var batteryCapacity = req.body.batteryCapacity;
+    var batteryLife = req.body.batteryLife;
+    var hardwareId = req.body.hardwareId;
+
+    const historyUpdate = new History({
+        date: date,
+        chargeCapacity: chargeCapacity,
+        dischargeCapacity: dischargeCapacity,
+        batteryCapacity: batteryCapacity,
+        batteryLife: batteryLife,
+        hardwareId: hardwareId
+    });
+
+    const historyAdd = new History({
+        _id: new mongoose.Types.ObjectId(),
+        date: date,
+        chargeCapacity: chargeCapacity,
+        dischargeCapacity: dischargeCapacity,
+        batteryCapacity: batteryCapacity,
+        batteryLife: batteryLife,
+        hardwareId: hardwareId
+    });
+
+
+    History.find({ date: date, hardwareId: hardwareId }).exec().then(history => {
+        if (history.length > 0) {
+            History.update({ hardwareId: hardwareId, date: date }, { $set: historyUpdate }).exec().then(result => {
+                res.status(200).json({
+                    message: "History Update Success.",
+                    code: 200
+                });
+            }).catch((err) => {
+                res.status(500).json({
+                    error: err,
+                });
+            });
+        } else {
+            console.log(historyUpdate)
+            historyAdd.save().then(result => {
+                res.status(200).json({
+                    message: 'New History Created.',
+                    code: 200
+                });
+            }).catch(err => {
+                console.log(err)
+                res.status(500).json({
+                    error: err
+                })
+            });
+        }
+    }).catch((err) => {
+        res.status(500).json({
+            error: err,
+        });
+    });
+}
+
+exports.hardware_history_get_all = (req, res, next) => {
+    History.find()
+        .exec()
+        .then(docs => {
+            res.status(200).json({
+                count: docs.count,
+                history: docs
+            });
+        })
+        .catch(err => {
+            res.status(500).json({ error: err })
+        });
+}
+
+
+exports.hardware_history_get = (req, res, next) => {
+    const date = new Date(req.params.date);
+    const hardwareId = req.params.hardwareId;
+    History.find({ date: date })
+        .exec()
+        .then(docs => {
+            res.status(200).json({
+                count: docs.count,
+                history: docs
+            });
+        })
+        .catch(err => {
+            res.status(500).json({ error: err })
+        });
+}
