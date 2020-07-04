@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const HardwareController = require("../controller/hardware");
 
-router.get("/history/:date", HardwareController.hardware_history_get);
+router.get("/history/:hardwareId", HardwareController.hardware_history_get);
 
 router.get("/history", HardwareController.hardware_history_get_all);
 
