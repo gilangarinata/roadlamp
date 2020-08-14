@@ -75,7 +75,7 @@ exports.hardware_update_hardware = (req, res, next) => {
                     if (lastNotif === 0 && resultHardware[0].alarm.length > 0) {
                         var payload = {
                             notification: {
-                                title: "Peringatan Gangguan Device ID : " + resultHardware[0].hardwareId,
+                                title: "Pemberitahuan Device ID : " + resultHardware[0].hardwareId,
                                 body: resultHardware[0].alarm
                             }
                         };
