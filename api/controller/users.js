@@ -143,7 +143,8 @@ exports.super_user_1_signup = (req, res, next) => {
                                     userCreated: {
                                         username: result.username,
                                         email: result.email,
-                                        position: result.position
+                                        position: result.position,
+                                        referal: result.referal
                                     }
                                 });
                             })
