@@ -141,6 +141,19 @@ exports.devices_get_web = (req, res, next) => {
 
 }
 
+exports.devices_get_all = (req, res, next) => {
+    Device.find().populate('hardware').select('name description _id hardware user').exec().then(device => {
+        return res.status(200).json({
+            count: 0,
+            result: device,
+        })
+    }).catch(err => {
+        res.status(500).json({
+            error: err
+        })
+    });
+}
+
 exports.devices_get = (req, res, next) => {
     const userId = req.params.userId;
     var userIdSuperuser2;
