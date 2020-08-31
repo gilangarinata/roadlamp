@@ -18,6 +18,7 @@ exports.devices_get_web = (req, res, next) => {
     User.findById(userId).exec().then(users => {
         if (users != null) {
             if (users.position === "superuser1") {
+
                 Device.find({ user: userId }).populate('hardware').select('name description _id hardware user').exec().then(device => {
                     if (device.length > 0) {
                         for (var j = 0; j < device.length; j++) {
@@ -48,6 +49,7 @@ exports.devices_get_web = (req, res, next) => {
                 });
 
             } else if (users.position === "superuser2") {
+                console.log("2")
                 Device.find({ user: userId }).populate('hardware').select('name description _id hardware user').exec().then(device => {
 
                     if (device.length > 0) {
@@ -76,6 +78,7 @@ exports.devices_get_web = (req, res, next) => {
                     })
                 });
             } else if (users.position === "user") {
+                console.log("3")
                 Device.find({ user: userId }).populate('hardware').select('name description _id hardware user').exec().then(device => {
                     if (!device) {
                         return res.status(404).json({
@@ -161,6 +164,7 @@ exports.devices_get = (req, res, next) => {
     var i = 0;
     User.findById(userId).exec().then(users => {
         if (users != null) {
+
             if (users.position === "superuser1") {
                 Device.find({ user: userId }).populate('hardware', 'hardwareId name lamp brightness').select('name description _id hardware user').exec().then(device => {
                     if (device.length > 0) {
@@ -176,8 +180,8 @@ exports.devices_get = (req, res, next) => {
                             fetchDevice();
                         } else {
                             return res.status(200).json({
-                                count: 0,
-                                result: [],
+                                count: deviceArray.length,
+                                result: deviceArray,
                             })
                         }
                     }).catch(err => {
@@ -193,7 +197,6 @@ exports.devices_get = (req, res, next) => {
 
             } else if (users.position === "superuser2") {
                 Device.find({ user: userId }).populate('hardware', 'hardwareId name lamp brightness').select('name description _id hardware user').exec().then(device => {
-
                     if (device.length > 0) {
                         for (var j = 0; j < device.length; j++) {
                             deviceArray.push(device[j])
@@ -205,8 +208,8 @@ exports.devices_get = (req, res, next) => {
                             fetchDevice();
                         } else {
                             return res.status(200).json({
-                                count: 0,
-                                result: [],
+                                count: deviceArray.length,
+                                result: deviceArray,
                             })
                         }
                     }).catch(err => {
