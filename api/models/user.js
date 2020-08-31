@@ -17,6 +17,16 @@ const userSchema = mongoose.Schema({
     },
     position: {
         type: String
+    },
+    referal: {
+        type: String,
+        unique: true,
+    },
+    referalFrom: {
+        type: String
+    },
+    referalSU1: {
+        type: String
     }
 });
 

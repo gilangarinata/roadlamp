@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const process = require("../../nodemon.json");
 const { remove } = require("../models/user");
 const { use } = require("../routes/users");
+const cryptoRandomString = require('crypto-random-string');
 
 exports.show_all = (req, res, next) => {
     User.find().exec().then((user) => {
@@ -20,6 +21,96 @@ exports.show_all = (req, res, next) => {
 
 
 exports.users_signup = (req, res, next) => {
+    User.find({ username: req.body.username })
+        .exec()
+        .then((user) => {
+            if (user.length > 0) {
+                return res.status(409).json({
+                    message: "Username Already Exist.",
+                });
+            } else {
+                User.find({ referal: req.body.referal })
+                    .exec()
+                    .then((usr) => {
+                        if (usr.length <= 0) {
+                            return res.status(409).json({
+                                message: "Referal Code Not Exist",
+                            });
+                        } else {
+                            var currentPosition;
+                            var refferal;
+                            if (usr[0].position == "superuser1") {
+                                currentPosition = "superuser2";
+                                refferal = cryptoRandomString({ length: 10 }).toString().toUpperCase();
+                                signUp(currentPosition, refferal, refferal);
+                            } else {
+                                currentPosition = "user";
+                                refferal = cryptoRandomString({ length: 3 }).toString().toUpperCase()
+                                signUp(currentPosition, refferal, usr[0].referalFrom);
+                            }
+
+                            function signUp(currentPosition, refferal, referalSU1) {
+                                bcrypt.hash(req.body.password, 10, (err, hash) => {
+                                    if (err) {
+                                        return res.status(500).json({
+                                            error: err,
+                                        });
+                                    } else {
+                                        const user = new User({
+                                            _id: new mongoose.Types.ObjectId(),
+                                            username: req.body.username,
+                                            email: req.body.email,
+                                            position: currentPosition,
+                                            password: hash,
+                                            referal: refferal,
+                                            referalFrom: req.body.referal,
+                                            referalSU1: referalSU1
+                                        });
+                                        user
+                                            .save()
+                                            .then((result) => {
+                                                res.status(201).json({
+                                                    message: "User Created Successfully.",
+                                                    userCreated: {
+                                                        username: result.username,
+                                                        email: result.email,
+                                                        position: result.position
+                                                    }
+                                                });
+                                            })
+                                            .catch((err) => {
+                                                res.status(500).json({
+                                                    error: err,
+                                                });
+                                            });
+                                    }
+                                });
+
+                            }
+
+
+
+
+                        }
+
+                    })
+                    .catch((err) => {
+                        res.status(500).json({
+                            error: err,
+                        });
+                    });
+
+
+            }
+        })
+        .catch((err) => {
+            res.status(500).json({
+                error: err,
+            });
+        });
+};
+
+exports.super_user_1_signup = (req, res, next) => {
     User.find({ username: req.body.username })
         .exec()
         .then((user) => {
@@ -39,8 +130,10 @@ exports.users_signup = (req, res, next) => {
                             _id: new mongoose.Types.ObjectId(),
                             username: req.body.username,
                             email: req.body.email,
-                            position: req.body.position,
+                            position: "superuser1",
                             password: hash,
+                            referal: cryptoRandomString({ length: 5 }).toString().toUpperCase(),
+                            referalFrom: req.body.referal
                         });
                         user
                             .save()
@@ -103,7 +196,9 @@ exports.users_login = (req, res, next) => {
                             _id: user[0]._id,
                             username: user[0].username,
                             email: user[0].email,
-                            position: user[0].position
+                            position: user[0].position,
+                            referal: user[0].referal,
+                            referalFrom: user[0].referalFrom,
                         }
                     });
                 }

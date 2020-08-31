@@ -6,6 +6,8 @@ router.get("/", UsersController.show_all);
 
 router.post("/signup", UsersController.users_signup);
 
+router.post("/add_superuser_1", UsersController.super_user_1_signup);
+
 router.post("/login", UsersController.users_login);
 
 router.delete("/:userId", UsersController.users_delete);

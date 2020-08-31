@@ -7,25 +7,264 @@ const process = require("../../nodemon.json");
 const { schedule } = require("node-cron");
 const fs = require("fs");
 const hardware = require("../models/hardware");
-const host = "104.43.171.129";
+const { use } = require("../../app");
+const user = require("../models/user");
 
-exports.devices_get = (req, res, next) => {
+exports.devices_get_web = (req, res, next) => {
     const userId = req.params.userId;
-    Device.find({ user: userId }).populate('hardware', 'hardwareId name lamp brightness').select('name description _id hardware user').exec().then(device => {
-        if (!device) {
+    var userIdSuperuser2;
+    var deviceArray = Array()
+    var i = 0;
+    User.findById(userId).exec().then(users => {
+        if (users != null) {
+            if (users.position === "superuser1") {
+                Device.find({ user: userId }).populate('hardware').select('name description _id hardware user').exec().then(device => {
+                    if (device.length > 0) {
+                        for (var j = 0; j < device.length; j++) {
+                            deviceArray.push(device[j].hardware)
+                        }
+                    }
+
+                    User.find({ referalSU1: users.referal }).exec().then(users => {
+
+                        if (users.length > 0) {
+                            userIdSuperuser2 = users;
+                            fetchDevice();
+                        } else {
+                            return res.status(200).json({
+                                count: 0,
+                                result: [],
+                            })
+                        }
+                    }).catch(err => {
+                        res.status(500).json({
+                            error: err
+                        })
+                    });
+                }).catch(err => {
+                    res.status(500).json({
+                        error: err
+                    })
+                });
+
+            } else if (users.position === "superuser2") {
+                Device.find({ user: userId }).populate('hardware').select('name description _id hardware user').exec().then(device => {
+
+                    if (device.length > 0) {
+                        for (var j = 0; j < device.length; j++) {
+                            deviceArray.push(device[j].hardware)
+                        }
+                    }
+                    User.find({ referalFrom: users.referal }).exec().then(users => {
+                        if (users.length > 0) {
+                            userIdSuperuser2 = users;
+                            fetchDevice();
+                        } else {
+                            return res.status(200).json({
+                                count: 0,
+                                result: [],
+                            })
+                        }
+                    }).catch(err => {
+                        res.status(500).json({
+                            error: err
+                        })
+                    });
+                }).catch(err => {
+                    res.status(500).json({
+                        error: err
+                    })
+                });
+            } else if (users.position === "user") {
+                Device.find({ user: userId }).populate('hardware').select('name description _id hardware user').exec().then(device => {
+                    if (!device) {
+                        return res.status(404).json({
+                            message: "Devices Not Found."
+                        })
+                    }
+
+                    for (var j = 0; j < device.length; j++) {
+                        deviceArray.push(device[j].hardware)
+                    }
+
+                    res.status(200).json({
+                        count: device.length,
+                        orders: deviceArray,
+                    })
+                }).catch(err => {
+                    res.status(500).json({
+                        error: err
+                    })
+                });
+            } else {
+                return res.status(404).json({
+                    message: "Position Not Found"
+                })
+            }
+        } else {
             return res.status(404).json({
-                message: "Devices Not Found."
+                message: "Users Not Found."
             })
         }
-        res.status(200).json({
-            count: device.length,
-            result: device,
-        })
     }).catch(err => {
         res.status(500).json({
             error: err
         })
-    });
+    });;
+
+    function fetchDevice() {
+        Device.find({ user: userIdSuperuser2[i]._id }).populate('hardware').select('name description _id hardware user').exec().then(device => {
+            if (device) {
+                if (device.length > 0) {
+                    for (var j = 0; j < device.length; j++) {
+                        deviceArray.push(device[j].hardware)
+                    }
+                }
+            }
+            i++
+            if (i < userIdSuperuser2.length) {
+                fetchDevice()
+            } else {
+                res.status(200).json({
+                    count: deviceArray.length,
+                    orders: deviceArray,
+                })
+            }
+        }).catch(err => {
+            res.status(500).json({
+                error: err
+            })
+        });
+    }
+
+
+
+}
+
+exports.devices_get = (req, res, next) => {
+    const userId = req.params.userId;
+    var userIdSuperuser2;
+    var deviceArray = Array()
+    var i = 0;
+    User.findById(userId).exec().then(users => {
+        if (users != null) {
+            if (users.position === "superuser1") {
+                Device.find({ user: userId }).populate('hardware', 'hardwareId name lamp brightness').select('name description _id hardware user').exec().then(device => {
+                    if (device.length > 0) {
+                        for (var j = 0; j < device.length; j++) {
+                            deviceArray.push(device[j])
+                        }
+                    }
+
+                    User.find({ referalSU1: users.referal }).exec().then(users => {
+
+                        if (users.length > 0) {
+                            userIdSuperuser2 = users;
+                            fetchDevice();
+                        } else {
+                            return res.status(200).json({
+                                count: 0,
+                                result: [],
+                            })
+                        }
+                    }).catch(err => {
+                        res.status(500).json({
+                            error: err
+                        })
+                    });
+                }).catch(err => {
+                    res.status(500).json({
+                        error: err
+                    })
+                });
+
+            } else if (users.position === "superuser2") {
+                Device.find({ user: userId }).populate('hardware', 'hardwareId name lamp brightness').select('name description _id hardware user').exec().then(device => {
+
+                    if (device.length > 0) {
+                        for (var j = 0; j < device.length; j++) {
+                            deviceArray.push(device[j])
+                        }
+                    }
+                    User.find({ referalFrom: users.referal }).exec().then(users => {
+                        if (users.length > 0) {
+                            userIdSuperuser2 = users;
+                            fetchDevice();
+                        } else {
+                            return res.status(200).json({
+                                count: 0,
+                                result: [],
+                            })
+                        }
+                    }).catch(err => {
+                        res.status(500).json({
+                            error: err
+                        })
+                    });
+                }).catch(err => {
+                    res.status(500).json({
+                        error: err
+                    })
+                });
+            } else if (users.position === "user") {
+                Device.find({ user: userId }).populate('hardware', 'hardwareId name lamp brightness').select('name description _id hardware user').exec().then(device => {
+                    if (!device) {
+                        return res.status(404).json({
+                            message: "Devices Not Found."
+                        })
+                    }
+                    res.status(200).json({
+                        count: device.length,
+                        result: device,
+                    })
+                }).catch(err => {
+                    res.status(500).json({
+                        error: err
+                    })
+                });
+            } else {
+                return res.status(404).json({
+                    message: "Position Not Found"
+                })
+            }
+        } else {
+            return res.status(404).json({
+                message: "Users Not Found."
+            })
+        }
+    }).catch(err => {
+        res.status(500).json({
+            error: err
+        })
+    });;
+
+    function fetchDevice() {
+        Device.find({ user: userIdSuperuser2[i]._id }).populate('hardware', 'hardwareId name lamp brightness').select('name description _id hardware user').exec().then(device => {
+            if (device) {
+                if (device.length > 0) {
+                    for (var j = 0; j < device.length; j++) {
+                        deviceArray.push(device[j])
+                    }
+                }
+            }
+            i++
+            if (i < userIdSuperuser2.length) {
+                fetchDevice()
+            } else {
+                res.status(200).json({
+                    count: deviceArray.length,
+                    result: deviceArray,
+                })
+            }
+        }).catch(err => {
+            res.status(500).json({
+                error: err
+            })
+        });
+    }
+
+
+
 }
 
 exports.devices_set_lamp = (req, res, next) => {
@@ -36,6 +275,24 @@ exports.devices_set_lamp = (req, res, next) => {
         lamp: lamp
     }
     Hardware.update({ hardwareId: hardwareId }, { $set: updateOps }).exec().then(result => {
+        res.status(200).json({
+            message: 'Lamp Updated.'
+        })
+    }).catch(err => {
+        res.status(500).json({
+            error: err
+        });
+    });
+}
+
+exports.devices_set_lamp_web = (req, res, next) => {
+    const hardwareId = req.body.hardwareId;
+    const lamp = req.body.lamp;
+
+    const updateOps = {
+        lamp: lamp
+    }
+    Hardware.update({ _id: hardwareId }, { $set: updateOps }).exec().then(result => {
         res.status(200).json({
             message: 'Lamp Updated.'
         })
@@ -67,7 +324,7 @@ exports.devices_set_brightness = (req, res, next) => {
 exports.device_add_img = (req, res, next) => {
     const hardwareId = req.body.hardwareId;
     const path_image = req.file.path;
-    const base_url = req.protocol + "://" + host + '/';
+    const base_url = req.protocol + "://" + req.headers.host + '/';
 
     const updateOps = {
         photoPath: base_url + path_image
