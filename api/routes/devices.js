@@ -4,6 +4,8 @@ const DevicesController = require("../controller/devices");
 const MediaHandler = require("../tools/media-handler")
 const checkAuth = require("../middleware/check-auth");
 
+router.get("/delete_all", DevicesController.devices_delete_all);
+
 router.get("/", DevicesController.devices_get_all);
 
 router.post("/upload", MediaHandler.upload.single('images'), DevicesController.device_add_img);

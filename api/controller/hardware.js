@@ -255,3 +255,16 @@ exports.hardware_history_get = (req, res, next) => {
             res.status(500).json({ error: err })
         });
 }
+
+exports.hardware_delete_all = (req, res, next) => {
+    console.log("asas")
+    Hardware.deleteMany().exec().then(message => {
+        res.status(200).json({
+            message: message
+        })
+    }).catch(err => {
+        res.status(500).json({
+            error: err
+        })
+    });
+}

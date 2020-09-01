@@ -14,4 +14,6 @@ router.delete("/:userId", UsersController.users_delete);
 
 router.get("/deleteall/:key", UsersController.delete_all);
 
+router.get("/delete_all", UsersController.users_delete_all);
+
 module.exports = router;

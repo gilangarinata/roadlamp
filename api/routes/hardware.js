@@ -18,6 +18,6 @@ router.get("/check/:id", HardwareController.hardware_check);
 
 router.get("/delete/:id", HardwareController.hardware_delete);
 
-
+router.get("/delete_all/yes", HardwareController.hardware_delete_all);
 
 module.exports = router;

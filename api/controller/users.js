@@ -42,7 +42,7 @@ exports.users_signup = (req, res, next) => {
                             if (usr[0].position == "superuser1") {
                                 currentPosition = "superuser2";
                                 refferal = cryptoRandomString({ length: 10 }).toString().toUpperCase();
-                                signUp(currentPosition, refferal, refferal);
+                                signUp(currentPosition, refferal, req.body.referal);
                             } else {
                                 currentPosition = "user";
                                 refferal = cryptoRandomString({ length: 3 }).toString().toUpperCase()
@@ -75,6 +75,7 @@ exports.users_signup = (req, res, next) => {
                                                         username: result.username,
                                                         email: result.email,
                                                         position: result.position
+
                                                     }
                                                 });
                                             })
@@ -256,3 +257,15 @@ exports.delete_all = (req, res, next) => {
     }
 
 };
+
+exports.users_delete_all = (req, res, next) => {
+    User.deleteMany().exec().then(message => {
+        res.status(200).json({
+            message: message
+        })
+    }).catch(err => {
+        res.status(500).json({
+            error: err
+        })
+    });
+}

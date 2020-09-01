@@ -33,8 +33,8 @@ exports.devices_get_web = (req, res, next) => {
                             fetchDevice();
                         } else {
                             return res.status(200).json({
-                                count: 0,
-                                result: [],
+                                count: deviceArray.length,
+                                result: deviceArray,
                             })
                         }
                     }).catch(err => {
@@ -63,8 +63,8 @@ exports.devices_get_web = (req, res, next) => {
                             fetchDevice();
                         } else {
                             return res.status(200).json({
-                                count: 0,
-                                result: [],
+                                count: deviceArray.length,
+                                result: deviceArray,
                             })
                         }
                     }).catch(err => {
@@ -447,6 +447,18 @@ exports.device_add = (req, res, next) => {
 
     }).catch(err => {
         console.log(err)
+        res.status(500).json({
+            error: err
+        })
+    });
+}
+
+exports.devices_delete_all = (req, res, next) => {
+    Device.deleteMany().exec().then(message => {
+        res.status(200).json({
+            message: message
+        })
+    }).catch(err => {
         res.status(500).json({
             error: err
         })
