@@ -49,7 +49,7 @@ const hardwareSchema = mongoose.Schema({
     },
     photoPath: {
         type: String,
-        default: ""
+        default: null
     }
 });
 
