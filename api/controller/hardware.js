@@ -73,6 +73,8 @@ exports.hardware_update_hardware = (req, res, next) => {
                         return dateA - dateB;
                     });
 
+                    var alarm = resultHardware[0].alarm;
+
                     if (lastNotif === "0" && resultHardware[0].alarm != "0") {
                         if (alarm === "1") showNotif("Lampu Tidak Menyala")
                         else if (alarm === "2") showNotif("Solar Cell atau MPPT Rusak")
