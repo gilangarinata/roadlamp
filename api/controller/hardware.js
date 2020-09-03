@@ -75,7 +75,7 @@ exports.hardware_update_hardware = (req, res, next) => {
                     });
 
                     var alarm = resultHardware[0].alarm;
-                    if (lastAlarm != alarm) {
+                    if (lastAlarm != alarm && lastNotif == 0) {
                         if (alarm != "0") {
                             if (alarm === "1") showNotif("Lampu Tidak Menyala")
                             else if (alarm === "2") showNotif("Solar Cell atau MPPT Rusak")
@@ -83,8 +83,10 @@ exports.hardware_update_hardware = (req, res, next) => {
                             else if (alarm === "4") showNotif("Baterai Habis / Baterai Rusak")
                             else if (alarm === "5") showNotif("Sistem Failure")
                         }
-                        lastAlarm = resultHardware[0].alarm;
+                        lastAlarm = alarm;
                     }
+
+                    console.log(lastAlarm + " " + alarm)
 
                     function showNotif(message) {
                         var payload = {
