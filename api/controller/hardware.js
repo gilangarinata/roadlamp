@@ -6,6 +6,7 @@ const History = require("../models/history")
 const Notification = require("../notif/firebase")
 var cron = require('node-cron');
 var lastNotif = 0;
+var lastAlarm = "";
 
 
 
@@ -73,11 +74,23 @@ exports.hardware_update_hardware = (req, res, next) => {
                         return dateA - dateB;
                     });
 
-                    if (lastNotif === 0 && resultHardware[0].alarm.length > 0) {
+                    var alarm = resultHardware[0].alarm;
+                    if (lastAlarm != alarm) {
+                        if (alarm != "0") {
+                            if (alarm === "1") showNotif("Lampu Tidak Menyala")
+                            else if (alarm === "2") showNotif("Solar Cell atau MPPT Rusak")
+                            else if (alarm === "3") showNotif("Baterai Short")
+                            else if (alarm === "4") showNotif("Baterai Habis / Baterai Rusak")
+                            else if (alarm === "5") showNotif("Sistem Failure")
+                        }
+                        lastAlarm = resultHardware[0].alarm;
+                    }
+
+                    function showNotif(message) {
                         var payload = {
                             notification: {
                                 title: "Pemberitahuan Device ID : " + resultHardware[0].hardwareId,
-                                body: resultHardware[0].alarm
+                                body: message
                             }
                         };
                         var topic = "seti-app-" + resultHardware[0].hardwareId;
@@ -88,12 +101,30 @@ exports.hardware_update_hardware = (req, res, next) => {
                             .catch(function(error) {
                                 console.log("Error sending message:", error);
                             });
-
-                        lastNotif = resultHardware[0].alarm.length;
-                    } else if (lastNotif > 0 && resultHardware[0].alarm.length === 0) {
-                        console.log("2")
-                        lastNotif = 0;
                     }
+
+
+                    // if (lastNotif === 0 && resultHardware[0].alarm.length > 0) {
+                    //     var payload = {
+                    //         notification: {
+                    //             title: "Pemberitahuan Device ID : " + resultHardware[0].hardwareId,
+                    //             body: resultHardware[0].alarm
+                    //         }
+                    //     };
+                    //     var topic = "seti-app-" + resultHardware[0].hardwareId;
+                    //     Notification.admin.messaging().sendToTopic(topic, payload)
+                    //         .then(function(response) {
+                    //             console.log("Successfully sent message:", response);
+                    //         })
+                    //         .catch(function(error) {
+                    //             console.log("Error sending message:", error);
+                    //         });
+
+                    //     lastNotif = resultHardware[0].alarm.length;
+                    // } else if (lastNotif > 0 && resultHardware[0].alarm.length === 0) {
+                    //     console.log("2")
+                    //     lastNotif = 0;
+                    // }
 
 
                     res.status(200).json({
