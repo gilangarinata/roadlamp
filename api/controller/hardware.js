@@ -61,6 +61,7 @@ exports.hardware_update_hardware = (req, res, next) => {
                 alarm: req.body.alarm,
                 longitude: req.body.longitude,
                 latitude: req.body.latitude,
+                photoPath: resultHardware[0].photoPath
             });
 
 
