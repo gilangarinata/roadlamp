@@ -92,7 +92,7 @@ exports.devices_get_web = (req, res, next) => {
 
                     res.status(200).json({
                         count: device.length,
-                        orders: deviceArray,
+                        result: deviceArray,
                     })
                 }).catch(err => {
                     res.status(500).json({
