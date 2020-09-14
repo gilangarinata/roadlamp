@@ -130,7 +130,7 @@ exports.devices_get_web = (req, res, next) => {
             } else {
                 res.status(200).json({
                     count: deviceArray.length,
-                    orders: deviceArray,
+                    result: deviceArray,
                 })
             }
         }).catch(err => {
