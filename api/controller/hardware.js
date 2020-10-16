@@ -140,14 +140,15 @@ exports.hardware_update_hardware = (req, res, next) => {
 exports.hardware_get = (req, res, next) => {
     const id = req.params.id;
     Hardware.findById(id).exec().then(hardware => {
-        var temperature = "";
-        var humidity = "";
         const uri = 'http://api.openweathermap.org/data/2.5/weather?lat=' + hardware.latitude + '&lon=' + hardware.longitude + '&appid=' + openWeatherKey + '&units=metric';
         request(uri, function(error, response, body) {
             if (!error && response.statusCode == 200) {
+                var temperature = "";
+                var humidity = "";
                 var obj = JSON.parse(response.body);
-                var temperatureOwm = obj.main.temp;
+                var temperatureOwm = obj.main.temp; //Own = Open Weather Map
                 var humidityOwm = obj.main.humidity;
+
                 if (temperatureOwm != null) {
                     temperature = temperatureOwm;
                 }
@@ -155,20 +156,41 @@ exports.hardware_get = (req, res, next) => {
                     humidity = humidityOwm;
                 }
                 res.status(200).json({
-                    result: hardware,
-                    openWeather: {
-                        'temperature': temperature,
-                        'humidity': humidity
-                    }
+                    result: {
+                        _id: hardware._id,
+                        capacity: hardware.capacity,
+                        chargingTime: hardware.chargingTime,
+                        dischargingTime: hardware.dischargingTime,
+                        betteryHealth: hardware.betteryHealth,
+                        alarm: hardware.alarm,
+                        photoPath: hardware.photoPath,
+                        name: hardware.name,
+                        longitude: hardware.longitude,
+                        latitude: hardware.latitude,
+                        hardwareId: hardware.hardwareId,
+                        temperature: temperature,
+                        humidity: humidity
+                    },
                 })
             } else {
                 res.status(200).json({
-                    result: hardware,
-                    openWeather: {
-                        'temperature': '',
-                        'humidity': ''
-                    }
+                    result: {
+                        _id: hardware._id,
+                        capacity: hardware.capacity,
+                        chargingTime: hardware.chargingTime,
+                        dischargingTime: hardware.dischargingTime,
+                        betteryHealth: hardware.betteryHealth,
+                        alarm: hardware.alarm,
+                        photoPath: hardware.photoPath,
+                        name: hardware.name,
+                        longitude: hardware.longitude,
+                        latitude: hardware.latitude,
+                        hardwareId: hardware.hardwareId,
+                        temperature: "",
+                        humidity: ""
+                    },
                 })
+
             }
         });
 
