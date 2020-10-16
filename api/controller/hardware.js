@@ -6,7 +6,8 @@ const History = require("../models/history")
 const Notification = require("../notif/firebase")
 var cron = require('node-cron');
 var lastNotif = "0";
-
+const request = require('request');
+const openWeatherKey = '815168ce4992ad1ee04830a8556bedf9';
 
 
 exports.hardware_get_all = (req, res, next) => {
@@ -139,9 +140,38 @@ exports.hardware_update_hardware = (req, res, next) => {
 exports.hardware_get = (req, res, next) => {
     const id = req.params.id;
     Hardware.findById(id).exec().then(hardware => {
-        res.status(200).json({
-            result: hardware
-        })
+        var temperature = "";
+        var humidity = "";
+        const uri = 'http://api.openweathermap.org/data/2.5/weather?lat=' + hardware.latitude + '&lon=' + hardware.longitude + '&appid=' + openWeatherKey + '&units=metric';
+        request(uri, function(error, response, body) {
+            if (!error && response.statusCode == 200) {
+                var obj = JSON.parse(response.body);
+                var temperatureOwm = obj.main.temp;
+                var humidityOwm = obj.main.humidity;
+                if (temperatureOwm != null) {
+                    temperature = temperatureOwm;
+                }
+                if (humidityOwm != null) {
+                    humidity = humidityOwm;
+                }
+                res.status(200).json({
+                    result: hardware,
+                    openWeather: {
+                        'temperature': temperature,
+                        'humidity': humidity
+                    }
+                })
+            } else {
+                res.status(200).json({
+                    result: hardware,
+                    openWeather: {
+                        'temperature': '',
+                        'humidity': ''
+                    }
+                })
+            }
+        });
+
     }).catch(err => {
         res.status(500).json({
             error: err
