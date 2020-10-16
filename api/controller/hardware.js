@@ -169,7 +169,9 @@ exports.hardware_get = (req, res, next) => {
                         latitude: hardware.latitude,
                         hardwareId: hardware.hardwareId,
                         temperature: temperature,
-                        humidity: humidity
+                        humidity: humidity,
+                        lamp: hardware.lamp,
+                        brightness: hardware.brightness,
                     },
                 })
             } else {
@@ -187,7 +189,9 @@ exports.hardware_get = (req, res, next) => {
                         latitude: hardware.latitude,
                         hardwareId: hardware.hardwareId,
                         temperature: "",
-                        humidity: ""
+                        humidity: "",
+                        lamp: hardware.lamp,
+                        brightness: hardware.brightness,
                     },
                 })
 
