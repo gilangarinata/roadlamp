@@ -17,6 +17,7 @@ mongoose.connect(process.env.DB_URI, {
     useUnifiedTopology: true
 });
 
+app.use(express.bodyParser({ limit: '50mb' }));
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
