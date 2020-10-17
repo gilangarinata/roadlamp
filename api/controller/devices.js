@@ -338,9 +338,12 @@ exports.devices_set_brightness = (req, res, next) => {
 }
 
 exports.device_add_img = (req, res, next) => {
+    console.log("gilang");
     const hardwareId = req.body.hardwareId;
     const path_image = req.file.path;
     const base_url = req.protocol + "://" + req.headers.host + '/';
+
+
 
     const updateOps = {
         photoPath: base_url + path_image
@@ -351,7 +354,7 @@ exports.device_add_img = (req, res, next) => {
             result: result
         })
     }).catch(err => {
-        res.status(500).json({
+        res.status(501).json({
             error: err
         });
     });
@@ -359,9 +362,6 @@ exports.device_add_img = (req, res, next) => {
 
 exports.device_delete_img = (req, res, next) => {
     const hardwareId = req.params.hardwareId;
-
-    console.log(hardwareId)
-
     const updateOps = {
         photoPath: null
     }
