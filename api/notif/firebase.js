@@ -1,6 +1,6 @@
 var admin = require("firebase-admin");
 
-var serviceAccount = require("./seti-apps-flutter.json");
+var serviceAccount = require("./seti-app-flutter.json");
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
