@@ -50,6 +50,10 @@ const hardwareSchema = mongoose.Schema({
     photoPath: {
         type: String,
         default: null
+    },
+    lastUpdate: {
+        type: Date,
+        default: null
     }
 });
 

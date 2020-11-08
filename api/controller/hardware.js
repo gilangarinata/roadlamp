@@ -62,7 +62,8 @@ exports.hardware_update_hardware = (req, res, next) => {
                 alarm: req.body.alarm,
                 longitude: req.body.longitude,
                 latitude: req.body.latitude,
-                photoPath: resultHardware[0].photoPath
+                photoPath: resultHardware[0].photoPath,
+                lastUpdate: new Date()
             });
 
 
@@ -104,10 +105,6 @@ exports.hardware_update_hardware = (req, res, next) => {
                             });
                     }
 
-
-
-
-
                     res.status(200).json({
                         lamp: resultHardware[0].lamp != null ? resultHardware[0].lamp : false,
                         brightness: resultHardware[0].brightness != null ? resultHardware[0].brightness : 0,
@@ -141,6 +138,26 @@ exports.hardware_get = (req, res, next) => {
     const id = req.params.id;
     Hardware.findById(id).exec().then(hardware => {
         const uri = 'http://api.openweathermap.org/data/2.5/weather?lat=' + hardware.latitude + '&lon=' + hardware.longitude + '&appid=' + openWeatherKey + '&units=metric';
+        var isActive = false;
+        if (hardware != null) {
+            if (hardware.lastUpdate != null) {
+                try {
+                    const dateNow = new Date();
+                    const dateLastUpdate = hardware.lastUpdate;
+                    const diffTime = Math.abs(dateNow - dateLastUpdate);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    console.log(diffTime + " milliseconds");
+                    console.log(diffDays + " days");
+
+                    if (diffTime < 20000) { // if there is data updated less than 20 second 
+                        isActive = true;
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+        }
+
         request(uri, function(error, response, body) {
             if (!error && response.statusCode == 200) {
                 var temperature = "";
@@ -172,6 +189,7 @@ exports.hardware_get = (req, res, next) => {
                         humidity: humidity.toString(),
                         lamp: hardware.lamp,
                         brightness: hardware.brightness,
+                        isActive: isActive
                     },
                 })
             } else {
@@ -192,6 +210,7 @@ exports.hardware_get = (req, res, next) => {
                         humidity: "",
                         lamp: hardware.lamp,
                         brightness: hardware.brightness,
+                        isActive: isActive
                     },
                 })
 
