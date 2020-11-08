@@ -26,6 +26,26 @@ exports.schedule_get = (req, res, next) => {
     });
 }
 
+exports.schedule_get_by_device = (req, res, next) => {
+    const hardwareId = req.params.hardwareId;
+    Schedule.find({ hardwareId: hardwareId }).exec().then(schedule => {
+        if (!schedule) {
+            return res.status(404).json({
+                message: "Schedule Not Found."
+            })
+        }
+        res.status(200).json({
+            count: schedule.length,
+            result: schedule,
+        })
+    }).catch(err => {
+        console.log(err)
+        res.status(500).json({
+            error: err
+        })
+    });
+}
+
 exports.schedule_add = (req, res, next) => {
     const schedule = new Schedule({
         _id: new mongoose.Types.ObjectId(),
