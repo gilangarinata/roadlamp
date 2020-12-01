@@ -139,6 +139,7 @@ exports.hardware_get = (req, res, next) => {
     Hardware.findById(id).exec().then(hardware => {
         const uri = 'http://api.openweathermap.org/data/2.5/weather?lat=' + hardware.latitude + '&lon=' + hardware.longitude + '&appid=' + openWeatherKey + '&units=metric';
         var isActive = false;
+
         if (hardware != null) {
             if (hardware.lastUpdate != null) {
                 try {
@@ -149,7 +150,7 @@ exports.hardware_get = (req, res, next) => {
                     console.log(diffTime + " milliseconds");
                     console.log(diffDays + " days");
 
-                    if (diffTime < 20000) { // if there is data updated less than 20 second 
+                    if (diffTime < 120000) { // if there is data updated less than 120 second 
                         isActive = true;
                     }
                 } catch (e) {

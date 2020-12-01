@@ -22,7 +22,7 @@ const hardwareSchema = mongoose.Schema({
         default: 0
     },
     dischargingTime: {
-        type: Number,
+        type: String,
         required: true,
         default: 0
     },
