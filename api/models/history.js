@@ -12,7 +12,7 @@ const historySchema = mongoose.Schema({
         default: 0
     },
     dischargeCapacity: {
-        type: Number,
+        type: String,
         required: true,
         default: 0
     },
