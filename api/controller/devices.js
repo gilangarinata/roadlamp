@@ -117,7 +117,7 @@ exports.devices_get_web = (req, res, next) => {
     });;
 
     function fetchDevice() {
-        Device.find({ user: userIdSuperuser2[i]._id }).populate('hardware').select('name description _id hardware user').exec().then(device => {
+        Device.find({ user: userIdSuperuser2[i]._id }).populate('hardware').select('name description _id hardware user username position referal').exec().then(device => {
             if (device) {
                 if (device.length > 0) {
                     for (var j = 0; j < device.length; j++) {
@@ -146,7 +146,7 @@ exports.devices_get_web = (req, res, next) => {
 }
 
 exports.devices_get_all = (req, res, next) => {
-    Device.find().populate('hardware').select('name description _id hardware user').exec().then(device => {
+    Device.find().populate('hardware').select('name description _id hardware user username position referal').exec().then(device => {
         return res.status(200).json({
             count: 0,
             result: device,
@@ -160,11 +160,18 @@ exports.devices_get_all = (req, res, next) => {
 
 exports.devices_get_v2 = (req, res, next) => {
     const userId = req.params.userId;
-    var userIdSuperuser2;
+    var userIdSuperuser2 = Array();
     var deviceArray = Array()
     var i = 0;
+    var isSuperuser1;
     User.findById(userId).exec().then(users => {
         if (users != null) {
+            if (users.position === "superuser1") {
+                isSuperuser1 = true;
+            } else {
+                isSuperuser1 = false;
+            }
+
             Device.find({ user: userId }).populate('hardware', 'hardwareId name lamp brightness').select('name description _id hardware user username position referal').exec().then(device => {
                 if (device.length > 0) {
                     for (var j = 0; j < device.length; j++) {
@@ -172,9 +179,23 @@ exports.devices_get_v2 = (req, res, next) => {
                     }
                 }
 
+
                 User.find({ referalFrom: users.referal }).exec().then(users => {
                     if (users.length > 0) {
-                        userIdSuperuser2 = users;
+                        if (isSuperuser1) {
+                            for (var i = 0; i < users.length; i++) {
+                                if (users[i].position === "superuser2") {
+                                    userIdSuperuser2.push(users[i]);
+                                }
+                            }
+                        } else {
+                            for (var i = 0; i < users.length; i++) {
+                                if (users[i].position === "user") {
+                                    userIdSuperuser2.push(users[i]);
+                                }
+                            }
+                        }
+
                         fetchDevice();
                     } else {
                         return res.status(200).json({
@@ -204,8 +225,10 @@ exports.devices_get_v2 = (req, res, next) => {
         })
     });;
 
+
+
     function fetchDevice() {
-        Device.find({ user: userIdSuperuser2[i]._id }).populate('hardware', 'hardwareId name lamp brightness').select('name description _id hardware user username position referal').exec().then(device => {
+        Device.find({ user: userIdSuperuser2[i]._id }).populate('hardware').select('name description _id hardware user username position referal').exec().then(device => {
             if (device) {
                 if (device.length > 0) {
                     for (var j = 0; j < device.length; j++) {
@@ -217,21 +240,9 @@ exports.devices_get_v2 = (req, res, next) => {
             if (i < userIdSuperuser2.length) {
                 fetchDevice()
             } else {
-                var newDevices = [];
-                for (var k = 0; k < deviceArray.length; k++) {
-                    if(newDevices.length > 1){
-                        for(var l = 0; l < newDevices.length; l++){
-                            
-                        }
-                    }else{
-                        newDevices.push(deviceArray[k])
-                    }
-
-                }
-
                 res.status(200).json({
-                    count: newDevices.length,
-                    result: newDevices,
+                    count: deviceArray.length,
+                    result: deviceArray,
                 })
             }
         }).catch(err => {
@@ -240,9 +251,6 @@ exports.devices_get_v2 = (req, res, next) => {
             })
         });
     }
-
-
-
 }
 
 exports.devices_get = (req, res, next) => {

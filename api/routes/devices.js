@@ -10,7 +10,7 @@ router.get("/", DevicesController.devices_get_all);
 
 router.post("/upload", MediaHandler.upload.single('images'), DevicesController.device_add_img);
 
-router.get("/:userId", checkAuth, DevicesController.devices_get);
+router.get("/:userId", checkAuth, DevicesController.devices_get_v2);
 
 router.post("/", checkAuth, MediaHandler.upload.single('images'), DevicesController.device_add);
 
