@@ -17,7 +17,7 @@ const hardwareSchema = mongoose.Schema({
         default: 0
     },
     chargingTime: {
-        type: Number,
+        type: String,
         required: true,
         default: 0
     },
