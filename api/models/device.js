@@ -23,6 +23,18 @@ const deviceSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         require: true
+    },
+    username: {
+        type: String,
+        default: null
+    },
+    position: {
+        type: String,
+        default: null
+    },
+    referal: {
+        type: String,
+        default: null
     }
 });
 

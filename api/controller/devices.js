@@ -9,6 +9,7 @@ const fs = require("fs");
 const hardware = require("../models/hardware");
 const { use } = require("../../app");
 const user = require("../models/user");
+const { check } = require("prettier");
 
 exports.devices_get_web = (req, res, next) => {
     const userId = req.params.userId;
@@ -157,6 +158,93 @@ exports.devices_get_all = (req, res, next) => {
     });
 }
 
+exports.devices_get_v2 = (req, res, next) => {
+    const userId = req.params.userId;
+    var userIdSuperuser2;
+    var deviceArray = Array()
+    var i = 0;
+    User.findById(userId).exec().then(users => {
+        if (users != null) {
+            Device.find({ user: userId }).populate('hardware', 'hardwareId name lamp brightness').select('name description _id hardware user username position referal').exec().then(device => {
+                if (device.length > 0) {
+                    for (var j = 0; j < device.length; j++) {
+                        deviceArray.push(device[j])
+                    }
+                }
+
+                User.find({ referalFrom: users.referal }).exec().then(users => {
+                    if (users.length > 0) {
+                        userIdSuperuser2 = users;
+                        fetchDevice();
+                    } else {
+                        return res.status(200).json({
+                            count: deviceArray.length,
+                            result: deviceArray,
+                        })
+                    }
+                }).catch(err => {
+                    res.status(500).json({
+                        error: err
+                    })
+                });
+            }).catch(err => {
+                res.status(500).json({
+                    error: err
+                })
+            });
+
+        } else {
+            return res.status(404).json({
+                message: "Users Not Found."
+            })
+        }
+    }).catch(err => {
+        res.status(500).json({
+            error: err
+        })
+    });;
+
+    function fetchDevice() {
+        Device.find({ user: userIdSuperuser2[i]._id }).populate('hardware', 'hardwareId name lamp brightness').select('name description _id hardware user username position referal').exec().then(device => {
+            if (device) {
+                if (device.length > 0) {
+                    for (var j = 0; j < device.length; j++) {
+                        deviceArray.push(device[j])
+                    }
+                }
+            }
+            i++
+            if (i < userIdSuperuser2.length) {
+                fetchDevice()
+            } else {
+                var newDevices = [];
+                for (var k = 0; k < deviceArray.length; k++) {
+                    if(newDevices.length > 1){
+                        for(var l = 0; l < newDevices.length; l++){
+                            
+                        }
+                    }else{
+                        newDevices.push(deviceArray[k])
+                    }
+
+                }
+
+                res.status(200).json({
+                    count: newDevices.length,
+                    result: newDevices,
+                })
+            }
+        }).catch(err => {
+            res.status(500).json({
+                error: err
+            })
+        });
+    }
+
+
+
+}
+
 exports.devices_get = (req, res, next) => {
     const userId = req.params.userId;
     var userIdSuperuser2;
@@ -174,7 +262,6 @@ exports.devices_get = (req, res, next) => {
                     }
 
                     User.find({ referalSU1: users.referal }).exec().then(users => {
-
                         if (users.length > 0) {
                             userIdSuperuser2 = users;
                             fetchDevice();
@@ -416,7 +503,10 @@ exports.device_add = (req, res, next) => {
                     name: req.body.name,
                     description: req.body.description,
                     hardware: result[0]._id,
-                    user: userId
+                    user: userId,
+                    username: user.username,
+                    position: user.position,
+                    referal: user.referal
                 });
 
                 return device.save().then(result => {

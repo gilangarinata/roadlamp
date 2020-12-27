@@ -7,7 +7,7 @@ const historySchema = mongoose.Schema({
         required: true
     },
     chargeCapacity: {
-        type: Number,
+        type: String,
         required: true,
         default: 0
     },
