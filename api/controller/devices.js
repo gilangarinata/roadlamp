@@ -183,31 +183,20 @@ exports.devices_get_v2 = (req, res, next) => {
                 User.find({ referalFrom: users.referal }).exec().then(users => {
                     if (users.length > 0) {
                         if (isSuperuser1) {
-                            loop1: for (var i = 0; i < users.length; i++) {
+                            for (var i = 0; i < users.length; i++) {
                                 if (users[i].position === "superuser2") {
-                                    for (var user in userIdSuperuser2) {
-                                        if (user._id === users[i]._id) {
-                                            continue loop1;
-                                        }
-                                    }
                                     userIdSuperuser2.push(users[i]);
                                 }
                             }
-                        }
-                        else {
-                            loop1: for (var i = 0; i < users.length; i++) {
+                        } else {
+                            for (var i = 0; i < users.length; i++) {
                                 if (users[i].position === "user") {
-                                    for (var user in userIdSuperuser2) {
-                                        if (user._id === users[i]._id) {
-                                            continue loop1;
-                                        }
-                                    }
                                     userIdSuperuser2.push(users[i]);
                                 }
                             }
                         }
 
-                        fetchDevice();
+                        fetchDevice2();
                     } else {
                         return res.status(200).json({
                             count: deviceArray.length,
@@ -238,18 +227,23 @@ exports.devices_get_v2 = (req, res, next) => {
 
 
 
-    function fetchDevice() {
+    function fetchDevice2() {
         Device.find({ user: userIdSuperuser2[i]._id }).populate('hardware').select('name description _id hardware user username position referal').exec().then(device => {
             if (device) {
                 if (device.length > 0) {
-                    for (var j = 0; j < device.length; j++) {
+                    loop1: for (var j = 0; j < device.length; j++) {
+                        for (var i = 0; i < deviceArray.length; i++) {
+                            if (deviceArray[i].username === device[j].username) {
+                                continue loop1;
+                            }
+                        }
                         deviceArray.push(device[j])
                     }
                 }
             }
             i++
             if (i < userIdSuperuser2.length) {
-                fetchDevice()
+                fetchDevice2()
             } else {
                 res.status(200).json({
                     count: deviceArray.length,
