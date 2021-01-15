@@ -183,14 +183,25 @@ exports.devices_get_v2 = (req, res, next) => {
                 User.find({ referalFrom: users.referal }).exec().then(users => {
                     if (users.length > 0) {
                         if (isSuperuser1) {
-                            for (var i = 0; i < users.length; i++) {
+                            loop1: for (var i = 0; i < users.length; i++) {
                                 if (users[i].position === "superuser2") {
+                                    for (var user in userIdSuperuser2) {
+                                        if (user._id === users[i]._id) {
+                                            continue loop1;
+                                        }
+                                    }
                                     userIdSuperuser2.push(users[i]);
                                 }
                             }
-                        } else {
-                            for (var i = 0; i < users.length; i++) {
+                        }
+                        else {
+                            loop1: for (var i = 0; i < users.length; i++) {
                                 if (users[i].position === "user") {
+                                    for (var user in userIdSuperuser2) {
+                                        if (user._id === users[i]._id) {
+                                            continue loop1;
+                                        }
+                                    }
                                     userIdSuperuser2.push(users[i]);
                                 }
                             }
