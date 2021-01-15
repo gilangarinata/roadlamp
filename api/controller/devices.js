@@ -516,7 +516,7 @@ exports.device_add = (req, res, next) => {
                     name: req.body.name,
                     description: req.body.description,
                     hardware: result[0]._id,
-                    user: userId,
+                    user: user._id,
                     username: user.username,
                     position: user.position,
                     referal: user.referal
