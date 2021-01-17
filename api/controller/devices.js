@@ -240,6 +240,7 @@ exports.devices_get_v2 = (req, res, next) => {
                     }
                 }
             }
+            console.log(i);
             i++
             if (i < userIdSuperuser.length) {
                 fetchDevice2()
