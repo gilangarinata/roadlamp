@@ -179,9 +179,9 @@ exports.devices_get_v2 = (req, res, next) => {
                     }
                 }
 
+                console.log(users.referal);
 
                 User.find({ referalFrom: users.referal }).exec().then(users => {
-                    console.log(users.referal);
                     if (users.length > 0) {
                         if (isSuperuser1) {
                             for (var i = 0; i < users.length; i++) {
