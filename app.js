@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+var cors = require('cors');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -17,7 +18,7 @@ mongoose.connect(process.env.DB_URI, {
     useUnifiedTopology: true
 });
 
-
+app.use(cors());
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use('/uploads', express.static('uploads'))
