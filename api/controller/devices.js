@@ -183,8 +183,8 @@ exports.devices_get_v2 = (req, res, next) => {
                     if (users.length > 0) {
                         if (isSuperuser1) {
                             for (var i = 0; i < users.length; i++) {
-                                console.log(users[i].username);
                                 if (users[i].position === "superuser2") {
+                                    console.log(users[i].username);
                                     userIdSuperuser2.push(users[i]);
                                 }
                             }
