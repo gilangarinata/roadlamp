@@ -184,7 +184,6 @@ exports.devices_get_v2 = (req, res, next) => {
                         if (isSuperuser1) {
                             for (var i = 0; i < users.length; i++) {
                                 if (users[i].position === "superuser2") {
-                                    console.log(users[i].username);
                                     userIdSuperuser2.push(users[i]);
                                 }
                             }
@@ -228,6 +227,7 @@ exports.devices_get_v2 = (req, res, next) => {
 
 
     function fetchDevice2() {
+        console.log(userIdSuperuser2[i].username);
         Device.find({ user: userIdSuperuser2[i]._id }).populate('hardware').select('name description _id hardware user username position referal').exec().then(device => {
             if (device) {
                 if (device.length > 0) {
