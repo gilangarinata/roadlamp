@@ -227,13 +227,12 @@ exports.devices_get_v2 = (req, res, next) => {
 
 
     function fetchDevice2() {
-        console.log(userIdSuperuser.length);
         Device.find({ user: userIdSuperuser[i] }).populate('hardware').select('name description _id hardware user username position referal').exec().then(device => {
             if (device) {
                 if (device.length > 0) {
                     loop1: for (var j = 0; j < device.length; j++) {
-                        for (var i = 0; i < deviceArray.length; i++) {
-                            if (deviceArray[i].username === device[j].username) {
+                        for (var k = 0; k < deviceArray.length; k++) {
+                            if (deviceArray[k].username === device[j].username) {
                                 continue loop1;
                             }
                         }
