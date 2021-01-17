@@ -233,7 +233,7 @@ exports.devices_get_v2 = (req, res, next) => {
             if (device) {
                 if (device.length > 0) {
                     loop1: for (var j = 0; j < device.length; j++) {
-                        console.lof(device[j]);
+                        console.log(device[j]);
                         for (var i = 0; i < deviceArray.length; i++) {
                             if (deviceArray[i].username === device[j].username) {
                                 continue loop1;
