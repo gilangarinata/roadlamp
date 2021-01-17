@@ -227,7 +227,7 @@ exports.devices_get_v2 = (req, res, next) => {
 
 
     function fetchDevice2() {
-        console.log(userIdSuperuser[i]);
+        console.log(userIdSuperuser.length);
         Device.find({ user: userIdSuperuser[i] }).populate('hardware').select('name description _id hardware user username position referal').exec().then(device => {
             if (device) {
                 if (device.length > 0) {
