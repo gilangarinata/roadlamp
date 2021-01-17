@@ -160,7 +160,7 @@ exports.devices_get_all = (req, res, next) => {
 
 exports.devices_get_v2 = (req, res, next) => {
     const userId = req.params.userId;
-    var userIdSuperuser2 = Array();
+    var userIdSuperuser = Array();
     var deviceArray = Array()
     var i = 0;
     var isSuperuser1;
@@ -184,13 +184,13 @@ exports.devices_get_v2 = (req, res, next) => {
                         if (isSuperuser1) {
                             for (var i = 0; i < users.length; i++) {
                                 if (users[i].position === "superuser2") {
-                                    userIdSuperuser2.push(users[i]);
+                                    userIdSuperuser.push(users[i]);
                                 }
                             }
                         } else {
                             for (var i = 0; i < users.length; i++) {
                                 if (users[i].position === "user") {
-                                    userIdSuperuser2.push(users[i]);
+                                    userIdSuperuser.push(users[i]);
                                 }
                             }
                         }
@@ -227,8 +227,8 @@ exports.devices_get_v2 = (req, res, next) => {
 
 
     function fetchDevice2() {
-        console.log(userIdSuperuser2[i].username);
-        Device.find({ user: userIdSuperuser2[i]._id }).populate('hardware').select('name description _id hardware user username position referal').exec().then(device => {
+        console.log(userIdSuperuser[i].username);
+        Device.find({ user: userIdSuperuser[i]._id }).populate('hardware').select('name description _id hardware user username position referal').exec().then(device => {
             if (device) {
                 if (device.length > 0) {
                     loop1: for (var j = 0; j < device.length; j++) {
@@ -242,7 +242,7 @@ exports.devices_get_v2 = (req, res, next) => {
                 }
             }
             i++
-            if (i < userIdSuperuser2.length) {
+            if (i < userIdSuperuser.length) {
                 fetchDevice2()
             } else {
                 res.status(200).json({
