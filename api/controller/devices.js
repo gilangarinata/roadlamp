@@ -181,6 +181,7 @@ exports.devices_get_v2 = (req, res, next) => {
 
 
                 User.find({ referalFrom: users.referal }).exec().then(users => {
+                    console.log(users.referal);
                     if (users.length > 0) {
                         if (isSuperuser1) {
                             for (var i = 0; i < users.length; i++) {
@@ -228,7 +229,6 @@ exports.devices_get_v2 = (req, res, next) => {
 
 
     function fetchDevice2() {
-        console.log(userIdSuperuser2[i]._id);
         Device.find({ user: userIdSuperuser2[i]._id }).populate('hardware').select('name description _id hardware user username position referal').exec().then(device => {
             if (device) {
                 if (device.length > 0) {
