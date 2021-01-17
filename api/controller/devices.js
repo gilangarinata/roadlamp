@@ -184,13 +184,13 @@ exports.devices_get_v2 = (req, res, next) => {
                         if (isSuperuser1) {
                             for (var i = 0; i < users.length; i++) {
                                 if (users[i].position === "superuser2") {
-                                    userIdSuperuser.push(users[i]);
+                                    userIdSuperuser.push(users[i]._id);
                                 }
                             }
                         } else {
                             for (var i = 0; i < users.length; i++) {
                                 if (users[i].position === "user") {
-                                    userIdSuperuser.push(users[i]);
+                                    userIdSuperuser.push(users[i]._id);
                                 }
                             }
                         }
@@ -227,8 +227,8 @@ exports.devices_get_v2 = (req, res, next) => {
 
 
     function fetchDevice2() {
-        console.log(userIdSuperuser[i].username);
-        Device.find({ user: userIdSuperuser[i]._id }).populate('hardware').select('name description _id hardware user username position referal').exec().then(device => {
+        console.log(userIdSuperuser[i]);
+        Device.find({ user: userIdSuperuser[i] }).populate('hardware').select('name description _id hardware user username position referal').exec().then(device => {
             if (device) {
                 if (device.length > 0) {
                     loop1: for (var j = 0; j < device.length; j++) {
