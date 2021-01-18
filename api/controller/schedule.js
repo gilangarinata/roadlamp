@@ -4,6 +4,7 @@ const { use } = require("../routes/users");
 
 const Hardware = require("../models/hardware");
 const e = require("express");
+var cron = require('node-cron');
 
 exports.schedule_get = (req, res, next) => {
     const userId = req.params.userId;
@@ -57,25 +58,22 @@ exports.schedule_add = (req, res, next) => {
         hardwareId: req.body.hardwareId
     });
 
-    console.log(parseInt(req.body.minute))
-
     schedule.save().then(result => {
         res.status(200).json({
             message: 'New Schedule Created.',
             schedule: result
         });
 
-        var schedule = `${parseInt(req.body.minute)} ${parseInt(req.body.hour)} * * *`;
-        var cron = require('node-cron');
+        // var schedule = "${parseInt(req.body.minute)} ${parseInt(req.body.hour)} * * *";
 
+        // console.log(schedule)
 
+        const hardwareId = req.body.hardwareId;
+        const brightness = req.body.brightness;
 
-
-
-
-
-        // const hardwareId = req.body.hardwareId;
-        // const brightness = req.body.brightness;
+        // cron.schedule(schedule, function() {
+        //     console.log('running a task every minute');
+        // });
 
         // const updateOps = {
         //     brightness: brightness
