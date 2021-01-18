@@ -7,6 +7,7 @@ const Hardware = require("./api/models/hardware");
 const port = 8000;
 
 const server = http.createServer(app);
+process.env.TZ = 'Asia/Jakarta'
 
 cron.schedule('*/1 * * * * *', function() {
     Schedule.find()
@@ -15,7 +16,6 @@ cron.schedule('*/1 * * * * *', function() {
             for (var i = 0; i < schedules.length; i++) {
 
                 var datetime = new Date();
-                datetime.setTimezone("Asia/Jakarta");
                 const minutesNow = datetime.getMinutes();
                 const hoursNow = datetime.getHours();
 
