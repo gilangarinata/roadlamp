@@ -10,13 +10,13 @@ router.get("/", DevicesController.devices_get_all);
 
 router.post("/upload", MediaHandler.upload.single('images'), DevicesController.device_add_img);
 
-router.get("/:userId", checkAuth, DevicesController.devices_get_v2);
+router.get("/:userId", DevicesController.devices_get_v2);
 
-router.post("/", checkAuth, MediaHandler.upload.single('images'), DevicesController.device_add);
+router.post("/", MediaHandler.upload.single('images'), DevicesController.device_add);
 
 router.delete("/upload/:hardwareId", DevicesController.device_delete_img);
 
-router.delete("/:deviceId", checkAuth, DevicesController.devices_delete);
+router.delete("/:deviceId", DevicesController.devices_delete);
 
 router.post("/update_lamp", DevicesController.devices_set_lamp);
 
