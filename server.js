@@ -8,7 +8,7 @@ const port = 8000;
 
 const server = http.createServer(app);
 
-cron.schedule('*/50 * * * * *', function() {
+cron.schedule('*/1 * * * * *', function() {
     Schedule.find()
         .exec()
         .then(schedules => {
@@ -17,6 +17,8 @@ cron.schedule('*/50 * * * * *', function() {
                 var datetime = new Date();
                 const minutesNow = datetime.getMinutes();
                 const hoursNow = datetime.getHours();
+
+                console.log(hoursNow);
 
                 if (hoursNow === Number(schedules[i].hour)) {
                     if (minutesNow === Number(schedules[i].minute)) {
