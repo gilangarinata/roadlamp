@@ -21,9 +21,6 @@ cron.schedule('*/2 * * * * *', function() {
                             console.log(parseInt(schedules[i].hour + "  " + hoursNow + " ====  " + schedules[i].minute + +minutesNow);
                                 if (hoursNow === parseInt(schedules[i].hour)) {
                                     if (minutesNow === parseInt(schedules[i].minute)) {
-
-
-
                                         const hardwareId = schedules[i].hardwareId;
                                         const brightness = schedules[i].brightness;
                                         const updateOps = {
