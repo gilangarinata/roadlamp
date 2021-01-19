@@ -11,6 +11,9 @@ const hardwareSchema = mongoose.Schema({
     brightness: {
         type: Number
     },
+    brightnessSchedule: {
+        type: Number
+    },
     capacity: {
         type: Number,
         required: true,
