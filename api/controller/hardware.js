@@ -47,6 +47,8 @@ exports.hardware_update_hardware = (req, res, next) => {
             }
         }
 
+        console.log(isActive);
+
 
         //add new hardware if hardwareId doesn't exist
         if (resultHardware.length < 1) {
