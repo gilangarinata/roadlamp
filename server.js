@@ -13,12 +13,13 @@ cron.schedule('*/2 * * * * *', function() {
     Schedule.find()
         .exec()
         .then(schedules => {
+            var datetime = new Date();
+            const minutesNow = datetime.getMinutes();
+            const hoursNow = datetime.getHours();
+
             console.log(hoursNow + " " + minutesNow);
             for (var i = 0; i < schedules.length; i++) {
 
-                var datetime = new Date();
-                const minutesNow = datetime.getMinutes();
-                const hoursNow = datetime.getHours();
 
                 if (hoursNow === Number(schedules[i].hour)) {
                     if (minutesNow === Number(schedules[i].minute)) {
