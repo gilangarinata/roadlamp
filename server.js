@@ -19,8 +19,6 @@ cron.schedule('*/50 * * * * *', function() {
                 const minutesNow = datetime.getMinutes();
                 const hoursNow = datetime.getHours();
 
-                console.log(hoursNow);
-
                 if (hoursNow === Number(schedules[i].hour)) {
                     if (minutesNow === Number(schedules[i].minute)) {
                         const hardwareId = schedules[i].hardwareId;
