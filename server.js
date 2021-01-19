@@ -9,7 +9,7 @@ const port = 8000;
 const server = http.createServer(app);
 process.env.TZ = 'Asia/Jakarta'
 
-cron.schedule('*/2 * * * * *', function() {
+cron.schedule('*/20 * * * * *', function() {
     Schedule.find()
         .exec()
         .then(schedules => {
@@ -18,7 +18,7 @@ cron.schedule('*/2 * * * * *', function() {
             const hoursNow = datetime.getHours();
 
             for (var i = 0; i < schedules.length; i++) {
-                console.log(parseInt(schedules[i].hour) + "  " + hoursNow + " ====  " + parseInt(schedules[i].minute) + "   " + minutesNow);
+                // console.log(parseInt(schedules[i].hour) + "  " + hoursNow + " ====  " + parseInt(schedules[i].minute) + "   " + minutesNow);
                 if (hoursNow === parseInt(schedules[i].hour)) {
                     if (minutesNow === parseInt(schedules[i].minute)) {
                         const hardwareId = schedules[i].hardwareId;
