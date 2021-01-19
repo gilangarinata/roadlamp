@@ -18,7 +18,7 @@ cron.schedule('*/2 * * * * *', function() {
             const hoursNow = datetime.getHours();
 
             for (var i = 0; i < schedules.length; i++) {
-                console.log(parseInt(schedules[i].hour) + "  " + hoursNow + " ====  " + schedules[i].minute + +minutesNow);
+                console.log(parseInt(schedules[i].hour) + "  " + hoursNow + " ====  " + parseInt(schedules[i].minute) + "   " + minutesNow);
                 if (hoursNow === parseInt(schedules[i].hour)) {
                     if (minutesNow === parseInt(schedules[i].minute)) {
                         const hardwareId = schedules[i].hardwareId;
