@@ -27,6 +27,27 @@ exports.hardware_get_all = (req, res, next) => {
 exports.hardware_update_hardware = (req, res, next) => {
     const hardwareId = req.body.hardwareId;
     Hardware.find({ hardwareId }).exec().then(resultHardware => {
+
+        var isActive = false;
+
+        if (resultHardware[0].lastUpdate != null) {
+            try {
+                const dateNow = new Date();
+                const dateLastUpdate = resultHardware[0].lastUpdate;
+                const diffTime = Math.abs(dateNow - dateLastUpdate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                console.log(diffTime + " milliseconds");
+                console.log(diffDays + " days");
+
+                if (diffTime < 120000) { // if there is data updated less than 120 second 
+                    isActive = true;
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        }
+
+
         //add new hardware if hardwareId doesn't exist
         if (resultHardware.length < 1) {
             const hardware = new Hardware({
@@ -63,7 +84,8 @@ exports.hardware_update_hardware = (req, res, next) => {
                 longitude: req.body.longitude,
                 latitude: req.body.latitude,
                 photoPath: resultHardware[0].photoPath,
-                lastUpdate: new Date()
+                lastUpdate: new Date(),
+                active: isActive
             });
 
 
@@ -173,6 +195,8 @@ exports.hardware_get = (req, res, next) => {
                 if (humidityOwm != null) {
                     humidity = humidityOwm;
                 }
+
+
                 res.status(200).json({
                     result: {
                         _id: hardware._id,
