@@ -18,7 +18,7 @@ cron.schedule('*/2 * * * * *', function() {
             const hoursNow = datetime.getHours();
 
             for (var i = 0; i < schedules.length; i++) {
-                console.log(schedules[i].hour);
+                console.log(parseInt(schedules[i].hour));
                 if (hoursNow === Number(schedules[i].hour)) {
                     if (minutesNow === Number(schedules[i].minute)) {
 
