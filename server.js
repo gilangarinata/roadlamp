@@ -18,10 +18,10 @@ cron.schedule('*/2 * * * * *', function() {
             const hoursNow = datetime.getHours();
 
             for (var i = 0; i < schedules.length; i++) {
+                console.log(Number(schedules[i].hour + " " + Number(schedules[i].minute)));
                 if (hoursNow === Number(schedules[i].hour)) {
                     if (minutesNow === Number(schedules[i].minute)) {
 
-                        console.log(schedules[i].hardwareId + " " + minutesNow);
 
                         const hardwareId = schedules[i].hardwareId;
                         const brightness = schedules[i].brightness;
