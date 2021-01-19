@@ -57,6 +57,10 @@ const hardwareSchema = mongoose.Schema({
     lastUpdate: {
         type: Date,
         default: null
+    },
+    active: {
+        type: Boolean,
+        default: false
     }
 });
 

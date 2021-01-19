@@ -172,7 +172,7 @@ exports.devices_get_v2 = (req, res, next) => {
                 isSuperuser1 = false;
             }
 
-            Device.find({ user: userId }).populate('hardware', 'hardwareId name lamp brightness brightnessSchedule').select('name description _id hardware user username position referal').exec().then(device => {
+            Device.find({ user: userId }).populate('hardware', 'hardwareId name lamp brightness brightnessSchedule active').select('name description _id hardware user username position referal').exec().then(device => {
                 if (device.length > 0) {
                     for (var j = 0; j < device.length; j++) {
                         deviceArray.push(device[j])
