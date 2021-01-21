@@ -16,4 +16,6 @@ router.get("/deleteall/:key", UsersController.delete_all);
 
 router.get("/delete_all", UsersController.users_delete_all);
 
+router.get("/getUserReferal/:referal/:position", UsersController.users_get_referal);
+
 module.exports = router;

@@ -269,3 +269,39 @@ exports.users_delete_all = (req, res, next) => {
         })
     });
 }
+
+exports.users_get_referal = (req, res, next) => {
+    var refferal = req.params.referal;
+    var position = req.params.position;
+
+
+    if (position === "superuser1") {
+        User.find({ referalSU1: refferal })
+            .exec()
+            .then((users) => {
+                res.status(200).json({
+                    count: users.length,
+                    users: users
+                })
+            })
+            .catch((err) => {
+                res.status(500).json({
+                    error: err,
+                });
+            });
+    } else {
+        User.find({ referalFrom: refferal })
+            .exec()
+            .then((users) => {
+                res.status(200).json({
+                    count: users.length,
+                    users: users
+                })
+            })
+            .catch((err) => {
+                res.status(500).json({
+                    error: err,
+                });
+            });
+    }
+}

@@ -164,6 +164,7 @@ exports.devices_get_v2 = (req, res, next) => {
     var deviceArray = Array()
     var i = 0;
     var isSuperuser1;
+
     User.findById(userId).exec().then(users => {
         if (users != null) {
             if (users.position === "superuser1") {
