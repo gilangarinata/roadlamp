@@ -264,7 +264,19 @@ exports.devices_get_v2 = (req, res, next) => {
                         name: "",
                         description: "",
                         user: userIdSuperuser[i]._id,
-                        hardware: hardware,
+                        hardware: {
+                            name: "",
+                            capacity: 0,
+                            chargingTime: "",
+                            dischargingTime: "",
+                            betteryHealth: 0,
+                            alarm: "",
+                            longitude: "",
+                            latitude: "",
+                            photoPath: "",
+                            lastUpdate: new Date(),
+                            active: false
+                        },
                         username: userIdSuperuser[i].username,
                         position: userIdSuperuser[i].position,
                         referal: userIdSuperuser[i].referal
