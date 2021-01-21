@@ -234,8 +234,10 @@ exports.devices_get_v2 = (req, res, next) => {
         console.log(userIdSuperuser[i]._id);
         Device.find({ user: userIdSuperuser[i]._id }).populate('hardware').select('name description _id hardware user username position referal').exec().then(device => {
             if (device) {
+                var hardwareEv;
                 if (device.length > 0) {
                     loop1: for (var j = 0; j < device.length; j++) {
+                        hardwareEv = device[j].hardware;
                         for (var k = 0; k < deviceArray.length; k++) {
                             if (deviceArray[k].username === device[j].username) {
                                 continue loop1;
@@ -249,27 +251,9 @@ exports.devices_get_v2 = (req, res, next) => {
                         _id: new mongoose.Types.ObjectId(),
                         name: "",
                         description: "",
-                        useraaaaa: userIdSuperuser[i]._id,
-                        hardware: {
-                            capacity: 68,
-                            chargingTime: "0.00",
-                            dischargingTime: "0.00",
-                            betteryHealth: 100,
-                            alarm: "0",
-                            photoPath: null,
-                            lastUpdate: "2021-01-21T14:47:01.784Z",
-                            active: true,
-                            _id: "5fe76b3d3af0cb111407740d",
-                            name: "PJU-A250",
-                            longitude: "112.74000",
-                            latitude: "-7.34216",
-                            hardwareId: "A250",
-                            __v: 0,
-                            lamp: false,
-                            brightness: 0,
-                            brightnessSchedule: 100
-                        },
-                        usernameaaaa: userIdSuperuser[i].username,
+                        user: userIdSuperuser[i]._id,
+                        hardware: hardwareEv,
+                        username: userIdSuperuser[i].username,
                         position: userIdSuperuser[i].position,
                         referal: userIdSuperuser[i].referal
                     });
