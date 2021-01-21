@@ -11,6 +11,7 @@ const { use } = require("../../app");
 const user = require("../models/user");
 const { check } = require("prettier");
 const { hardware_get_all } = require("./hardware");
+const e = require("cors");
 
 exports.devices_get_web = (req, res, next) => {
     const userId = req.params.userId;
@@ -269,6 +270,7 @@ exports.devices_get_v2 = (req, res, next) => {
                 })
             }
         }).catch(err => {
+            console.log(err);
             res.status(500).json({
                 error: err
             })
