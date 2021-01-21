@@ -59,7 +59,7 @@ exports.hardware_update_hardware = (req, res, next) => {
         } else {
             var isActive = false;
 
-            if (resultHardware[0].lastUpdate !== null) {
+            if (resultHardware[0].lastUpdate != null) {
                 try {
                     const dateNow = new Date();
                     const dateLastUpdate = resultHardware[0].lastUpdate;
