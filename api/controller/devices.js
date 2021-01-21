@@ -244,7 +244,7 @@ exports.devices_get_v2 = (req, res, next) => {
                     }
                 }
                 else {
-                    console.log(hardwareEv);
+                    console.log(device[0].hardware);
                     const device = new Device({
                         _id: new mongoose.Types.ObjectId(),
                         name: "",
