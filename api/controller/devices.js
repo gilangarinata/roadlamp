@@ -185,14 +185,12 @@ exports.devices_get_v2 = (req, res, next) => {
                     if (users.length > 0) {
                         if (isSuperuser1) {
                             for (var i = 0; i < users.length; i++) {
-                                console.log(users[i].username + "  isSuperuser1" + users[i]._id);
                                 if (users[i].position === "superuser2") {
                                     userIdSuperuser.push(users[i]);
                                 }
                             }
                         } else {
                             for (var i = 0; i < users.length; i++) {
-                                console.log(users[i].username + "  isSuperuser2" + users[i]._id);
                                 if (users[i].position === "user") {
                                     userIdSuperuser.push(users[i]);
                                 }
@@ -231,7 +229,6 @@ exports.devices_get_v2 = (req, res, next) => {
 
 
     function fetchDevice2() {
-        console.log(userIdSuperuser[i]._id);
         Device.find({ user: userIdSuperuser[i]._id }).populate('hardware').select('name description _id hardware user username position referal').exec().then(device => {
             if (device) {
                 var hardwareEv;
@@ -247,6 +244,7 @@ exports.devices_get_v2 = (req, res, next) => {
                     }
                 }
                 else {
+                    console.log(hardwareEv);
                     const device = new Device({
                         _id: new mongoose.Types.ObjectId(),
                         name: "",
