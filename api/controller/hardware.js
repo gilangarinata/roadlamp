@@ -31,19 +31,21 @@ exports.hardware_update_hardware = (req, res, next) => {
         var isActive = false;
 
         if (resultHardware[0].lastUpdate != undefined) {
-            try {
-                const dateNow = new Date();
-                const dateLastUpdate = resultHardware[0].lastUpdate;
-                const diffTime = Math.abs(dateNow - dateLastUpdate);
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                console.log(diffTime + " milliseconds");
-                console.log(diffDays + " days");
+            if (resultHardware[0].lastUpdate != null) {
+                try {
+                    const dateNow = new Date();
+                    const dateLastUpdate = resultHardware[0].lastUpdate;
+                    const diffTime = Math.abs(dateNow - dateLastUpdate);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    console.log(diffTime + " milliseconds");
+                    console.log(diffDays + " days");
 
-                if (diffTime < 120000) { // if there is data updated less than 120 second 
-                    isActive = true;
+                    if (diffTime < 120000) { // if there is data updated less than 120 second 
+                        isActive = true;
+                    }
+                } catch (e) {
+                    console.log(e);
                 }
-            } catch (e) {
-                console.log(e);
             }
         }
 
