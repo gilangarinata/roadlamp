@@ -246,7 +246,7 @@ exports.devices_get_v2 = (req, res, next) => {
                 }
                 else {
                     console.log(device[0].hardware);
-                    const device = new Device({
+                    const devices = new Device({
                         _id: new mongoose.Types.ObjectId(),
                         name: "",
                         description: "",
@@ -256,7 +256,7 @@ exports.devices_get_v2 = (req, res, next) => {
                         position: userIdSuperuser[i].position,
                         referal: userIdSuperuser[i].referal
                     });
-                    deviceArray.push(device);
+                    deviceArray.push(devices);
                 }
             }
 
