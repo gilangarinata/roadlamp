@@ -186,14 +186,14 @@ exports.devices_get_v2 = (req, res, next) => {
                             for (var i = 0; i < users.length; i++) {
                                 console.log(users[i].username + "  isSuperuser1" + users[i]._id);
                                 if (users[i].position === "superuser2") {
-                                    userIdSuperuser.push(users[i]._id);
+                                    userIdSuperuser.push(users[i]);
                                 }
                             }
                         } else {
                             for (var i = 0; i < users.length; i++) {
                                 console.log(users[i].username + "  isSuperuser2" + users[i]._id);
                                 if (users[i].position === "user") {
-                                    userIdSuperuser.push(users[i]._id);
+                                    userIdSuperuser.push(users[i]);
                                 }
                             }
                         }
@@ -230,8 +230,8 @@ exports.devices_get_v2 = (req, res, next) => {
 
 
     function fetchDevice2() {
-        console.log(userIdSuperuser[i]);
-        Device.find({ user: userIdSuperuser[i] }).populate('hardware').select('name description _id hardware user username position referal').exec().then(device => {
+        console.log(userIdSuperuser[i]._id);
+        Device.find({ user: userIdSuperuser[i]._id }).populate('hardware').select('name description _id hardware user username position referal').exec().then(device => {
             if (device) {
                 if (device.length > 0) {
                     loop1: for (var j = 0; j < device.length; j++) {
@@ -242,6 +242,18 @@ exports.devices_get_v2 = (req, res, next) => {
                         }
                         deviceArray.push(device[j])
                     }
+                }
+                else {
+                    const device = new Device({
+                        _id: new mongoose.Types.ObjectId(),
+                        name: "",
+                        description: "",
+                        user: userIdSuperuser[i]._id,
+                        username: userIdSuperuser[i].username,
+                        position: userIdSuperuser[i].position,
+                        referal: userIdSuperuser[i].referal
+                    });
+                    deviceArray.push(device);
                 }
             }
 
