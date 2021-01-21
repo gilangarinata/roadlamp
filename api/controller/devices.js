@@ -237,7 +237,6 @@ exports.devices_get_v2 = (req, res, next) => {
                 if (device.length > 0) {
                     hardwareEv = device[0].hardware;
                     loop1: for (var j = 0; j < device.length; j++) {
-                        hardwareEv = device[j].hardware;
                         for (var k = 0; k < deviceArray.length; k++) {
                             if (deviceArray[k].username === device[j].username) {
                                 continue loop1;
