@@ -10,6 +10,7 @@ const hardware = require("../models/hardware");
 const { use } = require("../../app");
 const user = require("../models/user");
 const { check } = require("prettier");
+const { hardware_get_all } = require("./hardware");
 
 exports.devices_get_web = (req, res, next) => {
     const userId = req.params.userId;
@@ -244,11 +245,26 @@ exports.devices_get_v2 = (req, res, next) => {
                     }
                 }
                 else {
+                    const hardware = new Hardware({
+                        name: "",
+                        capacity: 0,
+                        chargingTime: "",
+                        dischargingTime: "",
+                        betteryHealth: 0,
+                        alarm: "",
+                        longitude: "",
+                        latitude: "",
+                        photoPath: "",
+                        lastUpdate: new Date(),
+                        active: false
+                    });
+
                     const device = new Device({
                         _id: new mongoose.Types.ObjectId(),
                         name: "",
                         description: "",
                         user: userIdSuperuser[i]._id,
+                        hardware: hardware,
                         username: userIdSuperuser[i].username,
                         position: userIdSuperuser[i].position,
                         referal: userIdSuperuser[i].referal
