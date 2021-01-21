@@ -68,6 +68,7 @@ exports.hardware_update_hardware = (req, res, next) => {
                     message: 'New Hardware Created.'
                 });
             }).catch(err => {
+                console.log(err)
                 res.status(500).json({
                     error: err
                 })
@@ -143,12 +144,14 @@ exports.hardware_update_hardware = (req, res, next) => {
                     console.log(err)
                 });
             }).catch(err => {
+                console.log(err)
                 res.status(500).json({
                     error: err
                 })
             });
         }
     }).catch(err => {
+        console.log(err)
         res.status(500).json({
             error: err
         })
