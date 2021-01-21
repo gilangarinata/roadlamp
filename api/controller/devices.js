@@ -227,6 +227,7 @@ exports.devices_get_v2 = (req, res, next) => {
         })
     });;
 
+    var hardwareEv;
 
 
     function fetchDevice2() {
@@ -234,6 +235,7 @@ exports.devices_get_v2 = (req, res, next) => {
             if (device) {
                 var hardwareEv;
                 if (device.length > 0) {
+                    hardwareEv = device[0].hardware;
                     loop1: for (var j = 0; j < device.length; j++) {
                         hardwareEv = device[j].hardware;
                         for (var k = 0; k < deviceArray.length; k++) {
@@ -243,9 +245,8 @@ exports.devices_get_v2 = (req, res, next) => {
                         }
                         deviceArray.push(device[j])
                     }
-                }
-                else {
-                    console.log(device[0].hardware);
+                } else {
+                    console.log(hardwareEv);
                     const devices = new Device({
                         _id: new mongoose.Types.ObjectId(),
                         name: "",
@@ -256,7 +257,9 @@ exports.devices_get_v2 = (req, res, next) => {
                         position: userIdSuperuser[i].position,
                         referal: userIdSuperuser[i].referal
                     });
-                    deviceArray.push(devices);
+                    if (hardwareEv != null) {
+                        deviceArray.push(devices);
+                    }
                 }
             }
 
