@@ -245,37 +245,29 @@ exports.devices_get_v2 = (req, res, next) => {
                     }
                 }
                 else {
-                    const hardware = new Hardware({
-                        name: "",
-                        capacity: 0,
-                        chargingTime: "",
-                        dischargingTime: "",
-                        betteryHealth: 0,
-                        alarm: "",
-                        longitude: "",
-                        latitude: "",
-                        photoPath: "",
-                        lastUpdate: new Date(),
-                        active: false
-                    });
-
                     const device = new Device({
                         _id: new mongoose.Types.ObjectId(),
                         name: "",
                         description: "",
-                        user: userIdSuperuser[i]._id,
+                        useraaaaa: userIdSuperuser[i]._id,
                         hardware: {
-                            name: "",
-                            capacity: 0,
-                            chargingTime: "",
-                            dischargingTime: "",
-                            betteryHealth: 0,
-                            alarm: "",
-                            longitude: "",
-                            latitude: "",
-                            photoPath: "",
-                            lastUpdate: new Date(),
-                            active: false
+                            capacity: 68,
+                            chargingTime: "0.00",
+                            dischargingTime: "0.00",
+                            betteryHealth: 100,
+                            alarm: "0",
+                            photoPath: null,
+                            lastUpdate: "2021-01-21T14:47:01.784Z",
+                            active: true,
+                            _id: "5fe76b3d3af0cb111407740d",
+                            name: "PJU-A250",
+                            longitude: "112.74000",
+                            latitude: "-7.34216",
+                            hardwareId: "A250",
+                            __v: 0,
+                            lamp: false,
+                            brightness: 0,
+                            brightnessSchedule: 100
                         },
                         username: userIdSuperuser[i].username,
                         position: userIdSuperuser[i].position,
