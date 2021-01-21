@@ -30,6 +30,8 @@ exports.hardware_update_hardware = (req, res, next) => {
 
         var isActive = false;
 
+        console.log(resultHardware[0]);
+
         if (resultHardware[0].lastUpdate !== undefined) {
             if (resultHardware[0].lastUpdate !== null) {
                 try {
