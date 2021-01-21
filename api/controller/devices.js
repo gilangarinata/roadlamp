@@ -269,7 +269,7 @@ exports.devices_get_v2 = (req, res, next) => {
                             brightness: 0,
                             brightnessSchedule: 100
                         },
-                        username: userIdSuperuser[i].username,
+                        usernameaaaa: userIdSuperuser[i].username,
                         position: userIdSuperuser[i].position,
                         referal: userIdSuperuser[i].referal
                     });
