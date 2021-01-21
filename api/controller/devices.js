@@ -246,20 +246,42 @@ exports.devices_get_v2 = (req, res, next) => {
                         deviceArray.push(device[j])
                     }
                 } else {
-                    console.log(hardwareEv);
+
+
+                    const hardwares = new Hardware({
+                        capacity: 67,
+                        chargingTime: '0.00',
+                        dischargingTime: '0.00',
+                        betteryHealth: 100,
+                        alarm: '0',
+                        photoPath: null,
+                        lastUpdate: "2021-01-21T15:07:01.734Z",
+                        active: true,
+                        _id: new mongoose.Types.ObjectId(),
+                        name: 'PJU-A250',
+                        longitude: '112.74000',
+                        latitude: '-7.34216',
+                        hardwareId: 'A250',
+                        __v: 0,
+                        lamp: false,
+                        brightness: 0,
+                        brightnessSchedule: 100
+                    })
+
+                    console.log(hardwares);
+
                     const devices = new Device({
                         _id: new mongoose.Types.ObjectId(),
                         name: "",
                         description: "",
                         user: userIdSuperuser[i]._id,
-                        hardware: hardwareEv,
+                        hardware: hardwares,
                         username: userIdSuperuser[i].username,
                         position: userIdSuperuser[i].position,
                         referal: userIdSuperuser[i].referal
                     });
-                    if (hardwareEv != null) {
-                        deviceArray.push(devices);
-                    }
+                    deviceArray.push(devices);
+
                 }
             }
 
