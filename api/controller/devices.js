@@ -15,98 +15,60 @@ const e = require("cors");
 
 exports.devices_get_web = (req, res, next) => {
     const userId = req.params.userId;
-    var userIdSuperuser2;
+    var userIdSuperuser = Array();
     var deviceArray = Array()
     var i = 0;
+    var isSuperuser1;
+
     User.findById(userId).exec().then(users => {
         if (users != null) {
             if (users.position === "superuser1") {
-
-                Device.find({ user: userId }).populate('hardware').select('name description _id hardware user').exec().then(device => {
-                    if (device.length > 0) {
-                        for (var j = 0; j < device.length; j++) {
-                            deviceArray.push(device[j].hardware)
-                        }
-                    }
-
-                    User.find({ referalSU1: users.referal }).exec().then(users => {
-
-                        if (users.length > 0) {
-                            userIdSuperuser2 = users;
-                            fetchDevice();
-                        } else {
-                            return res.status(200).json({
-                                count: deviceArray.length,
-                                result: deviceArray,
-                            })
-                        }
-                    }).catch(err => {
-                        res.status(500).json({
-                            error: err
-                        })
-                    });
-                }).catch(err => {
-                    res.status(500).json({
-                        error: err
-                    })
-                });
-
-            } else if (users.position === "superuser2") {
-                console.log("2")
-                Device.find({ user: userId }).populate('hardware').select('name description _id hardware user').exec().then(device => {
-
-                    if (device.length > 0) {
-                        for (var j = 0; j < device.length; j++) {
-                            deviceArray.push(device[j].hardware)
-                        }
-                    }
-                    User.find({ referalFrom: users.referal }).exec().then(users => {
-                        if (users.length > 0) {
-                            userIdSuperuser2 = users;
-                            fetchDevice();
-                        } else {
-                            return res.status(200).json({
-                                count: deviceArray.length,
-                                result: deviceArray,
-                            })
-                        }
-                    }).catch(err => {
-                        res.status(500).json({
-                            error: err
-                        })
-                    });
-                }).catch(err => {
-                    res.status(500).json({
-                        error: err
-                    })
-                });
-            } else if (users.position === "user") {
-                console.log("3")
-                Device.find({ user: userId }).populate('hardware').select('name description _id hardware user').exec().then(device => {
-                    if (!device) {
-                        return res.status(404).json({
-                            message: "Devices Not Found."
-                        })
-                    }
-
-                    for (var j = 0; j < device.length; j++) {
-                        deviceArray.push(device[j].hardware)
-                    }
-
-                    res.status(200).json({
-                        count: device.length,
-                        result: deviceArray,
-                    })
-                }).catch(err => {
-                    res.status(500).json({
-                        error: err
-                    })
-                });
+                isSuperuser1 = true;
             } else {
-                return res.status(404).json({
-                    message: "Position Not Found"
-                })
+                isSuperuser1 = false;
             }
+
+            Device.find({ user: userId }).populate('hardware', 'hardwareId name lamp brightness brightnessSchedule active').select('name description _id hardware user username position referal').exec().then(device => {
+                if (device.length > 0) {
+                    for (var j = 0; j < device.length; j++) {
+                        deviceArray.push(device[j])
+                    }
+                }
+
+                User.find({ referalFrom: users.referal }).exec().then(users => {
+                    if (users.length > 0) {
+                        if (isSuperuser1) {
+                            for (var i = 0; i < users.length; i++) {
+                                if (users[i].position === "superuser2") {
+                                    userIdSuperuser.push(users[i]);
+                                }
+                            }
+                        } else {
+                            for (var i = 0; i < users.length; i++) {
+                                if (users[i].position === "user") {
+                                    userIdSuperuser.push(users[i]);
+                                }
+                            }
+                        }
+
+                        fetchDevice3();
+                    } else {
+                        return res.status(200).json({
+                            count: deviceArray.length,
+                            result: deviceArray,
+                        })
+                    }
+                }).catch(err => {
+                    res.status(500).json({
+                        error: err
+                    })
+                });
+            }).catch(err => {
+                res.status(500).json({
+                    error: err
+                })
+            });
+
         } else {
             return res.status(404).json({
                 message: "Users Not Found."
@@ -118,18 +80,20 @@ exports.devices_get_web = (req, res, next) => {
         })
     });;
 
-    function fetchDevice() {
-        Device.find({ user: userIdSuperuser2[i]._id }).populate('hardware').select('name description _id hardware user username position referal').exec().then(device => {
+    function fetchDevice3() {
+        Device.find({ user: userIdSuperuser[i]._id }).populate('hardware').select('name description _id hardware user username position referal').exec().then(device => {
             if (device) {
+                var hardwareEv;
                 if (device.length > 0) {
                     for (var j = 0; j < device.length; j++) {
-                        deviceArray.push(device[j].hardware)
+                        deviceArray.push(device[j])
                     }
                 }
             }
+
             i++
-            if (i < userIdSuperuser2.length) {
-                fetchDevice()
+            if (i < userIdSuperuser.length) {
+                fetchDevice2()
             } else {
                 res.status(200).json({
                     count: deviceArray.length,
@@ -137,14 +101,12 @@ exports.devices_get_web = (req, res, next) => {
                 })
             }
         }).catch(err => {
+            console.log(err);
             res.status(500).json({
                 error: err
             })
         });
     }
-
-
-
 }
 
 exports.devices_get_all = (req, res, next) => {
