@@ -43,11 +43,11 @@ exports.hardware_update_hardware = (req, res, next) => {
                 if (humidityOwm != null) {
                     humidity = humidityOwm;
                 }
-                updateHardware(resultHardware, temperature, humidity);
+                updateHardware(resultHardware, temperature, humidity, req);
             } else {
                 temperature = "-";
                 humidity = "-";
-                updateHardware(resultHardware, temperature, humidity);
+                updateHardware(resultHardware, temperature, humidity, req);
             }
         });
 
@@ -59,7 +59,7 @@ exports.hardware_update_hardware = (req, res, next) => {
     });
 }
 
-function updateHardware(resultHardware, temperature, humidity) {
+function updateHardware(resultHardware, temperature, humidity, req) {
     console.log(humidity + "  " + temperature);
     //add new hardware if hardwareId doesn't exist
     if (resultHardware.length < 1) {
