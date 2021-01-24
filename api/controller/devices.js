@@ -93,7 +93,7 @@ exports.devices_get_web = (req, res, next) => {
 
             i++
             if (i < userIdSuperuser.length) {
-                fetchDevice2()
+                fetchDevice3()
             } else {
                 res.status(200).json({
                     count: deviceArray.length,
