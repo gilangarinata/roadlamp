@@ -278,6 +278,10 @@ exports.devices_get_v2 = (req, res, next) => {
                 }
             }
         }
+
+        if (hardware.hardwareId == "B251") {
+            console.log("B251 " + isActive)
+        }
         return isActive;
     }
 }
