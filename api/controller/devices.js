@@ -205,11 +205,10 @@ exports.devices_get_v2 = (req, res, next) => {
                                 continue loop1;
                             }
                         }
+                        device[j].hardware.active = checkDeviceIsActive(device[j].hardware);
                         deviceArray.push(device[j])
                     }
                 } else {
-
-
                     const hardwares = new Hardware({
                         capacity: 67,
                         chargingTime: '0.00',
@@ -262,6 +261,29 @@ exports.devices_get_v2 = (req, res, next) => {
                 error: err
             })
         });
+    }
+
+    function checkDeviceIsActive(hardware) {
+        var isActive = false;
+        if (hardware != null) {
+            if (hardware.lastUpdate != null) {
+                try {
+                    const dateNow = new Date();
+                    const dateLastUpdate = hardware.lastUpdate;
+                    const diffTime = Math.abs(dateNow - dateLastUpdate);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    console.log(diffTime + " milliseconds");
+                    console.log(diffDays + " days");
+
+                    if (diffTime < 120000) { // if there is data updated less than 120 second 
+                        isActive = true;
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+        }
+        return isActive;
     }
 }
 
