@@ -27,9 +27,9 @@ exports.hardware_get_all = (req, res, next) => {
 exports.hardware_update_hardware = (req, res, next) => {
     const hardwareId = req.body.hardwareId;
     Hardware.find({ hardwareId }).exec().then(resultHardware => {
-        var temperature = "";
-        var humidity = "";
-        if (resultHardware.length > 1) {
+        var temperature = "-";
+        var humidity = "-";
+        if (resultHardware.length > 0) {
             const uri = 'http://api.openweathermap.org/data/2.5/weather?lat=' + resultHardware[0].latitude + '&lon=' + resultHardware[0].longitude + '&appid=' + openWeatherKey + '&units=metric';
             request(uri, function(error, response, body) {
                 if (!error && response.statusCode == 200) {
@@ -51,7 +51,26 @@ exports.hardware_update_hardware = (req, res, next) => {
                 }
             });
         } else {
-            updateHardware(resultHardware, temperature, humidity, req, res, hardwareId);
+            const uri = 'http://api.openweathermap.org/data/2.5/weather?lat=' + req.body.latitude + '&lon=' + req.body.longitude + '&appid=' + openWeatherKey + '&units=metric';
+            request(uri, function(error, response, body) {
+                if (!error && response.statusCode == 200) {
+                    var obj = JSON.parse(response.body);
+                    var temperatureOwm = obj.main.temp; //Own = Open Weather Map
+                    var humidityOwm = obj.main.humidity;
+
+                    if (temperatureOwm != null) {
+                        temperature = temperatureOwm;
+                    }
+                    if (humidityOwm != null) {
+                        humidity = humidityOwm;
+                    }
+                    updateHardware(resultHardware, temperature, humidity, req, res, hardwareId);
+                } else {
+                    temperature = "-";
+                    humidity = "-";
+                    updateHardware(resultHardware, temperature, humidity, req, res, hardwareId);
+                }
+            });
         }
 
 
