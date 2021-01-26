@@ -26,4 +26,6 @@ router.post("/update_brightness", DevicesController.devices_set_brightness);
 
 router.get("/web/:userId", DevicesController.devices_get_web);
 
+router.get("/webmap/:userId", DevicesController.devices_get_web_map);
+
 module.exports = router;
