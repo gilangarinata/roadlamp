@@ -201,7 +201,7 @@ exports.devices_get_v2 = (req, res, next) => {
                                 continue loop1;
                             }
                         }
-                        Hardware.update({ hardwareId: device[j].hardware.hardwareId }, { $set: { active: checkDeviceIsActive(device[j].hardware) } }).then(result => console.log("success updating harware :" + result)).catch(e => console.log("error updating harware :" + e));
+                        Hardware.update({ hardwareId: device[j].hardware.hardwareId }, { $set: { active: checkDeviceIsActive(device[j].hardware) } }).then(result => console.log("success updating harware :" + device[j].hardware.hardwareId)).catch(e => console.log("error updating harware :" + e));
                         deviceArray.push(device[j])
                     }
                 } else {
