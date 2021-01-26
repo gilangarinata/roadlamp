@@ -131,7 +131,13 @@ exports.devices_get_web_map = (req, res, next) => {
                     }
                 }
 
-                User.find({ referalFrom: users.referal, referalSU1: users.referal }).exec().then(users => {
+                User.find({
+                    $or: [{
+                        referalFrom: users.referal
+                    }, {
+                        referalSU1: users.referal
+                    }]
+                }).exec().then(users => {
                     if (users.length > 0) {
                         if (isSuperuser1) {
                             for (var i = 0; i < users.length; i++) {
