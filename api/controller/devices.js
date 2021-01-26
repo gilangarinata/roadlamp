@@ -41,6 +41,8 @@ exports.devices_get_web = (req, res, next) => {
                             for (var i = 0; i < users.length; i++) {
                                 if (users[i].position === "superuser2") {
                                     userIdSuperuser.push(users[i]);
+                                } else if (users[i].position === "user") {
+                                    userIdSuperuser.push(users[i]);
                                 }
                             }
                         } else {
