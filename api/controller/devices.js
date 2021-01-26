@@ -189,9 +189,6 @@ exports.devices_get_v2 = (req, res, next) => {
         })
     });;
 
-    var hardwareEv;
-
-
     function fetchDevice2() {
         Device.find({ user: userIdSuperuser[i]._id }).populate('hardware').select('name description _id hardware user username position referal').exec().then(device => {
             if (device) {
@@ -205,7 +202,7 @@ exports.devices_get_v2 = (req, res, next) => {
                                 continue loop1;
                             }
                         }
-                        device[j].hardware.active = checkDeviceIsActive(device[j].hardware);
+                        Hardware.update({ hardwareId: device[j].hardware.hardwareId }, { $set: { active: checkDeviceIsActive(device[j].hardware) } });
                         deviceArray.push(device[j])
                     }
                 } else {
@@ -272,8 +269,6 @@ exports.devices_get_v2 = (req, res, next) => {
                     const dateLastUpdate = hardware.lastUpdate;
                     const diffTime = Math.abs(dateNow - dateLastUpdate);
                     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    console.log(diffTime + " milliseconds");
-                    console.log(diffDays + " days");
 
                     if (diffTime < 120000) { // if there is data updated less than 120 second 
                         isActive = true;
