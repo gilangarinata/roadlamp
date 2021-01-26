@@ -202,7 +202,7 @@ exports.devices_get_v2 = (req, res, next) => {
                                 continue loop1;
                             }
                         }
-                        Hardware.update({ hardwareId: device[j].hardware.hardwareId }, { $set: { active: checkDeviceIsActive(device[j].hardware) } });
+                        Hardware.update({ hardwareId: device[j].hardware.hardwareId }, { $set: { active: checkDeviceIsActive(device[j].hardware) } }).then(result => console.log("success updating harware :" + result)).catch(e => console.log("error updating harware :" + e));
                         deviceArray.push(device[j])
                     }
                 } else {
@@ -226,7 +226,6 @@ exports.devices_get_v2 = (req, res, next) => {
                         brightnessSchedule: 100
                     })
 
-                    console.log(hardwares);
 
                     const devices = new Device({
                         _id: new mongoose.Types.ObjectId(),
@@ -269,6 +268,7 @@ exports.devices_get_v2 = (req, res, next) => {
                     const dateLastUpdate = hardware.lastUpdate;
                     const diffTime = Math.abs(dateNow - dateLastUpdate);
                     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    console.log(diffTime + " milliseconds  DV" + hardware.hardwareId);
 
                     if (diffTime < 120000) { // if there is data updated less than 120 second 
                         isActive = true;
