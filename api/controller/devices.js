@@ -217,7 +217,7 @@ exports.devices_get_web_map = (req, res, next) => {
 exports.devices_get_all = (req, res, next) => {
     Device.find().populate('hardware').select('name description _id hardware user username position referal').exec().then(device => {
         return res.status(200).json({
-            count: 0,
+            count: device.length,
             result: device,
         })
     }).catch(err => {
