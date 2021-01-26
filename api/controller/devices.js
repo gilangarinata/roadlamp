@@ -90,6 +90,9 @@ exports.devices_get_web = (req, res, next) => {
                     }
                 }
             }
+            for (var k = 0; k < deviceArray.length; k++) {
+                Hardware.update({ hardwareId: deviceArray[k].hardware.hardwareId }, { $set: { active: checkDeviceIsActive(deviceArray[k].hardware) } }).then(result => console.log("success updating harware")).catch(e => console.log("error updating harware :" + e));
+            }
 
             i++
             if (i < userIdSuperuser.length) {
@@ -106,6 +109,33 @@ exports.devices_get_web = (req, res, next) => {
                 error: err
             })
         });
+    }
+
+
+    function checkDeviceIsActive(hardware) {
+        var isActive = false;
+        if (hardware != null) {
+            if (hardware.lastUpdate != null) {
+                try {
+                    const dateNow = new Date();
+                    const dateLastUpdate = hardware.lastUpdate;
+                    const diffTime = Math.abs(dateNow - dateLastUpdate);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    console.log(diffTime + " milliseconds  DV" + hardware.hardwareId);
+
+                    if (diffTime < 120000) { // if there is data updated less than 120 second 
+                        isActive = true;
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+        }
+
+        if (hardware.hardwareId == "B251") {
+            console.log("B251 " + isActive)
+        }
+        return isActive;
     }
 }
 
@@ -196,6 +226,10 @@ exports.devices_get_web_map = (req, res, next) => {
                 }
             }
 
+            for (var k = 0; k < deviceArray.length; k++) {
+                Hardware.update({ hardwareId: deviceArray[k].hardware.hardwareId }, { $set: { active: checkDeviceIsActive(deviceArray[k].hardware) } }).then(result => console.log("success updating harware")).catch(e => console.log("error updating harware :" + e));
+            }
+
             i++
             if (i < userIdSuperuser.length) {
                 fetchDevice3()
@@ -211,6 +245,33 @@ exports.devices_get_web_map = (req, res, next) => {
                 error: err
             })
         });
+    }
+
+
+    function checkDeviceIsActive(hardware) {
+        var isActive = false;
+        if (hardware != null) {
+            if (hardware.lastUpdate != null) {
+                try {
+                    const dateNow = new Date();
+                    const dateLastUpdate = hardware.lastUpdate;
+                    const diffTime = Math.abs(dateNow - dateLastUpdate);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    console.log(diffTime + " milliseconds  DV" + hardware.hardwareId);
+
+                    if (diffTime < 120000) { // if there is data updated less than 120 second 
+                        isActive = true;
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+        }
+
+        if (hardware.hardwareId == "B251") {
+            console.log("B251 " + isActive)
+        }
+        return isActive;
     }
 }
 
