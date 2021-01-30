@@ -307,7 +307,7 @@ exports.users_get_referal = (req, res, next) => {
 
 exports.users_get_goverment = (req, res, next) => {
     var query = req.params.query;
-    if (query === "") {
+    if (query === "0") {
         User.find({ position: "superuser2" })
             .exec()
             .then((users) => {
