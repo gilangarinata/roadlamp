@@ -323,12 +323,19 @@ exports.users_get_goverment = (req, res, next) => {
             });
 
     } else {
-        User.find({ $and: [{ position: "superuser2" }, { username: "/gila/" }] })
+        User.find({ position: "superuser2" })
             .exec()
             .then((users) => {
+                var newUsers = [];
+                for (var i = 0; i < users.length; i++) {
+                    if (users[i].username.includes(query)) {
+                        newUsers.push(users[i]);
+                    }
+                }
+
                 res.status(200).json({
-                    count: users.length,
-                    users: users
+                    count: newUsers.length,
+                    users: newUsers
                 })
             })
             .catch((err) => {
