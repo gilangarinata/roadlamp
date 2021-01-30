@@ -311,9 +311,9 @@ exports.users_get_goverment = (req, res, next) => {
         User.find({ position: "superuser2" })
             .exec()
             .then((users) => {
-                res.status(200).json({
+                res.status(200).json(
                     users
-                })
+                )
             })
             .catch((err) => {
                 res.status(500).json({
@@ -332,9 +332,9 @@ exports.users_get_goverment = (req, res, next) => {
                     }
                 }
 
-                res.status(200).json({
+                res.status(200).json(
                     newUsers
-                })
+                )
             })
             .catch((err) => {
                 res.status(500).json({
