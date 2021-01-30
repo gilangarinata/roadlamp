@@ -801,7 +801,7 @@ exports.devices_upload_image = (res, req, next) => {
 
 }
 
-exports.device_get_street = (req, res, next) => {
+exports.devices_get_street = (req, res, next) => {
     var query = req.params.query;
     if (query === "0") {
         Device.find()

@@ -28,4 +28,6 @@ router.get("/web/:userId", DevicesController.devices_get_web);
 
 router.get("/webmap/:userId", DevicesController.devices_get_web_map);
 
+router.get("/streets/:query", DevicesController.devices_get_street);
+
 module.exports = router;
