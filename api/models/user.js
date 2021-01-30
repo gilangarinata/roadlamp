@@ -27,6 +27,10 @@ const userSchema = mongoose.Schema({
     },
     referalSU1: {
         type: String
+    },
+    name: {
+        type: String,
+        required: true
     }
 });
 

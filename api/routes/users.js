@@ -18,4 +18,6 @@ router.get("/delete_all", UsersController.users_delete_all);
 
 router.get("/getUserReferal/:referal/:position", UsersController.users_get_referal);
 
+router.get("/getGoverment/:query", UsersController.users_get_goverment);
+
 module.exports = router;

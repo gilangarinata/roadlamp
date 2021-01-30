@@ -274,7 +274,6 @@ exports.users_get_referal = (req, res, next) => {
     var refferal = req.params.referal;
     var position = req.params.position;
 
-
     if (position === "superuser1") {
         User.find({ referalSU1: refferal })
             .exec()
@@ -304,4 +303,41 @@ exports.users_get_referal = (req, res, next) => {
                 });
             });
     }
+}
+
+exports.users_get_goverment = (req, res, next) => {
+    var query = req.params.query;
+    if (query === "") {
+        User.find({ position: "superuser2" })
+            .exec()
+            .then((users) => {
+                res.status(200).json({
+                    count: users.length,
+                    users: users
+                })
+            })
+            .catch((err) => {
+                res.status(500).json({
+                    error: err,
+                });
+            });
+
+    } else {
+        User.find({ $and: [{ position: "superuser2", name: query }] })
+            .exec()
+            .then((users) => {
+                res.status(200).json({
+                    count: users.length,
+                    users: users
+                })
+            })
+            .catch((err) => {
+                res.status(500).json({
+                    error: err,
+                });
+            });
+    }
+
+
+
 }
