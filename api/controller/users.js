@@ -323,7 +323,7 @@ exports.users_get_goverment = (req, res, next) => {
             });
 
     } else {
-        User.find({ $and: [{ position: "superuser2", name: query }] })
+        User.find({ $and: [{ position: "superuser2" }, { name: query }] })
             .exec()
             .then((users) => {
                 res.status(200).json({
