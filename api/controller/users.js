@@ -312,8 +312,7 @@ exports.users_get_goverment = (req, res, next) => {
             .exec()
             .then((users) => {
                 res.status(200).json({
-                    count: users.length,
-                    users: users
+                    users
                 })
             })
             .catch((err) => {
@@ -334,8 +333,7 @@ exports.users_get_goverment = (req, res, next) => {
                 }
 
                 res.status(200).json({
-                    count: newUsers.length,
-                    users: newUsers
+                    newUsers
                 })
             })
             .catch((err) => {
