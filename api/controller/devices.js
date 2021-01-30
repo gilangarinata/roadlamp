@@ -800,3 +800,46 @@ exports.devices_upload_image = (res, req, next) => {
     const userId = req.body.images;
 
 }
+
+exports.device_get_street = (req, res, next) => {
+    var query = req.params.query;
+    if (query === "0") {
+        Device.find()
+            .exec()
+            .then((devices) => {
+                res.status(200).json(
+                    devices
+                )
+            })
+            .catch((err) => {
+                res.status(500).json({
+                    error: err,
+                });
+            });
+
+    } else {
+        Device.find()
+            .exec()
+            .then((devices) => {
+                var newDevices = [];
+                for (var i = 0; i < devices.length; i++) {
+                    if (devices[i].ruasJalan == null) continue;
+                    if (devices[i].ruasJalan.toLowerCase().includes(query.toLowerCase())) {
+                        newDevices.push(devices[i]);
+                    }
+                }
+
+                res.status(200).json(
+                    devices
+                )
+            })
+            .catch((err) => {
+                res.status(500).json({
+                    error: err,
+                });
+            });
+    }
+
+
+
+}
