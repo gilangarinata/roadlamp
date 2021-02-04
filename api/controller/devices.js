@@ -807,8 +807,14 @@ exports.devices_get_street = (req, res, next) => {
         Device.find()
             .exec()
             .then((devices) => {
+                var ruasJalan = [];
+                for (var i = 0; i < devices.length; i++) {
+                    if (devices[i].ruasJalan != null) {
+                        ruasJalan.push(devices[i].ruasJalan);
+                    }
+                }
                 res.status(200).json(
-                    devices
+                    ruasJalan
                 )
             })
             .catch((err) => {
