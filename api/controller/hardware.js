@@ -143,10 +143,10 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
 
             const hardware = new Hardware({
                 name: req.body[keys[i]].name,
-                capacity: req.body[keys[i]].capacity,
-                chargingTime: req.body[keys[i]].chargingTime,
+                capacity: Number(req.body[keys[i]].capacity),
+                chargingTime: Number(req.body[keys[i]].chargingTime),
                 dischargingTime: req.body[keys[i]].dischargingTime,
-                betteryHealth: req.body[keys[i]].betteryHealth,
+                betteryHealth: Number(req.body[keys[i]].betteryHealth),
                 alarm: req.body[keys[i]].alarm,
                 longitude: req.body[keys[i]].longitude,
                 latitude: req.body[keys[i]].latitude,
