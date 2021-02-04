@@ -25,8 +25,10 @@ exports.hardware_get_all = (req, res, next) => {
 }
 
 exports.hardware_update_hardware_v2 = (req, res, next) => {
-    console.log(req.body);
 
+    var keys = [];
+    for (var k in req.body) keys.push(k);
+    console.log(keys);
     const hardwareId = req.body.hardwareId;
     Hardware.find({ hardwareId }).exec().then(resultHardware => {
         var temperature = "-";
