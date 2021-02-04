@@ -25,66 +25,69 @@ exports.hardware_get_all = (req, res, next) => {
 }
 
 exports.hardware_update_hardware_v2 = (req, res, next) => {
-
-    var keys = [];
-    for (var k in req.body) keys.push(k);
-    console.log(keys);
-    const hardwareId = req.body.hardwareId;
-    Hardware.find({ hardwareId }).exec().then(resultHardware => {
-        var temperature = "-";
-        var humidity = "-";
-        if (resultHardware.length > 0) {
-            const uri = 'http://api.openweathermap.org/data/2.5/weather?lat=' + resultHardware[0].latitude + '&lon=' + resultHardware[0].longitude + '&appid=' + openWeatherKey + '&units=metric';
-            request(uri, function(error, response, body) {
-                if (!error && response.statusCode == 200) {
-                    var obj = JSON.parse(response.body);
-                    var temperatureOwm = obj.main.temp; //Own = Open Weather Map
-                    var humidityOwm = obj.main.humidity;
-
-                    if (temperatureOwm != null) {
-                        temperature = temperatureOwm;
-                    }
-                    if (humidityOwm != null) {
-                        humidity = humidityOwm;
-                    }
-                    updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId);
-                } else {
-                    temperature = "-";
-                    humidity = "-";
-                    updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId);
-                }
-            });
-        } else {
-            const uri = 'http://api.openweathermap.org/data/2.5/weather?lat=' + req.body.latitude + '&lon=' + req.body.longitude + '&appid=' + openWeatherKey + '&units=metric';
-            request(uri, function(error, response, body) {
-                if (!error && response.statusCode == 200) {
-                    var obj = JSON.parse(response.body);
-                    var temperatureOwm = obj.main.temp; //Own = Open Weather Map
-                    var humidityOwm = obj.main.humidity;
-
-                    if (temperatureOwm != null) {
-                        temperature = temperatureOwm;
-                    }
-                    if (humidityOwm != null) {
-                        humidity = humidityOwm;
-                    }
-                    updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId);
-                } else {
-                    temperature = "-";
-                    humidity = "-";
-                    updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId);
-                }
-            });
+    for (var key in req.body) {
+        if (p.hasOwnProperty(key)) {
+            console.log(key + " -> " + p[key]);
         }
+    }
+
+
+    // const hardwareId = req.body.hardwareId;
+    // Hardware.find({ hardwareId }).exec().then(resultHardware => {
+    //     var temperature = "-";
+    //     var humidity = "-";
+    //     if (resultHardware.length > 0) {
+    //         const uri = 'http://api.openweathermap.org/data/2.5/weather?lat=' + resultHardware[0].latitude + '&lon=' + resultHardware[0].longitude + '&appid=' + openWeatherKey + '&units=metric';
+    //         request(uri, function(error, response, body) {
+    //             if (!error && response.statusCode == 200) {
+    //                 var obj = JSON.parse(response.body);
+    //                 var temperatureOwm = obj.main.temp; //Own = Open Weather Map
+    //                 var humidityOwm = obj.main.humidity;
+
+    //                 if (temperatureOwm != null) {
+    //                     temperature = temperatureOwm;
+    //                 }
+    //                 if (humidityOwm != null) {
+    //                     humidity = humidityOwm;
+    //                 }
+    //                 updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId);
+    //             } else {
+    //                 temperature = "-";
+    //                 humidity = "-";
+    //                 updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId);
+    //             }
+    //         });
+    //     } else {
+    //         const uri = 'http://api.openweathermap.org/data/2.5/weather?lat=' + req.body.latitude + '&lon=' + req.body.longitude + '&appid=' + openWeatherKey + '&units=metric';
+    //         request(uri, function(error, response, body) {
+    //             if (!error && response.statusCode == 200) {
+    //                 var obj = JSON.parse(response.body);
+    //                 var temperatureOwm = obj.main.temp; //Own = Open Weather Map
+    //                 var humidityOwm = obj.main.humidity;
+
+    //                 if (temperatureOwm != null) {
+    //                     temperature = temperatureOwm;
+    //                 }
+    //                 if (humidityOwm != null) {
+    //                     humidity = humidityOwm;
+    //                 }
+    //                 updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId);
+    //             } else {
+    //                 temperature = "-";
+    //                 humidity = "-";
+    //                 updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId);
+    //             }
+    //         });
+    //     }
 
 
 
-    }).catch(err => {
-        console.log(err)
-        res.status(500).json({
-            error: err
-        })
-    });
+    // }).catch(err => {
+    //     console.log(err)
+    //     res.status(500).json({
+    //         error: err
+    //     })
+    // });
 
 
     function updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId) {
