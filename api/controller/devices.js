@@ -465,7 +465,7 @@ exports.devices_get_v3 = (req, res, next) => {
         if (users != null) {
             User.find({ referalFrom: users.referal }).exec().then(commonUsers => {
                 for (var i = 0; i < commonUsers.length; i++) {
-                    userIdSuperuser[i].push(commonUsers[i]);
+                    userIdSuperuser.push(commonUsers[i]);
                 }
                 fetchDevice4();
             }).catch(err => console.log(err));
