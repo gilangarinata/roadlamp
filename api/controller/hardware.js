@@ -26,8 +26,8 @@ exports.hardware_get_all = (req, res, next) => {
 
 exports.hardware_update_hardware_v2 = (req, res, next) => {
     for (var key in req.body) {
-        if (p.hasOwnProperty(key)) {
-            console.log(key + " -> " + p[key]);
+        if (req.body.hasOwnProperty(key)) {
+            console.log(key + " -> " + req.body[key]);
         }
     }
 
