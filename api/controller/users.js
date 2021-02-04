@@ -64,7 +64,8 @@ exports.users_signup = (req, res, next) => {
                                             password: hash,
                                             referal: refferal,
                                             referalFrom: req.body.referal,
-                                            referalSU1: referalSU1
+                                            referalSU1: referalSU1,
+                                            name: req.body.name
                                         });
                                         user
                                             .save()
