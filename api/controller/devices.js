@@ -811,7 +811,8 @@ exports.device_add = (req, res, next) => {
                     username: user.username,
                     position: user.position,
                     referal: user.referal,
-                    ruasJalan: req.body.ruasJalan
+                    ruasJalan: req.body.ruasJalan,
+                    referalFrom: user.referalFrom
                 });
 
                 return device.save().then(result => {

@@ -36,6 +36,9 @@ const deviceSchema = mongoose.Schema({
         type: String,
         default: null
     },
+    referalFrom: {
+        type: String
+    },
     ruasJalan: {
         type: String
     }
