@@ -831,12 +831,11 @@ exports.devices_get_street = (req, res, next) => {
                 for (var i = 0; i < devices.length; i++) {
                     if (devices[i].ruasJalan == null) continue;
                     if (devices[i].ruasJalan.toLowerCase().includes(query.toLowerCase())) {
-                        newDevices.push(devices[i]);
+                        newDevices.push(devices[i].ruasJalan);
                     }
                 }
-
                 res.status(200).json(
-                    devices
+                    newDevices
                 )
             })
             .catch((err) => {
