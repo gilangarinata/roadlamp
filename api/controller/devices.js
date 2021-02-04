@@ -810,7 +810,7 @@ exports.devices_get_street = (req, res, next) => {
                 var ruasJalan = [];
                 for (var i = 0; i < devices.length; i++) {
                     if (devices[i].ruasJalan != null) {
-                        ruasJalan.push(devices[i].ruasJalan);
+                        ruasJalan.push(devices[i]);
                     }
                 }
                 res.status(200).json(
@@ -831,7 +831,7 @@ exports.devices_get_street = (req, res, next) => {
                 for (var i = 0; i < devices.length; i++) {
                     if (devices[i].ruasJalan == null) continue;
                     if (devices[i].ruasJalan.toLowerCase().includes(query.toLowerCase())) {
-                        newDevices.push(devices[i].ruasJalan);
+                        newDevices.push(devices[i]);
                     }
                 }
                 res.status(200).json(
