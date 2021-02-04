@@ -25,73 +25,72 @@ exports.hardware_get_all = (req, res, next) => {
 }
 
 exports.hardware_update_hardware_v2 = (req, res, next) => {
+    var keys = [];
+    var i = 0;
+    var resultObj = {};
     for (var key in req.body) {
-        if (req.body.hasOwnProperty(key)) {
-            console.log(key + " -> " + req.body[key]);
-        }
+        keys.push(key);
+    }
+
+    updateHardware(req.body[keys[i]].hardwareId);
+
+    function updateHardware(hardwareId) {
+        Hardware.find({ hardwareId }).exec().then(resultHardware => {
+            var temperature = "-";
+            var humidity = "-";
+            if (resultHardware.length > 0) {
+                const uri = 'http://api.openweathermap.org/data/2.5/weather?lat=' + resultHardware[0].latitude + '&lon=' + resultHardware[0].longitude + '&appid=' + openWeatherKey + '&units=metric';
+                request(uri, function(error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                        var obj = JSON.parse(response.body);
+                        var temperatureOwm = obj.main.temp; //Own = Open Weather Map
+                        var humidityOwm = obj.main.humidity;
+
+                        if (temperatureOwm != null) {
+                            temperature = temperatureOwm;
+                        }
+                        if (humidityOwm != null) {
+                            humidity = humidityOwm;
+                        }
+                        updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId);
+                    } else {
+                        temperature = "-";
+                        humidity = "-";
+                        updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId);
+                    }
+                });
+            } else {
+                const uri = 'http://api.openweathermap.org/data/2.5/weather?lat=' + req.body.latitude + '&lon=' + req.body.longitude + '&appid=' + openWeatherKey + '&units=metric';
+                request(uri, function(error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                        var obj = JSON.parse(response.body);
+                        var temperatureOwm = obj.main.temp; //Own = Open Weather Map
+                        var humidityOwm = obj.main.humidity;
+
+                        if (temperatureOwm != null) {
+                            temperature = temperatureOwm;
+                        }
+                        if (humidityOwm != null) {
+                            humidity = humidityOwm;
+                        }
+                        updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId);
+                    } else {
+                        temperature = "-";
+                        humidity = "-";
+                        updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId);
+                    }
+                });
+            }
+
+
+
+        }).catch(err => {
+            console.log(err)
+        });
     }
 
 
-    // const hardwareId = req.body.hardwareId;
-    // Hardware.find({ hardwareId }).exec().then(resultHardware => {
-    //     var temperature = "-";
-    //     var humidity = "-";
-    //     if (resultHardware.length > 0) {
-    //         const uri = 'http://api.openweathermap.org/data/2.5/weather?lat=' + resultHardware[0].latitude + '&lon=' + resultHardware[0].longitude + '&appid=' + openWeatherKey + '&units=metric';
-    //         request(uri, function(error, response, body) {
-    //             if (!error && response.statusCode == 200) {
-    //                 var obj = JSON.parse(response.body);
-    //                 var temperatureOwm = obj.main.temp; //Own = Open Weather Map
-    //                 var humidityOwm = obj.main.humidity;
-
-    //                 if (temperatureOwm != null) {
-    //                     temperature = temperatureOwm;
-    //                 }
-    //                 if (humidityOwm != null) {
-    //                     humidity = humidityOwm;
-    //                 }
-    //                 updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId);
-    //             } else {
-    //                 temperature = "-";
-    //                 humidity = "-";
-    //                 updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId);
-    //             }
-    //         });
-    //     } else {
-    //         const uri = 'http://api.openweathermap.org/data/2.5/weather?lat=' + req.body.latitude + '&lon=' + req.body.longitude + '&appid=' + openWeatherKey + '&units=metric';
-    //         request(uri, function(error, response, body) {
-    //             if (!error && response.statusCode == 200) {
-    //                 var obj = JSON.parse(response.body);
-    //                 var temperatureOwm = obj.main.temp; //Own = Open Weather Map
-    //                 var humidityOwm = obj.main.humidity;
-
-    //                 if (temperatureOwm != null) {
-    //                     temperature = temperatureOwm;
-    //                 }
-    //                 if (humidityOwm != null) {
-    //                     humidity = humidityOwm;
-    //                 }
-    //                 updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId);
-    //             } else {
-    //                 temperature = "-";
-    //                 humidity = "-";
-    //                 updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId);
-    //             }
-    //         });
-    //     }
-
-
-
-    // }).catch(err => {
-    //     console.log(err)
-    //     res.status(500).json({
-    //         error: err
-    //     })
-    // });
-
-
     function updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId) {
-        console.log(humidity + "  " + temperature);
         //add new hardware if hardwareId doesn't exist
         if (resultHardware.length < 1) {
             const hardware = new Hardware({
@@ -197,7 +196,7 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
                             });
                     }
 
-                    res.status(200).json({
+                    resultObj[hardwareId] = {
                         lamp: resultHardware[0].lamp != null ? resultHardware[0].lamp : false,
                         brightness: resultHardware[0].brightness != null ? resultHardware[0].brightness : 0,
                         count: schedule.length,
@@ -208,15 +207,18 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
                                 brightness: schedule.brightness
                             }
                         })
-                    })
+                    }
+                    i++;
+                    if (i < keys.length) {
+                        updateHardware(req.body[keys[i]].hardwareId);
+                    } else {
+                        res.status(200).json(resultObj);
+                    }
                 }).catch(err => {
                     console.log(err)
                 });
             }).catch(err => {
                 console.log(err)
-                res.status(500).json({
-                    error: err
-                })
             });
         }
     }
