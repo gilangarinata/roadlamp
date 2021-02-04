@@ -310,8 +310,10 @@ exports.users_get_goverment = (req, res, next) => {
             .then((users) => {
                 var newUsers = [];
                 for (var i = 0; i < users.length; i++) {
-                    if (users[i].name.toLowerCase().includes(query.toLowerCase())) {
-                        newUsers.push(users[i]);
+                    if (users[i].name != null) {
+                        if (users[i].name.toLowerCase().includes(query.toLowerCase())) {
+                            newUsers.push(users[i]);
+                        }
                     }
                 }
 
