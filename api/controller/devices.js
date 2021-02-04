@@ -895,8 +895,13 @@ exports.devices_get_street = (req, res, next) => {
             .exec()
             .then((devices) => {
                 var ruasJalan = [];
-                for (var i = 0; i < devices.length; i++) {
+                loop1: for (var i = 0; i < devices.length; i++) {
                     if (devices[i].ruasJalan != null) {
+                        loop2: for (var j = 0; j < ruasJalan.length; j++) {
+                            if (devices[i].ruasJalan == ruasJalan[j].ruasJalan) {
+                                continue loop1;
+                            }
+                        }
                         ruasJalan.push(devices[i]);
                     }
                 }
@@ -915,8 +920,14 @@ exports.devices_get_street = (req, res, next) => {
             .exec()
             .then((devices) => {
                 var newDevices = [];
-                for (var i = 0; i < devices.length; i++) {
+                loop1: for (var i = 0; i < devices.length; i++) {
                     if (devices[i].ruasJalan == null) continue;
+                    loop2: for (var j = 0; j < newDevices.length; j++) {
+                        if (devices[i].ruasJalan == newDevices[j].ruasJalan) {
+                            continue loop1;
+                        }
+                    }
+
                     if (devices[i].ruasJalan.toLowerCase().includes(query.toLowerCase())) {
                         newDevices.push(devices[i]);
                     }

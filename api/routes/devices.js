@@ -12,6 +12,8 @@ router.post("/upload", MediaHandler.upload.single('images'), DevicesController.d
 
 router.get("/:userId", DevicesController.devices_get_v2);
 
+router.post("/v3", DevicesController.devices_get_v3);
+
 router.post("/", MediaHandler.upload.single('images'), DevicesController.device_add);
 
 router.delete("/upload/:hardwareId", DevicesController.device_delete_img);
