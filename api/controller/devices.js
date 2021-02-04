@@ -464,10 +464,18 @@ exports.devices_get_v3 = (req, res, next) => {
     User.findById(userId).exec().then(users => {
         if (users != null) {
             User.find({ referalFrom: users.referal }).exec().then(commonUsers => {
-                for (var i = 0; i < commonUsers.length; i++) {
-                    userIdSuperuser.push(commonUsers[i]);
+                if (commonUsers.length > 0) {
+                    for (var i = 0; i < commonUsers.length; i++) {
+                        userIdSuperuser.push(commonUsers[i]);
+                    }
+                    fetchDevice4();
+                } else {
+                    return res.status(200).json({
+                        count: 0,
+                        result: [],
+                    })
                 }
-                fetchDevice4();
+
             }).catch(err => console.log(err));
         } else {
             return res.status(404).json({
