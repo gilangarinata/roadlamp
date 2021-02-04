@@ -60,7 +60,7 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
                     }
                 });
             } else {
-                const uri = 'http://api.openweathermap.org/data/2.5/weather?lat=' + req.body.latitude + '&lon=' + req.body.longitude + '&appid=' + openWeatherKey + '&units=metric';
+                const uri = 'http://api.openweathermap.org/data/2.5/weather?lat=' + req.body[keys[i]].latitude + '&lon=' + req.body[keys[i]].longitude + '&appid=' + openWeatherKey + '&units=metric';
                 request(uri, function(error, response, body) {
                     if (!error && response.statusCode == 200) {
                         var obj = JSON.parse(response.body);
@@ -95,15 +95,15 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
         if (resultHardware.length < 1) {
             const hardware = new Hardware({
                 _id: new mongoose.Types.ObjectId(),
-                name: req.body.name,
-                capacity: req.body.capacity,
-                chargingTime: req.body.chargingTime,
-                dischargingTime: req.body.dischargingTime,
-                betteryHealth: req.body.betteryHealth,
-                alarm: req.body.alarm,
-                longitude: req.body.longitude,
-                latitude: req.body.latitude,
-                hardwareId: req.body.hardwareId,
+                name: req.body[keys[i]].name,
+                capacity: req.body[keys[i]].capacity,
+                chargingTime: req.body[keys[i]].chargingTime,
+                dischargingTime: req.body[keys[i]].dischargingTime,
+                betteryHealth: req.body[keys[i]].betteryHealth,
+                alarm: req.body[keys[i]].alarm,
+                longitude: req.body[keys[i]].longitude,
+                latitude: req.body[keys[i]].latitude,
+                hardwareId: req.body[keys[i]].hardwareId,
                 temperature: temperature,
                 humidity: humidity
             });
@@ -142,14 +142,14 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
 
 
             const hardware = new Hardware({
-                name: req.body.name,
-                capacity: req.body.capacity,
-                chargingTime: req.body.chargingTime,
-                dischargingTime: req.body.dischargingTime,
-                betteryHealth: req.body.betteryHealth,
-                alarm: req.body.alarm,
-                longitude: req.body.longitude,
-                latitude: req.body.latitude,
+                name: req.body[keys[i]].name,
+                capacity: req.body[keys[i]].capacity,
+                chargingTime: req.body[keys[i]].chargingTime,
+                dischargingTime: req.body[keys[i]].dischargingTime,
+                betteryHealth: req.body[keys[i]].betteryHealth,
+                alarm: req.body[keys[i]].alarm,
+                longitude: req.body[keys[i]].longitude,
+                latitude: req.body[keys[i]].latitude,
                 photoPath: resultHardware[0].photoPath,
                 lastUpdate: new Date(),
                 active: isActive,
