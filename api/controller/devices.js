@@ -454,6 +454,93 @@ exports.devices_get_v2 = (req, res, next) => {
     }
 }
 
+exports.devices_get_v3 = (req, res, next) => {
+    const userId = req.body.userId;
+    const ruasJalan = req.body.ruasJalan;
+    var userIdSuperuser = Array();
+    var deviceArray = Array()
+    var i = 0;
+
+    User.findById(userId).exec().then(users => {
+        if (users != null) {
+            User.find({ referalFrom: users.referal }).exec().then(commonUsers => {
+                for (var i = 0; i < commonUsers.length; i++) {
+                    userIdSuperuser[i].push(commonUsers[i]);
+                }
+                fetchDevice4();
+            }).catch(err => console.log(err));
+        } else {
+            return res.status(404).json({
+                message: "Users Not Found."
+            })
+        }
+    }).catch(err => {
+        res.status(500).json({
+            error: err
+        })
+    });;
+
+    function fetchDevice4() {
+        Device.find({ user: userIdSuperuser[i]._id }).populate('hardware').exec().then(device => {
+            if (device) {
+                if (device.length > 0) {
+                    for (var j = 0; j < device.length; j++) {
+                        if (device[j].ruasJalan == ruasJalan) {
+                            deviceArray.push(device[j])
+                        }
+                    }
+                }
+            }
+
+            for (var k = 0; k < deviceArray.length; k++) {
+                Hardware.update({ hardwareId: deviceArray[k].hardware.hardwareId }, { $set: { active: checkDeviceIsActive(deviceArray[k].hardware) } }).then(result => console.log("success updating harware")).catch(e => console.log("error updating harware :" + e));
+            }
+
+            i++
+            if (i < userIdSuperuser.length) {
+                fetchDevice4()
+            } else {
+                res.status(200).json({
+                    count: deviceArray.length,
+                    result: deviceArray,
+                })
+            }
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            })
+        });
+    }
+
+    function checkDeviceIsActive(hardware) {
+        var isActive = false;
+        if (hardware != null) {
+            if (hardware.lastUpdate != null) {
+                try {
+                    const dateNow = new Date();
+                    const dateLastUpdate = hardware.lastUpdate;
+                    const diffTime = Math.abs(dateNow - dateLastUpdate);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    console.log(diffTime + " milliseconds  DV" + hardware.hardwareId);
+
+                    if (diffTime < 120000) { // if there is data updated less than 120 second 
+                        isActive = true;
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+        }
+
+        if (hardware.hardwareId == "B251") {
+            console.log("B251 " + isActive)
+        }
+        return isActive;
+    }
+}
+
+
 exports.devices_get = (req, res, next) => {
     const userId = req.params.userId;
     var userIdSuperuser2;
