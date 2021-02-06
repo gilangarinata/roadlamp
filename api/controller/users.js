@@ -58,6 +58,8 @@ exports.users_signup = (req, res, next) => {
                                             error: err,
                                         });
                                     } else {
+                                        var newUserReferalFrom = [];
+                                        newUserReferalFrom.push(req.body.referal);
                                         const user = new User({
                                             _id: new mongoose.Types.ObjectId(),
                                             username: req.body.username,
@@ -66,6 +68,7 @@ exports.users_signup = (req, res, next) => {
                                             password: hash,
                                             referal: refferal,
                                             referalFrom: req.body.referal,
+                                            referalFrom2: newUserReferalFrom,
                                             referalSU1: referalSU1,
                                             name: req.body.name
                                         });
