@@ -359,7 +359,7 @@ exports.get_all_user_admin = (req, res, next) => {
                 for (var i = 0; i < users.length; i++) {
                     if (users[i].name != null) {
                         var buf = Buffer.from(users[i].username.toLowerCase());
-                        var buf2 = Buffer.from(user[i].name.toLowerCase());
+                        var buf2 = Buffer.from(users[i].name.toLowerCase());
                         if (buf.includes(query.toLowerCase()) || buf2.includes(query.toLowerCase())) {
                             newUsers.push(users[i]);
                         }
