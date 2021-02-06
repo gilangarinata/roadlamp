@@ -275,12 +275,18 @@ exports.users_delete_all = (req, res, next) => {
 
 exports.users_get_referal = (req, res, next) => {
     var refferal = req.params.referal;
-    User.find({ referalFrom: refferal })
+    User.find({ position: "user" })
         .exec()
         .then((users) => {
+            var newUsers = [];
+            for (var i = 0; i < users.length; i++) {
+                if (users[i].referalFrom2.includes(refferal)) {
+                    newUsers.push(users[i]);
+                }
+            }
             res.status(200).json({
-                count: users.length,
-                users: users
+                count: newUsers.length,
+                users: newUsers
             })
         })
         .catch((err) => {
@@ -337,66 +343,83 @@ exports.users_get_goverment = (req, res, next) => {
 }
 
 exports.get_all_user_admin = (req, res, next) => {
-    Device.find().exec().then((user) => {
-        for (var i = 0; i < user.length; i++) {
-            var rf = [];
-            rf.push(user[i].referalFrom);
-            const hardware = new User({
-                referalFrom2: rf,
-            });
-
-            Device.update({ _id: user[i]._id }, { $set: hardware }).exec().then(result => {
-                console.log(result);
-            }).catch((err) => {
+    var query = req.params.query;
+    if (query === "0") {
+        User.find({ position: "user" })
+            .exec()
+            .then((users) => {
+                res.status(200).json(
+                    users
+                )
+            })
+            .catch((err) => {
                 console.log(err);
+                res.status(500).json({
+                    error: err,
+                });
             });
+
+    } else {
+        User.find({ position: "user" })
+            .exec()
+            .then((users) => {
+                var newUsers = [];
+                for (var i = 0; i < users.length; i++) {
+                    if (users[i].name != null) {
+                        var buf = Buffer.from(users[i].username.toLowerCase());
+                        var buf2 = Buffer.from(users[i].name.toLowerCase());
+                        if (buf.includes(query.toLowerCase()) || buf2.includes(query.toLowerCase())) {
+                            newUsers.push(users[i]);
+                        }
+                    } else {
+                        var buf = Buffer.from(users[i].username.toLowerCase());
+                        if (buf.includes(query.toLowerCase())) {
+                            newUsers.push(users[i]);
+                        }
+                    }
+                }
+                res.status(200).json(
+                    newUsers
+                )
+            })
+            .catch((err) => {
+                console.log(err);
+                res.status(500).json({
+                    error: err,
+                });
+            });
+    }
+}
+
+exports.add_referal_from = (req, res, next) => {
+    var referal = req.params.referal;
+    var userId = req.params.userId;
+    User.findById(userId).exec().then(user => {
+        var referalFroms = [];
+        referalFroms = user.referalFrom2;
+        if (!user.referalFrom2.includes(referal)) {
+            referalFroms.push(referal);
         }
-    })
+        var newUser = User({
+            referalFrom2: referalFroms
+        });
+        User.update({ _id: user_id }, { $set: newUser }).exec().then(result => {
+            Device.find({ user: user._id }).exec().then(devices => {
+                for (var i = 0; i < devices.length; i++) {
+                    var newDevice = Device({
+                        referalFrom2: referalFroms
+                    });
+                    Device.update({ user: devices[i].user }, { $set: newDevice }).exec().then(result => {
+                        res.status(200).json(result);
+                    })
+                }
+            })
+        }).catch((err) => {
+            console.log(err);
+            res.status(500).json({
+                error: err,
+            });
+        });
+    });
 
-    // var query = req.params.query;
-    // if (query === "0") {
-    //     User.find({ position: "user" })
-    //         .exec()
-    //         .then((users) => {
-    //             res.status(200).json(
-    //                 users
-    //             )
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //             res.status(500).json({
-    //                 error: err,
-    //             });
-    //         });
-
-    // } else {
-    //     User.find({ position: "user" })
-    //         .exec()
-    //         .then((users) => {
-    //             var newUsers = [];
-    //             for (var i = 0; i < users.length; i++) {
-    //                 if (users[i].name != null) {
-    //                     var buf = Buffer.from(users[i].username.toLowerCase());
-    //                     var buf2 = Buffer.from(users[i].name.toLowerCase());
-    //                     if (buf.includes(query.toLowerCase()) || buf2.includes(query.toLowerCase())) {
-    //                         newUsers.push(users[i]);
-    //                     }
-    //                 } else {
-    //                     var buf = Buffer.from(users[i].username.toLowerCase());
-    //                     if (buf.includes(query.toLowerCase())) {
-    //                         newUsers.push(users[i]);
-    //                     }
-    //                 }
-    //             }
-    //             res.status(200).json(
-    //                 newUsers
-    //             )
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //             res.status(500).json({
-    //                 error: err,
-    //             });
-    //         });
-    // }
 }
