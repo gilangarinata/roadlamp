@@ -403,7 +403,7 @@ exports.add_referal_from = (req, res, next) => {
         var newUser = User({
             referalFrom2: referalFroms
         });
-        User.update({ _id: user_id }, { $set: newUser }).exec().then(result => {
+        User.update({ _id: user._id }, { $set: newUser }).exec().then(result => {
             Device.find({ user: user._id }).exec().then(devices => {
                 if (devices.length > 0) {
                     for (var i = 0; i < devices.length; i++) {
