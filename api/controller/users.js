@@ -405,18 +405,22 @@ exports.add_referal_from = (req, res, next) => {
         });
         User.update({ _id: user_id }, { $set: newUser }).exec().then(result => {
             Device.find({ user: user._id }).exec().then(devices => {
-                for (var i = 0; i < devices.length; i++) {
-                    var newDevice = Device({
-                        referalFrom2: referalFroms
-                    });
-                    Device.update({ user: devices[i].user }, { $set: newDevice }).exec().then(result => {
-                        res.status(200).json(result);
-                    }).catch((err) => {
-                        console.log(err);
-                        res.status(500).json({
-                            error: err,
+                if (devices.length > 0) {
+                    for (var i = 0; i < devices.length; i++) {
+                        var newDevice = Device({
+                            referalFrom2: referalFroms
                         });
-                    });
+                        Device.update({ user: devices[i].user }, { $set: newDevice }).exec().then(result => {
+                            res.status(200).json(result);
+                        }).catch((err) => {
+                            console.log(err);
+                            res.status(500).json({
+                                error: err,
+                            });
+                        });
+                    }
+                } else {
+                    res.status(200).json(result);
                 }
             }).catch((err) => {
                 console.log(err);
