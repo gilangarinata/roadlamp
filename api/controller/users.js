@@ -336,7 +336,7 @@ exports.users_get_goverment = (req, res, next) => {
 }
 
 exports.get_all_user_admin = (req, res, next) => {
-    User.find().exec().then((users) => {
+    User.find().exec().then((user) => {
         for (var i = 0; i < user.length; i++) {
             var rf = [];
             rf.push(user[i].referalFrom);
