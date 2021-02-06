@@ -6,6 +6,7 @@ const process = require("../../nodemon.json");
 const { remove } = require("../models/user");
 const { use } = require("../routes/users");
 const cryptoRandomString = require('crypto-random-string');
+const user = require("../models/user");
 
 exports.show_all = (req, res, next) => {
     User.find().exec().then((user) => {
@@ -335,50 +336,66 @@ exports.users_get_goverment = (req, res, next) => {
 }
 
 exports.get_all_user_admin = (req, res, next) => {
-    var query = req.params.query;
-    if (query === "0") {
-        User.find({ position: "user" })
-            .exec()
-            .then((users) => {
-                res.status(200).json(
-                    users
-                )
-            })
-            .catch((err) => {
-                console.log(err);
-                res.status(500).json({
-                    error: err,
-                });
+    User.find().exec().then((users) => {
+        for (var i = 0; i < user.length; i++) {
+            var rf = [];
+            rf.push(user[i].referalFrom);
+            const hardware = new User({
+                referalFrom2: rf,
             });
 
-    } else {
-        User.find({ position: "user" })
-            .exec()
-            .then((users) => {
-                var newUsers = [];
-                for (var i = 0; i < users.length; i++) {
-                    if (users[i].name != null) {
-                        var buf = Buffer.from(users[i].username.toLowerCase());
-                        var buf2 = Buffer.from(users[i].name.toLowerCase());
-                        if (buf.includes(query.toLowerCase()) || buf2.includes(query.toLowerCase())) {
-                            newUsers.push(users[i]);
-                        }
-                    } else {
-                        var buf = Buffer.from(users[i].username.toLowerCase());
-                        if (buf.includes(query.toLowerCase())) {
-                            newUsers.push(users[i]);
-                        }
-                    }
-                }
-                res.status(200).json(
-                    newUsers
-                )
-            })
-            .catch((err) => {
+            User.update({ _id: user[i]._id }, { $set: hardware }).exec().then(result => {
+                console.log(result);
+            }).catch((err) => {
                 console.log(err);
-                res.status(500).json({
-                    error: err,
-                });
             });
-    }
+        }
+    })
+
+    // var query = req.params.query;
+    // if (query === "0") {
+    //     User.find({ position: "user" })
+    //         .exec()
+    //         .then((users) => {
+    //             res.status(200).json(
+    //                 users
+    //             )
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //             res.status(500).json({
+    //                 error: err,
+    //             });
+    //         });
+
+    // } else {
+    //     User.find({ position: "user" })
+    //         .exec()
+    //         .then((users) => {
+    //             var newUsers = [];
+    //             for (var i = 0; i < users.length; i++) {
+    //                 if (users[i].name != null) {
+    //                     var buf = Buffer.from(users[i].username.toLowerCase());
+    //                     var buf2 = Buffer.from(users[i].name.toLowerCase());
+    //                     if (buf.includes(query.toLowerCase()) || buf2.includes(query.toLowerCase())) {
+    //                         newUsers.push(users[i]);
+    //                     }
+    //                 } else {
+    //                     var buf = Buffer.from(users[i].username.toLowerCase());
+    //                     if (buf.includes(query.toLowerCase())) {
+    //                         newUsers.push(users[i]);
+    //                     }
+    //                 }
+    //             }
+    //             res.status(200).json(
+    //                 newUsers
+    //             )
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //             res.status(500).json({
+    //                 error: err,
+    //             });
+    //         });
+    // }
 }

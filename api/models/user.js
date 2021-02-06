@@ -31,7 +31,8 @@ const userSchema = mongoose.Schema({
     name: {
         type: String,
         required: true
-    }
+    },
+    referalFrom2: [String]
 });
 
 module.exports = mongoose.model('User', userSchema);
