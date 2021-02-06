@@ -204,6 +204,7 @@ exports.users_login = (req, res, next) => {
                             position: user[0].position,
                             referal: user[0].referal,
                             referalFrom: user[0].referalFrom,
+                            referalFrom2: user[0].referalFrom2,
                         }
                     });
                 }
