@@ -41,7 +41,10 @@ const deviceSchema = mongoose.Schema({
     },
     ruasJalan: {
         type: String
-    }
+    },
+    referalFrom2: [
+        String
+    ]
 });
 
 deviceSchema.plugin(uniqueValidator);
