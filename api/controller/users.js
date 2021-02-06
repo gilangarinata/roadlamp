@@ -345,6 +345,7 @@ exports.get_all_user_admin = (req, res, next) => {
                 )
             })
             .catch((err) => {
+                console.log(err);
                 res.status(500).json({
                     error: err,
                 });
@@ -374,6 +375,7 @@ exports.get_all_user_admin = (req, res, next) => {
                 )
             })
             .catch((err) => {
+                console.log(err);
                 res.status(500).json({
                     error: err,
                 });
