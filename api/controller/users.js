@@ -337,53 +337,20 @@ exports.users_get_goverment = (req, res, next) => {
 }
 
 exports.get_all_user_admin = (req, res, next) => {
-    User.find().exec().then((users) => {
-        Device.find().exec().then((devices) => {
-            for (var i = 0; i < users.length; i++) {
-                var rf = [];
-                rf.push(users[i].referalFrom);
-                for (var j = 0; j < devices.length; j++) {
-                    if (devices[j].user == users[i]._id) {
-                        const hardware = new Device({
-                            referalFrom2: rf,
-                            referal: users[i].referalFrom
-                        });
-                        Device.update({ user: users[i]._id }, { $set: hardware }).exec().then(result => {
-                            console.log(result);
-                        }).catch((err) => {
-                            console.log(err);
-                        });
-                    }
-                }
+    Device.find().exec().then((user) => {
+        for (var i = 0; i < user.length; i++) {
+            var rf = [];
+            rf.push(user[i].referalFrom);
+            const hardware = new User({
+                referalFrom2: rf,
+            });
 
-
-                // var rf = [];
-                // rf.push(user[i].referalFrom);
-                // const hardware = new User({
-                //     referalFrom2: rf,
-                // });
-
-                // User.update({ _id: user[i]._id }, { $set: hardware }).exec().then(result => {
-                //     console.log(result);
-                // }).catch((err) => {
-                //     console.log(err);
-                // });
-            }
-        });
-
-        // for (var i = 0; i < user.length; i++) {
-        //     var rf = [];
-        //     rf.push(user[i].referalFrom);
-        //     const hardware = new User({
-        //         referalFrom2: rf,
-        //     });
-
-        //     User.update({ _id: user[i]._id }, { $set: hardware }).exec().then(result => {
-        //         console.log(result);
-        //     }).catch((err) => {
-        //         console.log(err);
-        //     });
-        // }
+            Device.update({ _id: user[i]._id }, { $set: hardware }).exec().then(result => {
+                console.log(result);
+            }).catch((err) => {
+                console.log(err);
+            });
+        }
     })
 
     // var query = req.params.query;
