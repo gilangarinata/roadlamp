@@ -899,6 +899,7 @@ exports.devices_upload_image = (res, req, next) => {
 
 exports.devices_get_street = (req, res, next) => {
     var query = req.body.query;
+    var referal = req.body.referal;
     if (query === "0") {
         Device.find()
             .exec()

@@ -333,3 +333,50 @@ exports.users_get_goverment = (req, res, next) => {
 
 
 }
+
+exports.get_all_user_admin = (req, res, next) => {
+    var query = req.params.query;
+    if (query === "0") {
+        User.find({ position: "user" })
+            .exec()
+            .then((users) => {
+                res.status(200).json(
+                    users
+                )
+            })
+            .catch((err) => {
+                res.status(500).json({
+                    error: err,
+                });
+            });
+
+    } else {
+        User.find({ position: "user" })
+            .exec()
+            .then((users) => {
+                var newUsers = [];
+                for (var i = 0; i < users.length; i++) {
+                    if (users[i].name != null) {
+                        var buf = Buffer.from(users[i].username.toLowerCase());
+                        var buf2 = Buffer.from(user[i].name.toLowerCase());
+                        if (buf.includes(query.toLowerCase()) || buf2.includes(query.toLowerCase())) {
+                            newUsers.push(users[i]);
+                        }
+                    } else {
+                        var buf = Buffer.from(users[i].username.toLowerCase());
+                        if (buf.includes(query.toLowerCase())) {
+                            newUsers.push(users[i]);
+                        }
+                    }
+                }
+                res.status(200).json(
+                    newUsers
+                )
+            })
+            .catch((err) => {
+                res.status(500).json({
+                    error: err,
+                });
+            });
+    }
+}

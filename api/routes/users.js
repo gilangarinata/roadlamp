@@ -20,4 +20,6 @@ router.get("/getUserReferal/:referal", UsersController.users_get_referal);
 
 router.get("/getGoverment/:query", UsersController.users_get_goverment);
 
+router.get("/getAllUserAdmin/:query", UsersController.get_all_user_admin);
+
 module.exports = router;
