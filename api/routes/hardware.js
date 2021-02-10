@@ -8,6 +8,8 @@ router.get("/history", HardwareController.hardware_history_get_all);
 
 router.post("/history", HardwareController.hardware_update_history);
 
+router.post("/history/v2", HardwareController.hardware_update_history_v2);
+
 router.post("/", HardwareController.hardware_update_hardware);
 
 router.post("/v2", HardwareController.hardware_update_hardware_v2);
