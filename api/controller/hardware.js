@@ -731,130 +731,131 @@ exports.hardware_update_history = (req, res, next) => {
 }
 
 exports.hardware_update_history_v2 = (req, res, next) => {
-    var keys = [];
-    var i = 0;
-    var resultObj = {};
-    for (var key in req.body) {
-        keys.push(key);
-    }
+        var keys = [];
+        var i = 0;
+        var resultObj = {};
+        for (var key in req.body) {
+            keys.push(key);
+        }
 
-    updateHistory();
+        updateHistory();
 
-    function updateHistory() {
-        var date = req.body[keys[i]].date;
-        var chargeCapacity = req.body[keys[i]].chargeCapacity;
-        var dischargeCapacity = req.body[keys[i]].dischargeCapacity;
-        var batteryCapacity = req.body[keys[i]].batteryCapacity;
-        var batteryLife = req.body[keys[i]].batteryLife;
-        var hardwareId = req.body[keys[i]].hardwareId;
+        function updateHistory() {
+            var date = req.body[keys[i]].date;
+            var chargeCapacity = req.body[keys[i]].chargeCapacity;
+            var dischargeCapacity = req.body[keys[i]].dischargeCapacity;
+            var batteryCapacity = req.body[keys[i]].batteryCapacity;
+            var batteryLife = req.body[keys[i]].batteryLife;
+            var hardwareId = req.body[keys[i]].hardwareId;
 
-        const historyUpdate = new History({
-            date: date,
-            chargeCapacity: chargeCapacity,
-            dischargeCapacity: dischargeCapacity,
-            batteryCapacity: batteryCapacity,
-            batteryLife: batteryLife,
-            hardwareId: hardwareId
-        });
+            const historyUpdate = new History({
+                date: date,
+                chargeCapacity: chargeCapacity,
+                dischargeCapacity: dischargeCapacity,
+                batteryCapacity: batteryCapacity,
+                batteryLife: batteryLife,
+                hardwareId: hardwareId
+            });
 
-        const historyAdd = new History({
-            _id: new mongoose.Types.ObjectId(),
-            date: date,
-            chargeCapacity: chargeCapacity,
-            dischargeCapacity: dischargeCapacity,
-            batteryCapacity: batteryCapacity,
-            batteryLife: batteryLife,
-            hardwareId: hardwareId
-        });
+            const historyAdd = new History({
+                _id: new mongoose.Types.ObjectId(),
+                date: date,
+                chargeCapacity: chargeCapacity,
+                dischargeCapacity: dischargeCapacity,
+                batteryCapacity: batteryCapacity,
+                batteryLife: batteryLife,
+                hardwareId: hardwareId
+            });
 
 
-        History.find({ date: date, hardwareId: hardwareId }).exec().then(history => {
-            if (history.length > 0) {
-                History.update({ hardwareId: hardwareId, date: date }, { $set: historyUpdate }).exec().then(result => {
-                    i++;
-                    if (i < keys.length()) {
-                        updateHistory();
-                    } else {
-                        res.status(200).json({
-                            message: "History Update Success.",
-                            code: 200
-                        });
-                    }
-                }).catch((err) => {
-                    console.log(err)
+            History.find({ date: date, hardwareId: hardwareId }).exec().then(history => {
+                    if (history.length > 0) {
+                        History.update({ hardwareId: hardwareId, date: date }, { $set: historyUpdate }).exec().then(result => {
+                                i++;
+                                if (i < keys.length {
+                                        updateHistory();
+                                    } else {
+                                        res.status(200).json({
+                                            message: "History Update Success.",
+                                            code: 200
+                                        });
+                                    }
+                                }).catch((err) => {
+                                console.log(err)
+                                res.status(500).json({
+                                    error: err,
+                                });
+                            });
+                        }
+                        else {
+                            console.log(historyUpdate)
+                            historyAdd.save().then(result => {
+                                i++;
+                                if (i < keys.length) {
+                                    updateHistory();
+                                } else {
+                                    res.status(200).json({
+                                        message: "New history created.",
+                                        code: 200
+                                    });
+                                }
+                            }).catch(err => {
+                                console.log(err)
+                                res.status(500).json({
+                                    error: err
+                                })
+                            });
+                        }
+                    }).catch((err) => {
                     res.status(500).json({
                         error: err,
                     });
                 });
-            } else {
-                console.log(historyUpdate)
-                historyAdd.save().then(result => {
-                    i++;
-                    if (i < keys.length()) {
-                        updateHistory();
-                    } else {
-                        res.status(200).json({
-                            message: "New history created.",
-                            code: 200
-                        });
-                    }
-                }).catch(err => {
-                    console.log(err)
-                    res.status(500).json({
-                        error: err
-                    })
-                });
             }
-        }).catch((err) => {
-            res.status(500).json({
-                error: err,
+
+
+        }
+
+
+        exports.hardware_history_get_all = (req, res, next) => {
+            History.find()
+                .exec()
+                .then(docs => {
+                    res.status(200).json({
+                        count: docs.count,
+                        history: docs
+                    });
+                })
+                .catch(err => {
+                    res.status(500).json({ error: err })
+                });
+        }
+
+
+        exports.hardware_history_get = (req, res, next) => {
+            const hardwareId = req.params.hardwareId;
+            History.find({ hardwareId: hardwareId })
+                .exec()
+                .then(docs => {
+                    res.status(200).json({
+                        count: docs.count,
+                        history: docs
+                    });
+                })
+                .catch(err => {
+                    res.status(500).json({ error: err })
+                });
+        }
+
+        exports.hardware_delete_all = (req, res, next) => {
+            console.log("asas")
+            Hardware.deleteMany().exec().then(message => {
+                res.status(200).json({
+                    message: message
+                })
+            }).catch(err => {
+                res.status(500).json({
+                    error: err
+                })
             });
-        });
-    }
-
-
-}
-
-
-exports.hardware_history_get_all = (req, res, next) => {
-    History.find()
-        .exec()
-        .then(docs => {
-            res.status(200).json({
-                count: docs.count,
-                history: docs
-            });
-        })
-        .catch(err => {
-            res.status(500).json({ error: err })
-        });
-}
-
-
-exports.hardware_history_get = (req, res, next) => {
-    const hardwareId = req.params.hardwareId;
-    History.find({ hardwareId: hardwareId })
-        .exec()
-        .then(docs => {
-            res.status(200).json({
-                count: docs.count,
-                history: docs
-            });
-        })
-        .catch(err => {
-            res.status(500).json({ error: err })
-        });
-}
-
-exports.hardware_delete_all = (req, res, next) => {
-    console.log("asas")
-    Hardware.deleteMany().exec().then(message => {
-        res.status(200).json({
-            message: message
-        })
-    }).catch(err => {
-        res.status(500).json({
-            error: err
-        })
-    });
-}
+        }
