@@ -463,7 +463,7 @@ exports.devices_get_v3 = (req, res, next) => {
 
     User.findById(userId).exec().then(users => {
         if (users != null) {
-            User.find({ referalFrom: users.referal }).exec().then(commonUsers => {
+            User.find({ referalFrom2: users.referal }).exec().then(commonUsers => {
                 if (commonUsers.length > 0) {
                     for (var i = 0; i < commonUsers.length; i++) {
                         userIdSuperuser.push(commonUsers[i]);
