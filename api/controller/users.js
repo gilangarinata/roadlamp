@@ -414,7 +414,7 @@ exports.add_referal_from = (req, res, next) => {
                         var newDevice = Device({
                             referalFrom2: referalFroms
                         });
-                        Device.update({ user: devices[i].user }, { $set: newDevice }).exec().then(result => {
+                        Device.update({ _id: devices[i]._id }, { $set: newDevice }).exec().then(result => {
                             res.status(200).json(result);
                         }).catch((err) => {
                             console.log(err);
