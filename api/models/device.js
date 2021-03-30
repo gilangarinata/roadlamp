@@ -5,13 +5,11 @@ const deviceSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     name: {
         type: String,
-        required: true,
-        default: 0
+        required: true
     },
     description: {
         type: String,
-        required: true,
-        default: 0
+        required: true
     },
     hardware: {
         type: mongoose.Schema.Types.ObjectId,
@@ -25,16 +23,13 @@ const deviceSchema = mongoose.Schema({
         require: true
     },
     username: {
-        type: String,
-        default: null
+        type: String
     },
     position: {
-        type: String,
-        default: null
+        type: String
     },
     referal: {
-        type: String,
-        default: null
+        type: String
     },
     referalFrom: {
         type: String
