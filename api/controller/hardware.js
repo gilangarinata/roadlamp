@@ -15,7 +15,7 @@ exports.hardware_get_all = (req, res, next) => {
         .exec()
         .then(docs => {
             res.status(200).json({
-                count: docs.count,
+                total: docs.length,
                 orders: docs
             });
         })
