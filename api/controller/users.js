@@ -139,6 +139,7 @@ exports.super_user_1_signup = (req, res, next) => {
                             email: req.body.email,
                             position: "superuser1",
                             password: hash,
+                            name: req.body.name,
                             referal: cryptoRandomString({ length: 5 }).toString().toUpperCase(),
                             referalFrom: req.body.referal
                         });
