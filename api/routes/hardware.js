@@ -24,4 +24,6 @@ router.get("/delete/:id", HardwareController.hardware_delete);
 
 router.get("/delete_all/yes", HardwareController.hardware_delete_all);
 
+router.get("/updateLatLong/:lat/:long", HardwareController.update_lat_long);
+
 module.exports = router;

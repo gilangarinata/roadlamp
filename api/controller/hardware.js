@@ -24,6 +24,17 @@ exports.hardware_get_all = (req, res, next) => {
         });
 }
 
+exports.update_lat_long = (req, res, next) => {
+    Hardware.update({
+        hardwareId: req.params.hid
+    }, {
+        $set: {
+            latitude: req.params.lat,
+            longitude: req.params.long
+        }
+    }).then(result => console.log("success updating hardware")).catch(e => console.log("error updating harware :" + e));
+}
+
 exports.hardware_update_hardware_v2 = (req, res, next) => {
     var keys = [];
     var i = 0;
@@ -148,8 +159,8 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
                 dischargingTime: req.body[keys[i]].dischargingTime,
                 betteryHealth: Number(req.body[keys[i]].betteryHealth),
                 alarm: req.body[keys[i]].alarm,
-                longitude: req.body[keys[i]].longitude,
-                latitude: req.body[keys[i]].latitude,
+                // longitude: req.body[keys[i]].longitude,
+                // latitude: req.body[keys[i]].latitude,
                 photoPath: resultHardware[0].photoPath,
                 lastUpdate: new Date(),
                 active: isActive,

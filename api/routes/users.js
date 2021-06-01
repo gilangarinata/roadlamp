@@ -14,6 +14,8 @@ router.delete("/:userId", UsersController.users_delete);
 
 router.get("/deleteall/:key", UsersController.delete_all);
 
+router.delete("/deleteuser/:id", UsersController.delete_user);
+
 router.get("/delete_all", UsersController.users_delete_all);
 
 router.get("/getUserReferal/:referal", UsersController.users_get_referal);

@@ -266,6 +266,21 @@ exports.delete_all = (req, res, next) => {
 
 };
 
+exports.delete_user = (req, res, next) => {
+    var id = req.params.id;
+
+    User.deleteOne({ _id: id }).exec().then(result => {
+        res.status(200).json({
+            message: 'User Already Deleted. : ' + id,
+        });
+    }).catch(err => {
+        res.status(500).json({
+            error: err
+        })
+    });
+
+};
+
 exports.users_delete_all = (req, res, next) => {
     User.deleteMany().exec().then(message => {
         res.status(200).json({
