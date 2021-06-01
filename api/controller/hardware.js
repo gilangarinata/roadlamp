@@ -29,10 +29,18 @@ exports.update_lat_long = (req, res, next) => {
         hardwareId: req.params.hid
     }, {
         $set: {
-            latitude: req.params.lat,
-            longitude: req.params.long
+            latitude: req.body.lat,
+            longitude: req.body.long
         }
-    }).then(result => console.log("success updating hardware")).catch(e => console.log("error updating harware :" + e));
+    }).then(result => {
+        res.status(200).json({
+            message: 'success'
+        });
+    }).catch(e => {
+        res.status(500).json({
+            message: 'failed'
+        });
+    });
 }
 
 exports.hardware_update_hardware_v2 = (req, res, next) => {
