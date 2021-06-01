@@ -26,7 +26,7 @@ exports.hardware_get_all = (req, res, next) => {
 
 exports.update_lat_long = (req, res, next) => {
     Hardware.update({
-        hardwareId: req.params.hid
+        hardwareId: req.body.hid
     }, {
         $set: {
             latitude: req.body.lat,
