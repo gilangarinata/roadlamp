@@ -150,8 +150,8 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
                     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                     console.log(diffTime + " milliseconds");
                     console.log(diffDays + " days");
-
-                    if (diffTime < 120000) { // if there is data updated less than 120 second 
+                    //1800000
+                    if (diffTime < 1800000) { // if there is data updated less than 120 second 
                         isActive = true;
                     }
                 } catch (e) {
@@ -347,7 +347,7 @@ function updateHardware(resultHardware, temperature, humidity, req, res, hardwar
                 console.log(diffTime + " milliseconds");
                 console.log(diffDays + " days");
 
-                if (diffTime < 120000) { // if there is data updated less than 120 second 
+                if (diffTime < 1800000) { // if there is data updated less than 120 second 
                     isActive = true;
                 }
             } catch (e) {
@@ -478,7 +478,7 @@ function updateHardwareV2(resultHardware, temperature, humidity, req, res, hardw
                 console.log(diffTime + " milliseconds");
                 console.log(diffDays + " days");
 
-                if (diffTime < 120000) { // if there is data updated less than 120 second 
+                if (diffTime < 1800000) { // if there is data updated less than 120 second 
                     isActive = true;
                 }
             } catch (e) {
@@ -583,7 +583,7 @@ exports.hardware_get = (req, res, next) => {
                     console.log(diffTime + " milliseconds");
                     console.log(diffDays + " days");
 
-                    if (diffTime < 120000) { // if there is data updated less than 120 second 
+                    if (diffTime < 1800000) { // if there is data updated less than 120 second 
                         isActive = true;
                     }
                 } catch (e) {
