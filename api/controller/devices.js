@@ -544,6 +544,8 @@ exports.devices_get_v3 = (req, res, next) => {
         if (hardware.hardwareId == "B251") {
             console.log("B251 " + isActive)
         }
+
+        console.log(hardware.hardwareId + " " + isActive);
         return isActive;
     }
 }
