@@ -532,7 +532,7 @@ exports.devices_get_v3 = (req, res, next) => {
                     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                     console.log(diffTime + " milliseconds  DV" + hardware.hardwareId);
 
-                    if (diffTime < 120000) { // if there is data updated less than 120 second 
+                    if (diffTime < 1800000) { // if there is data updated less than 120 second 
                         isActive = true;
                     }
                 } catch (e) {
@@ -545,7 +545,7 @@ exports.devices_get_v3 = (req, res, next) => {
             console.log("B251 " + isActive)
         }
 
-        console.log(hardware.hardwareId + " " + isActive);
+
         return isActive;
     }
 }
