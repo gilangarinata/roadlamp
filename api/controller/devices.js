@@ -501,8 +501,7 @@ exports.devices_get_v3 = (req, res, next) => {
             }
 
             for (var k = 0; k < deviceArray.length; k++) {
-                console.log(deviceArray);
-                // Hardware.update({ hardwareId: deviceArray[k].hardware.hardwareId }, { $set: { active: checkDeviceIsActive(deviceArray[k].hardware) } }).then(result => console.log("success updating harware " + checkDeviceIsActive(deviceArray[k].hardware))).catch(e => console.log("error updating harware :" + e));
+                Hardware.update({ hardwareId: deviceArray[k].hardware.hardwareId }, { $set: { active: checkDeviceIsActive(deviceArray[k].hardware) } }).then(result => console.log("success updating harware ")).catch(e => console.log("error updating harware :" + e));
             }
 
             i++
