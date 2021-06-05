@@ -532,7 +532,7 @@ exports.devices_get_v3 = (req, res, next) => {
                     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                     console.log(dateNow + "    " + dateLastUpdate);
 
-                    if (diffTime < 50000000) { // if there is data updated less than 120 second 
+                    if (diffTime < 1800000) { // if there is data updated less than 120 second 
                         isActive = true;
                     }
                 } catch (e) {
