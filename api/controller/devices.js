@@ -458,216 +458,14 @@ exports.devices_get_v2 = (req, res, next) => {
 
 
 exports.devices_process_earth = (req, res, next) => {
-    const userId = req.params.userId;
-    const ruasJalan = req.params.ruasJalan;
+    const longitude = req.body.longitude;
+    const latitude = req.body.latitude;
+    const name = req.body.name;
+    const hid = req.body.hid;
 
+    processEarth(name, longitude, latitude, hid);
 
-    var kml = builder.create('kml', { version: '1.0', encoding: 'UTF-8', standalone: true });
-    kml
-        .att('xmlns', "http://www.opengis.net/kml/2.2")
-        .att('xmlns:gx', "http://www.google.com/kml/ext/2.2")
-        .att('xmlns:kml', "http://www.opengis.net/kml/2.2")
-        .att('xmlns:atom', "http://www.w3.org/2005/Atom")
-
-    var documents = kml.ele('Document')
-        .ele('name', "test.kmz").up()
-
-    .ele('Style')
-        .att("id", 'Normal0_04')
-
-    //     <BalloonStyle>
-    //     <text>$[description]</text>
-    // </BalloonStyle>
-    // <LineStyle>
-    //     <width>2</width>
-    // </LineStyle>
-
-
-    .ele('IconStyle')
-        .ele('Icon')
-        .ele('href', 'http://www.earthpoint.us/Dots/GoogleEarth/pal5/icon57.png').up()
-        .up()
-        .up()
-
-    .ele('BalloonStyle')
-        .ele('text', '$[description]')
-        .up()
-        .up()
-
-    .ele('LineStyle').ele('width', 2)
-        .up()
-        .up()
-        .up()
-
-    .ele('StyleMap')
-        .att('id', '0_0')
-        .ele('Pair')
-        .ele('key', 'normal')
-        .up()
-        .ele('styleUrl', '#Normal0_04')
-        .up()
-        .up()
-
-    .ele('Pair')
-        .ele('key', 'highlight')
-        .up()
-        .ele('styleUrl', '#Highlight0_00')
-        .up()
-        .up()
-        .up()
-
-    .ele('Style')
-        .att("id", 'Highlight0_00')
-
-    //     <BalloonStyle>
-    //     <text>$[description]</text>
-    // </BalloonStyle>
-    // <LineStyle>
-    //     <width>2</width>
-    // </LineStyle>
-
-
-    .ele('IconStyle')
-        .ele('scale', '1.1').up()
-        .ele('Icon')
-        .ele('href', 'http://www.earthpoint.us/Dots/GoogleEarth/pal5/icon57.png').up()
-        .up()
-        .up()
-
-    .ele('BalloonStyle')
-        .ele('text', '$[description]')
-        .up()
-        .up()
-
-    .ele('LineStyle').ele('width', 3)
-        .up()
-        .up()
-        .up()
-
-    var folder = documents.ele('Folder')
-        .ele('name', 'asas').up()
-        .ele('open', 1).up()
-        .ele('LookAt')
-        .ele('longitude', 107.610591666667).up()
-        .ele('latitude', -6.358549999999999).up()
-        .ele('altitude', 0).up()
-        .ele('heading', 0).up()
-        .ele('tilt', 0).up()
-        .ele('range', 5915).up().up()
-
-
-    for (var i = 1; i <= 3; i++) {
-        var item = folder.ele('Placemark');
-        item.ele('name', 'APJ-01').up();
-        item.ele('Snippet').att('maxLines', 0).up();
-
-        var lookat = item.ele('LookAt');
-        lookat.ele('longitude', 107.610216666667);
-        lookat.ele('latitude', -6.358549999999999);
-        lookat.ele('altitude', 0);
-        lookat.ele('heading', 0);
-        lookat.ele('tilt', 0);
-        lookat.ele('range', 1000);
-        lookat.ele('altitudeMode', 'relativeToGround');
-
-        item.ele('styleUrl', '#0_0');
-        item.ele('ExtendedData');
-
-        var point = item.ele('Point');
-        point.ele('coordinates', "107.610216666667, -6.37501944444444, 0")
-
-
-    }
-
-
-    var doc = kml.end({ pretty: true });
-
-
-    var xmldoc = kml.toString({ pretty: true });
-
-    var dirPath = "./uploads/earth.kml";
-
-    fs.writeFile(dirPath, xmldoc, function(err) {
-        if (err) { return console.log(err); }
-        console.log("The file was saved!");
-        res.render('index', { title: 'Generate XML using NodeJS' });
-
-    });
-
-
-    res.set('Content-Type', 'text/xml');
-    res.send(doc);
-
-    console.log(doc);
-}
-
-exports.devices_get_v3 = (req, res, next) => {
-    const userId = req.body.userId;
-    const ruasJalan = req.body.ruasJalan;
-    var userIdSuperuser = Array();
-    var deviceArray = Array()
-    var i = 0;
-    const base_url = req.protocol + "://" + req.headers.host + '/';
-
-    User.findById(userId).exec().then(users => {
-        if (users != null) {
-            User.find({ referalFrom2: users.referal }).exec().then(commonUsers => {
-                if (commonUsers.length > 0) {
-                    for (var i = 0; i < commonUsers.length; i++) {
-                        userIdSuperuser.push(commonUsers[i]);
-                    }
-                    fetchDevice4();
-                } else {
-                    return res.status(200).json({
-                        kml: "",
-                        count: 0,
-                        result: [],
-                    })
-                }
-
-            }).catch(err => console.log(err));
-        } else {
-            return res.status(404).json({
-                message: "Users Not Found."
-            })
-        }
-    }).catch(err => {
-        res.status(500).json({
-            error: err
-        })
-    });;
-
-    function fetchDevice4() {
-        Device.find({ user: userIdSuperuser[i]._id }).populate('hardware').exec().then(device => {
-            if (device) {
-                if (device.length > 0) {
-                    for (var j = 0; j < device.length; j++) {
-                        if (device[j].ruasJalan == ruasJalan) {
-                            deviceArray.push(device[j])
-                        }
-                    }
-                }
-            }
-
-            for (var k = 0; k < deviceArray.length; k++) {
-                Hardware.update({ hardwareId: deviceArray[k].hardware.hardwareId }, { $set: { active: checkDeviceIsActive(deviceArray[k].hardware) } }).then(result => console.log("success updating harware ")).catch(e => console.log("error updating harware :" + e));
-            }
-
-            i++
-            if (i < userIdSuperuser.length) {
-                fetchDevice4()
-            } else {
-                processEarth(userId, ruasJalan.replace(/ /g, ''), deviceArray)
-            }
-        }).catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            })
-        });
-    }
-
-    function processEarth(userId, ruasJalan, deviceArray) {
+    function processEarth(name, longitude, latitude, hid) {
         var kml = builder.create('kml', { version: '1.0', encoding: 'UTF-8', standalone: true });
         kml
             .att('xmlns', "http://www.opengis.net/kml/2.2")
@@ -676,7 +474,7 @@ exports.devices_get_v3 = (req, res, next) => {
             .att('xmlns:atom', "http://www.w3.org/2005/Atom")
 
         var documents = kml.ele('Document')
-            .ele('name', ruasJalan).up()
+            .ele('name', name).up()
 
         .ele('Style')
             .att("id", 'Normal0_04')
@@ -736,36 +534,35 @@ exports.devices_get_v3 = (req, res, next) => {
             .up()
 
         var folder = documents.ele('Folder')
-            .ele('name', ruasJalan).up()
+            .ele('name', name).up()
             .ele('open', 1).up()
             .ele('LookAt')
-            .ele('longitude', deviceArray[0].hardware.longitude).up()
-            .ele('latitude', deviceArray[0].hardware.latitude).up()
+            .ele('longitude', longitude).up()
+            .ele('latitude', latitude).up()
             .ele('altitude', 0).up()
             .ele('heading', 0).up()
             .ele('tilt', 0).up()
-            .ele('range', 10000).up().up()
+            .ele('range', 5000).up().up()
 
         var newDeviceArray = [];
 
-        for (var i = 0; i < deviceArray.length; i++) {
+        for (var i = 0; i < 1; i++) {
 
+            // console.log(deviceArray[i].name + "");
 
-            console.log(deviceArray[i].name + "");
-
-            var name = "";
-            var deviceName = deviceArray[i].name;
-            if (deviceName) {
-                name = deviceArray[i].name;
-            }
+            // var name = "";
+            // var deviceName = deviceArray[i].name;
+            // if (deviceName) {
+            //     name = deviceArray[i].name;
+            // }
 
             var item = folder.ele('Placemark');
             item.ele('name', name).up();
             item.ele('Snippet').att('maxLines', 0).up();
 
             var lookat = item.ele('LookAt');
-            lookat.ele('longitude', deviceArray[i].hardware.longitude);
-            lookat.ele('latitude', deviceArray[i].hardware.latitude);
+            lookat.ele('longitude', longitude);
+            lookat.ele('latitude', latitude);
             lookat.ele('altitude', 0);
             lookat.ele('heading', 0);
             lookat.ele('tilt', 0);
@@ -776,12 +573,7 @@ exports.devices_get_v3 = (req, res, next) => {
             item.ele('ExtendedData');
 
             var point = item.ele('Point');
-            point.ele('coordinates', deviceArray[i].hardware.longitude + ", " + deviceArray[i].hardware.latitude + ", 0")
-
-
-            deviceArray[i]["kml_url"] = base_url + "uploads/" + userId + "_" + ruasJalan + ".kml";
-            deviceArray[i]["kml_filename"] = userId + "_" + ruasJalan + ".kml";
-            newDeviceArray.push(deviceArray[i])
+            point.ele('coordinates', longitude + ", " + latitude + ", 0")
 
         }
 
@@ -791,19 +583,92 @@ exports.devices_get_v3 = (req, res, next) => {
 
         var xmldoc = kml.toString({ pretty: true });
 
-        var dirPath = "./uploads/" + userId + "_" + ruasJalan + ".kml";
+        var dirPath = "./uploads/" + hid + ".kml";
 
         fs.writeFile(dirPath, xmldoc, function(err) {
             if (err) { return console.log(err); }
             console.log("The file was saved!");
 
             res.status(200).json({
-                count: newDeviceArray.length,
-                result: newDeviceArray,
+                message: "sukses",
+                filename: hid + ".kml",
             })
 
         });
     }
+
+}
+
+exports.devices_get_v3 = (req, res, next) => {
+    const userId = req.body.userId;
+    const ruasJalan = req.body.ruasJalan;
+    var userIdSuperuser = Array();
+    var deviceArray = Array()
+    var i = 0;
+    const base_url = req.protocol + "://" + req.headers.host + '/';
+
+    User.findById(userId).exec().then(users => {
+        if (users != null) {
+            User.find({ referalFrom2: users.referal }).exec().then(commonUsers => {
+                if (commonUsers.length > 0) {
+                    for (var i = 0; i < commonUsers.length; i++) {
+                        userIdSuperuser.push(commonUsers[i]);
+                    }
+                    fetchDevice4();
+                } else {
+                    return res.status(200).json({
+                        kml: "",
+                        count: 0,
+                        result: [],
+                    })
+                }
+
+            }).catch(err => console.log(err));
+        } else {
+            return res.status(404).json({
+                message: "Users Not Found."
+            })
+        }
+    }).catch(err => {
+        res.status(500).json({
+            error: err
+        })
+    });;
+
+    function fetchDevice4() {
+        Device.find({ user: userIdSuperuser[i]._id }).populate('hardware').exec().then(device => {
+            if (device) {
+                if (device.length > 0) {
+                    for (var j = 0; j < device.length; j++) {
+                        if (device[j].ruasJalan == ruasJalan) {
+                            deviceArray.push(device[j])
+                        }
+                    }
+                }
+            }
+
+            for (var k = 0; k < deviceArray.length; k++) {
+                Hardware.update({ hardwareId: deviceArray[k].hardware.hardwareId }, { $set: { active: checkDeviceIsActive(deviceArray[k].hardware) } }).then(result => console.log("success updating harware ")).catch(e => console.log("error updating harware :" + e));
+            }
+
+            i++
+            if (i < userIdSuperuser.length) {
+                fetchDevice4()
+            } else {
+                res.status(200).json({
+                        count: newDeviceArray.length,
+                        result: newDeviceArray,
+                    })
+                    // processEarth(userId, ruasJalan.replace(/ /g, ''), deviceArray)
+            }
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            })
+        });
+    }
+
 
     function checkDeviceIsActive(hardware) {
         var isActive = false;

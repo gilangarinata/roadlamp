@@ -30,7 +30,7 @@ router.get("/web/:userId", DevicesController.devices_get_web);
 
 router.get("/webmap/:userId", DevicesController.devices_get_web_map);
 
-router.get("/get_earth_value/user", DevicesController.devices_process_earth);
+router.post("/get_earth_value/user", DevicesController.devices_process_earth);
 
 router.post("/streets", DevicesController.devices_get_street);
 
