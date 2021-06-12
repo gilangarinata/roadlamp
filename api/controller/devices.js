@@ -746,6 +746,8 @@ exports.devices_get_v3 = (req, res, next) => {
             .ele('tilt', 0).up()
             .ele('range', 5915).up().up()
 
+        var newDeviceArray = [];
+
         for (var i = 0; i < deviceArray.length; i++) {
 
 
@@ -777,6 +779,10 @@ exports.devices_get_v3 = (req, res, next) => {
             point.ele('coordinates', "107.610216666667, -6.37501944444444, 0")
 
 
+            deviceArray[i]["kml_url"] = base_url + "uploads/" + userId + "_" + ruasJalan + ".kml";
+            deviceArray[i]["kml_filename"] = userId + "_" + ruasJalan + ".kml";
+            newDeviceArray.push()
+
         }
 
 
@@ -792,8 +798,6 @@ exports.devices_get_v3 = (req, res, next) => {
             console.log("The file was saved!");
 
             res.status(200).json({
-                kml_filename: userId + "_" + ruasJalan + ".kml",
-                kml_url: base_url + "uploads/" + userId + "_" + ruasJalan + ".kml",
                 count: deviceArray.length,
                 result: deviceArray,
             })
