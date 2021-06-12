@@ -7,6 +7,12 @@ const deviceSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    kml_url: {
+        type: String,
+    },
+    kml_filename: {
+        type: String,
+    },
     description: {
         type: String,
         required: true
