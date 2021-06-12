@@ -655,7 +655,7 @@ exports.devices_get_v3 = (req, res, next) => {
             if (i < userIdSuperuser.length) {
                 fetchDevice4()
             } else {
-                processEarth()
+                processEarth(userId, ruasJalan.replace(' ', '-'), deviceArray)
                 res.status(200).json({
                     count: deviceArray.length,
                     result: deviceArray,
