@@ -655,6 +655,7 @@ exports.devices_get_v3 = (req, res, next) => {
             if (i < userIdSuperuser.length) {
                 fetchDevice4()
             } else {
+                processEarth()
                 res.status(200).json({
                     count: deviceArray.length,
                     result: deviceArray,
@@ -796,7 +797,7 @@ exports.devices_get_v3 = (req, res, next) => {
                     const dateLastUpdate = hardware.lastUpdate;
                     const diffTime = Math.abs(dateNow - dateLastUpdate);
                     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    console.log(dateNow + "    " + dateLastUpdate);
+                    // console.log(dateNow + "    " + dateLastUpdate);
 
                     if (diffTime < 180000) { // if there is data updated less than 120 second 
                         isActive = true;
