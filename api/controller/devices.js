@@ -470,7 +470,7 @@ exports.devices_process_earth = (req, res, next) => {
         .att('xmlns:atom', "http://www.w3.org/2005/Atom")
 
     var documents = kml.ele('Document')
-        .ele('name', "apj cikampek subang.kmz").up()
+        .ele('name', "test.kmz").up()
 
     .ele('Style')
         .att("id", 'Normal0_04')
@@ -545,7 +545,7 @@ exports.devices_process_earth = (req, res, next) => {
         .up()
 
     var folder = documents.ele('Folder')
-        .ele('name', 'apj cikampek subang').up()
+        .ele('name', 'asas').up()
         .ele('open', 1).up()
         .ele('LookAt')
         .ele('longitude', 107.610591666667).up()
@@ -736,15 +736,15 @@ exports.devices_get_v3 = (req, res, next) => {
             .up()
 
         var folder = documents.ele('Folder')
-            .ele('name', 'apj cikampek subang').up()
+            .ele('name', ruasJalan).up()
             .ele('open', 1).up()
             .ele('LookAt')
-            .ele('longitude', 107.610591666667).up()
-            .ele('latitude', -6.358549999999999).up()
+            .ele('longitude', deviceArray[0].hardware.longitude).up()
+            .ele('latitude', deviceArray[0].hardware.latitude).up()
             .ele('altitude', 0).up()
             .ele('heading', 0).up()
             .ele('tilt', 0).up()
-            .ele('range', 5915).up().up()
+            .ele('range', 10000).up().up()
 
         var newDeviceArray = [];
 
