@@ -655,7 +655,7 @@ exports.devices_get_v3 = (req, res, next) => {
             if (i < userIdSuperuser.length) {
                 fetchDevice4()
             } else {
-                processEarth(userId, ruasJalan.replace(' ', '-'), deviceArray)
+                processEarth(userId, ruasJalan.replace(/ /g, ''), deviceArray)
                 res.status(200).json({
                     count: deviceArray.length,
                     result: deviceArray,
@@ -792,7 +792,7 @@ exports.devices_get_v3 = (req, res, next) => {
         fs.writeFile(dirPath, xmldoc, function(err) {
             if (err) { return console.log(err); }
             console.log("The file was saved!");
-            res.render('index', { title: 'Generate XML using NodeJS' });
+            // res.render('index', { title: 'Generate XML using NodeJS' });
 
         });
     }
