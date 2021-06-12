@@ -658,8 +658,8 @@ exports.devices_get_v3 = (req, res, next) => {
                 fetchDevice4()
             } else {
                 res.status(200).json({
-                        count: newDeviceArray.length,
-                        result: newDeviceArray,
+                        count: deviceArray.length,
+                        result: deviceArray,
                     })
                     // processEarth(userId, ruasJalan.replace(/ /g, ''), deviceArray)
             }
