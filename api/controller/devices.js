@@ -607,6 +607,7 @@ exports.devices_get_v3 = (req, res, next) => {
     var userIdSuperuser = Array();
     var deviceArray = Array()
     var i = 0;
+    const base_url = req.protocol + "://" + req.headers.host + '/';
 
     User.findById(userId).exec().then(users => {
         if (users != null) {
@@ -618,6 +619,7 @@ exports.devices_get_v3 = (req, res, next) => {
                     fetchDevice4();
                 } else {
                     return res.status(200).json({
+                        kml: "",
                         count: 0,
                         result: [],
                     })
@@ -656,10 +658,6 @@ exports.devices_get_v3 = (req, res, next) => {
                 fetchDevice4()
             } else {
                 processEarth(userId, ruasJalan.replace(/ /g, ''), deviceArray)
-                res.status(200).json({
-                    count: deviceArray.length,
-                    result: deviceArray,
-                })
             }
         }).catch(err => {
             console.log(err);
@@ -792,7 +790,12 @@ exports.devices_get_v3 = (req, res, next) => {
         fs.writeFile(dirPath, xmldoc, function(err) {
             if (err) { return console.log(err); }
             console.log("The file was saved!");
-            // res.render('index', { title: 'Generate XML using NodeJS' });
+
+            res.status(200).json({
+                kml: base_url + userId + "_" + ruasJalan + ".kml",
+                count: deviceArray.length,
+                result: deviceArray,
+            })
 
         });
     }
