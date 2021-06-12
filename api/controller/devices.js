@@ -798,8 +798,8 @@ exports.devices_get_v3 = (req, res, next) => {
             console.log("The file was saved!");
 
             res.status(200).json({
-                count: deviceArray.length,
-                result: deviceArray,
+                count: newDeviceArray.length,
+                result: newDeviceArray,
             })
 
         });
