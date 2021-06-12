@@ -676,7 +676,7 @@ exports.devices_get_v3 = (req, res, next) => {
             .att('xmlns:atom', "http://www.w3.org/2005/Atom")
 
         var documents = kml.ele('Document')
-            .ele('name', "apj cikampek subang.kmz").up()
+            .ele('name', ruasJalan).up()
 
         .ele('Style')
             .att("id", 'Normal0_04')
@@ -776,7 +776,7 @@ exports.devices_get_v3 = (req, res, next) => {
             item.ele('ExtendedData');
 
             var point = item.ele('Point');
-            point.ele('coordinates', "107.610216666667, -6.37501944444444, 0")
+            point.ele('coordinates', deviceArray[i].hardware.longitude + ", " + deviceArray[i].hardware.latitude + ", 0")
 
 
             deviceArray[i]["kml_url"] = base_url + "uploads/" + userId + "_" + ruasJalan + ".kml";
