@@ -12,6 +12,8 @@ const user = require("../models/user");
 const { check } = require("prettier");
 const { hardware_get_all } = require("./hardware");
 const e = require("cors");
+const builder = require('xmlbuilder', { encoding: 'utf-8' });
+
 
 exports.devices_get_web = (req, res, next) => {
     const userId = req.params.userId;
@@ -454,6 +456,151 @@ exports.devices_get_v2 = (req, res, next) => {
     }
 }
 
+
+exports.devices_process_earth = (req, res, next) => {
+    const userId = req.params.userId;
+    const ruasJalan = req.params.ruasJalan;
+
+
+    var kml = builder.create('kml', { version: '1.0', encoding: 'UTF-8', standalone: true });
+    kml
+        .att('xmlns', "http://www.opengis.net/kml/2.2")
+        .att('xmlns:gx', "http://www.google.com/kml/ext/2.2")
+        .att('xmlns:kml', "http://www.opengis.net/kml/2.2")
+        .att('xmlns:atom', "http://www.w3.org/2005/Atom")
+
+    var documents = kml.ele('Document')
+        .ele('name', "apj cikampek subang.kmz").up()
+
+    .ele('Style')
+        .att("id", 'Normal0_04')
+
+    //     <BalloonStyle>
+    //     <text>$[description]</text>
+    // </BalloonStyle>
+    // <LineStyle>
+    //     <width>2</width>
+    // </LineStyle>
+
+
+    .ele('IconStyle')
+        .ele('Icon')
+        .ele('href', 'http://www.earthpoint.us/Dots/GoogleEarth/pal5/icon57.png').up()
+        .up()
+        .up()
+
+    .ele('BalloonStyle')
+        .ele('text', '$[description]')
+        .up()
+        .up()
+
+    .ele('LineStyle').ele('width', 2)
+        .up()
+        .up()
+        .up()
+
+    .ele('StyleMap')
+        .att('id', '0_0')
+        .ele('Pair')
+        .ele('key', 'normal')
+        .up()
+        .ele('styleUrl', '#Normal0_04')
+        .up()
+        .up()
+
+    .ele('Pair')
+        .ele('key', 'highlight')
+        .up()
+        .ele('styleUrl', '#Highlight0_00')
+        .up()
+        .up()
+        .up()
+
+    .ele('Style')
+        .att("id", 'Highlight0_00')
+
+    //     <BalloonStyle>
+    //     <text>$[description]</text>
+    // </BalloonStyle>
+    // <LineStyle>
+    //     <width>2</width>
+    // </LineStyle>
+
+
+    .ele('IconStyle')
+        .ele('scale', '1.1').up()
+        .ele('Icon')
+        .ele('href', 'http://www.earthpoint.us/Dots/GoogleEarth/pal5/icon57.png').up()
+        .up()
+        .up()
+
+    .ele('BalloonStyle')
+        .ele('text', '$[description]')
+        .up()
+        .up()
+
+    .ele('LineStyle').ele('width', 3)
+        .up()
+        .up()
+        .up()
+
+    var folder = documents.ele('Folder')
+        .ele('name', 'apj cikampek subang').up()
+        .ele('open', 1).up()
+        .ele('LookAt')
+        .ele('longitude', 107.610591666667).up()
+        .ele('latitude', -6.358549999999999).up()
+        .ele('altitude', 0).up()
+        .ele('heading', 0).up()
+        .ele('tilt', 0).up()
+        .ele('range', 5915).up().up()
+
+
+    for (var i = 1; i <= 3; i++) {
+        var item = folder.ele('Placemark');
+        item.ele('name', 'APJ-01').up();
+        item.ele('Snippet').att('maxLines', 0).up();
+
+        var lookat = item.ele('LookAt');
+        lookat.ele('longitude', 107.610216666667);
+        lookat.ele('latitude', -6.358549999999999);
+        lookat.ele('altitude', 0);
+        lookat.ele('heading', 0);
+        lookat.ele('tilt', 0);
+        lookat.ele('range', 1000);
+        lookat.ele('altitudeMode', 'relativeToGround');
+
+        item.ele('styleUrl', '#0_0');
+        item.ele('ExtendedData');
+
+        var point = item.ele('Point');
+        point.ele('coordinates', "107.610216666667, -6.37501944444444, 0")
+
+
+    }
+
+
+    var doc = kml.end({ pretty: true });
+
+
+    var xmldoc = kml.toString({ pretty: true });
+
+    var dirPath = "./uploads/earth.kml";
+
+    fs.writeFile(dirPath, xmldoc, function(err) {
+        if (err) { return console.log(err); }
+        console.log("The file was saved!");
+        res.render('index', { title: 'Generate XML using NodeJS' });
+
+    });
+
+
+    res.set('Content-Type', 'text/xml');
+    res.send(doc);
+
+    console.log(doc);
+}
+
 exports.devices_get_v3 = (req, res, next) => {
     const userId = req.body.userId;
     const ruasJalan = req.body.ruasJalan;
@@ -518,6 +665,125 @@ exports.devices_get_v3 = (req, res, next) => {
             res.status(500).json({
                 error: err
             })
+        });
+    }
+
+    function processEarth(userId, ruasJalan, deviceArray) {
+        var kml = builder.create('kml', { version: '1.0', encoding: 'UTF-8', standalone: true });
+        kml
+            .att('xmlns', "http://www.opengis.net/kml/2.2")
+            .att('xmlns:gx', "http://www.google.com/kml/ext/2.2")
+            .att('xmlns:kml', "http://www.opengis.net/kml/2.2")
+            .att('xmlns:atom', "http://www.w3.org/2005/Atom")
+
+        var documents = kml.ele('Document')
+            .ele('name', "apj cikampek subang.kmz").up()
+
+        .ele('Style')
+            .att("id", 'Normal0_04')
+
+        .ele('IconStyle')
+            .ele('Icon')
+            .ele('href', 'http://www.earthpoint.us/Dots/GoogleEarth/pal5/icon57.png').up()
+            .up()
+            .up()
+
+        .ele('BalloonStyle')
+            .ele('text', '$[description]')
+            .up()
+            .up()
+
+        .ele('LineStyle').ele('width', 2)
+            .up()
+            .up()
+            .up()
+
+        .ele('StyleMap')
+            .att('id', '0_0')
+            .ele('Pair')
+            .ele('key', 'normal')
+            .up()
+            .ele('styleUrl', '#Normal0_04')
+            .up()
+            .up()
+
+        .ele('Pair')
+            .ele('key', 'highlight')
+            .up()
+            .ele('styleUrl', '#Highlight0_00')
+            .up()
+            .up()
+            .up()
+
+        .ele('Style')
+            .att("id", 'Highlight0_00')
+
+
+        .ele('IconStyle')
+            .ele('scale', '1.1').up()
+            .ele('Icon')
+            .ele('href', 'http://www.earthpoint.us/Dots/GoogleEarth/pal5/icon57.png').up()
+            .up()
+            .up()
+
+        .ele('BalloonStyle')
+            .ele('text', '$[description]')
+            .up()
+            .up()
+
+        .ele('LineStyle').ele('width', 3)
+            .up()
+            .up()
+            .up()
+
+        var folder = documents.ele('Folder')
+            .ele('name', 'apj cikampek subang').up()
+            .ele('open', 1).up()
+            .ele('LookAt')
+            .ele('longitude', 107.610591666667).up()
+            .ele('latitude', -6.358549999999999).up()
+            .ele('altitude', 0).up()
+            .ele('heading', 0).up()
+            .ele('tilt', 0).up()
+            .ele('range', 5915).up().up()
+
+
+        for (var i = 0; i <= deviceArray.length; i++) {
+            var item = folder.ele('Placemark');
+            item.ele('name', deviceArray[i].name).up();
+            item.ele('Snippet').att('maxLines', 0).up();
+
+            var lookat = item.ele('LookAt');
+            lookat.ele('longitude', deviceArray[i].hardware.longitude);
+            lookat.ele('latitude', deviceArray[i].hardware.latitude);
+            lookat.ele('altitude', 0);
+            lookat.ele('heading', 0);
+            lookat.ele('tilt', 0);
+            lookat.ele('range', 1000);
+            lookat.ele('altitudeMode', 'relativeToGround');
+
+            item.ele('styleUrl', '#0_0');
+            item.ele('ExtendedData');
+
+            var point = item.ele('Point');
+            point.ele('coordinates', "107.610216666667, -6.37501944444444, 0")
+
+
+        }
+
+
+        var doc = kml.end({ pretty: true });
+
+
+        var xmldoc = kml.toString({ pretty: true });
+
+        var dirPath = "./uploads/" + userId + "_" + ruasJalan + ".kml";
+
+        fs.writeFile(dirPath, xmldoc, function(err) {
+            if (err) { return console.log(err); }
+            console.log("The file was saved!");
+            res.render('index', { title: 'Generate XML using NodeJS' });
+
         });
     }
 

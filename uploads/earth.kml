@@ -1,0 +1,108 @@
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+  <Document>
+    <name>apj cikampek subang.kmz</name>
+    <Style id="Normal0_04">
+      <IconStyle>
+        <Icon>
+          <href>http://www.earthpoint.us/Dots/GoogleEarth/pal5/icon57.png</href>
+        </Icon>
+      </IconStyle>
+      <BalloonStyle>
+        <text>$[description]</text>
+      </BalloonStyle>
+      <LineStyle>
+        <width>2</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="0_0">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#Normal0_04</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#Highlight0_00</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="Highlight0_00">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>http://www.earthpoint.us/Dots/GoogleEarth/pal5/icon57.png</href>
+        </Icon>
+      </IconStyle>
+      <BalloonStyle>
+        <text>$[description]</text>
+      </BalloonStyle>
+      <LineStyle>
+        <width>3</width>
+      </LineStyle>
+    </Style>
+    <Folder>
+      <name>apj cikampek subang</name>
+      <open>1</open>
+      <LookAt>
+        <longitude>107.610591666667</longitude>
+        <latitude>-6.358549999999999</latitude>
+        <altitude>0</altitude>
+        <heading>0</heading>
+        <tilt>0</tilt>
+        <range>5915</range>
+      </LookAt>
+      <Placemark>
+        <name>APJ-01</name>
+        <Snippet maxLines="0"/>
+        <LookAt>
+          <longitude>107.610216666667</longitude>
+          <latitude>-6.358549999999999</latitude>
+          <altitude>0</altitude>
+          <heading>0</heading>
+          <tilt>0</tilt>
+          <range>1000</range>
+          <altitudeMode>relativeToGround</altitudeMode>
+        </LookAt>
+        <styleUrl>#0_0</styleUrl>
+        <ExtendedData/>
+        <Point>
+          <coordinates>107.610216666667, -6.37501944444444, 0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>APJ-01</name>
+        <Snippet maxLines="0"/>
+        <LookAt>
+          <longitude>107.610216666667</longitude>
+          <latitude>-6.358549999999999</latitude>
+          <altitude>0</altitude>
+          <heading>0</heading>
+          <tilt>0</tilt>
+          <range>1000</range>
+          <altitudeMode>relativeToGround</altitudeMode>
+        </LookAt>
+        <styleUrl>#0_0</styleUrl>
+        <ExtendedData/>
+        <Point>
+          <coordinates>107.610216666667, -6.37501944444444, 0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>APJ-01</name>
+        <Snippet maxLines="0"/>
+        <LookAt>
+          <longitude>107.610216666667</longitude>
+          <latitude>-6.358549999999999</latitude>
+          <altitude>0</altitude>
+          <heading>0</heading>
+          <tilt>0</tilt>
+          <range>1000</range>
+          <altitudeMode>relativeToGround</altitudeMode>
+        </LookAt>
+        <styleUrl>#0_0</styleUrl>
+        <ExtendedData/>
+        <Point>
+          <coordinates>107.610216666667, -6.37501944444444, 0</coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>
