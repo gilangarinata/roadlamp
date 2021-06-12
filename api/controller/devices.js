@@ -748,6 +748,7 @@ exports.devices_get_v3 = (req, res, next) => {
             .ele('tilt', 0).up()
             .ele('range', 5915).up().up()
 
+        console.log(deviceArray);
 
         for (var i = 0; i <= deviceArray.length; i++) {
             var item = folder.ele('Placemark');
