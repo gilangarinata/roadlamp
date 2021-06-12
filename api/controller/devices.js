@@ -593,7 +593,7 @@ exports.devices_process_earth = (req, res, next) => {
             res.status(200).json({
                 message: "sukses",
                 filename: hid + ".kml",
-                downloadUrl: base_url + '/uploads/' + hid + ".kml"
+                downloadUrl: base_url + 'uploads/' + hid + ".kml"
             })
 
         });
