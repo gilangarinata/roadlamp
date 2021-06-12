@@ -781,7 +781,7 @@ exports.devices_get_v3 = (req, res, next) => {
 
             deviceArray[i]["kml_url"] = base_url + "uploads/" + userId + "_" + ruasJalan + ".kml";
             deviceArray[i]["kml_filename"] = userId + "_" + ruasJalan + ".kml";
-            newDeviceArray.push()
+            newDeviceArray.push(deviceArray[i])
 
         }
 
