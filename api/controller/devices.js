@@ -462,6 +462,7 @@ exports.devices_process_earth = (req, res, next) => {
     const latitude = req.body.latitude;
     const name = req.body.name;
     const hid = req.body.hid;
+    const base_url = req.protocol + "://" + req.headers.host + '/';
 
     processEarth(name, longitude, latitude, hid);
 
@@ -592,6 +593,7 @@ exports.devices_process_earth = (req, res, next) => {
             res.status(200).json({
                 message: "sukses",
                 filename: hid + ".kml",
+                downloadUrl: base_url + '/uploads/' + hid + ".kml"
             })
 
         });
