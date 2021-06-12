@@ -748,9 +748,10 @@ exports.devices_get_v3 = (req, res, next) => {
             .ele('tilt', 0).up()
             .ele('range', 5915).up().up()
 
-        console.log(deviceArray[i].name);
 
         for (var i = 0; i <= deviceArray.length; i++) {
+            console.log(deviceArray[i].name);
+
             var item = folder.ele('Placemark');
             item.ele('name', deviceArray[i].name).up();
             item.ele('Snippet').att('maxLines', 0).up();
