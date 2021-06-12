@@ -792,7 +792,7 @@ exports.devices_get_v3 = (req, res, next) => {
             console.log("The file was saved!");
 
             res.status(200).json({
-                kml: base_url + userId + "_" + ruasJalan + ".kml",
+                kml: base_url + "uploads/" + userId + "_" + ruasJalan + ".kml",
                 count: deviceArray.length,
                 result: deviceArray,
             })
