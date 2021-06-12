@@ -752,7 +752,8 @@ exports.devices_get_v3 = (req, res, next) => {
         for (var i = 0; i <= deviceArray.length; i++) {
 
             var name = "";
-            if (typeof deviceArray[i].name !== undefined) {
+            var deviceName = deviceArray[i].name;
+            if (deviceName) {
                 name = deviceArray[i].name;
             }
 
