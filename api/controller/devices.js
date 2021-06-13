@@ -1179,7 +1179,6 @@ exports.devices_update_segment = (req, res, next) => {
                         segment: segment
                     }
                 }).then(result => {
-                    console.log("sukse" + result);
                     return res.status(200).json({
                         message: "sukses",
                         hid: hid,
@@ -1192,10 +1191,6 @@ exports.devices_update_segment = (req, res, next) => {
                 });
             }
         }
-        return res.status(200).json({
-            message: "harware id tidak ditemukan / belum didaftarkan user",
-            hid: hid,
-        })
     }).catch(err => {
         res.status(500).json({
             error: err
