@@ -1142,7 +1142,7 @@ exports.devices_get_kwh_segmented = (res, req, next) => {
                 var totalKwhInSegmtnt = 0;
                 for (var j = 0; j < deviceArray.length; j++) {
                     if (deviceArray[j].segment === segments[i]) {
-                        totalKwhInSegmtnt += Number(deviceArray[j].hardware.chargeCapacity)
+                        totalKwhInSegmtnt += Number(deviceArray[j].hardware.dischargingTime)
                     }
                 }
                 kwhs.push({
