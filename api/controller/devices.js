@@ -1120,13 +1120,14 @@ exports.devices_get_kwh_segmented = (req, res, next) => {
 
 
     function processMonthlyHistory(deviceArray) {
-        histories = [];
-        History.find({
-            "date": {
-                "$regex": monthYear,
-                "$options": "i"
+        newHistories = [];
+        History.find().then(histories => {
+            for (var i = 0; i < histories.length; i++) {
+                if (histories[i].date.toString().contains(monthYear)) {
+                    newHistories.push(histories[i]);
+                }
             }
-        }).then(histories => {
+
             var allSegmtnArray = [];
             for (var i = 0; i < deviceArray.length; i++) {
                 allSegmtnArray.push(deviceArray[i].segment);
@@ -1140,9 +1141,14 @@ exports.devices_get_kwh_segmented = (req, res, next) => {
                 var totalKwhInSegmtnt = 0;
                 for (var j = 0; j < deviceArray.length; j++) {
                     if (deviceArray[j].segment === segments[i]) {
-                        totalKwhInSegmtnt += Number(deviceArray[j].hardware.dischargingTime)
+                        for (var k = 0; k < newHistories.length; k++) {
+                            if (newHistories[k].hardwareId === deviceArray[j].hardware.hardwareId) {
+                                totalKwhInSegmtnt += Number(newHistories[k].dischargeCapacity)
+                            }
+                        }
                     }
                 }
+
                 kwhs.push({
                     "segment": segments[i],
                     "kwhs": totalKwhInSegmtnt
