@@ -1169,6 +1169,8 @@ exports.devices_update_segment = (req, res, next) => {
     const hid = req.params.hid;
     const segment = req.params.hid;
 
+    console.log(segment);
+
     Device.find().populate('hardware').exec().then(device => {
         for (var i = 0; i < device.length; i++) {
             if (device[i].hardware.hardwareId == hid) {
@@ -1177,6 +1179,7 @@ exports.devices_update_segment = (req, res, next) => {
                         segment: segment
                     }
                 }).then(result => {
+                    console.log("sukse" + result);
                     return res.status(200).json({
                         message: "sukses",
                         hid: hid,
