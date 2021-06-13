@@ -1085,11 +1085,7 @@ exports.devices_get_kwh_segmented = (res, req, next) => {
                 message: "Users Not Found."
             })
         }
-    }).catch(err => {
-        res.status(500).json({
-            error: err
-        })
-    });;
+    });
 
     function fetchDevice4() {
         Device.find({ user: userIdSuperuser[i]._id }).populate('hardware').exec().then(device => {
