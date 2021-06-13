@@ -34,6 +34,6 @@ router.post("/get_earth_value/user", DevicesController.devices_process_earth);
 
 router.post("/streets", DevicesController.devices_get_street);
 
-router.get("/update/segment/:hid/:segment", DevicesController.device_update_segment);
+router.get("/update/segment/:hid/:segment", DevicesController.devices_update_segment);
 
 module.exports = router;

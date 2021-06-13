@@ -7,11 +7,12 @@ const process = require("../../nodemon.json");
 const { schedule } = require("node-cron");
 const fs = require("fs");
 const hardware = require("../models/hardware");
-const { use } = require("../../app");
+const { use, all } = require("../../app");
 const user = require("../models/user");
 const { check } = require("prettier");
 const { hardware_get_all } = require("./hardware");
 const e = require("cors");
+const History = require("../models/history")
 const builder = require('xmlbuilder', { encoding: 'utf-8' });
 
 
@@ -1052,10 +1053,113 @@ exports.devices_upload_image = (res, req, next) => {
 
 }
 
-// return res.status(200).json({
-//     count: device.length,
-//     result: device,
-// }) gilang
+exports.devices_get_kwh_segmented = (res, req, next) => {
+    const userId = req.body.userId;
+    const ruasJalan = req.body.ruasJalan;
+    var userIdSuperuser = Array();
+    var deviceArray = Array()
+    var monthYear = req.body.monthYear
+    var i = 0;
+
+    User.findById(userId).exec().then(users => {
+        if (users != null) {
+            User.find({ referalFrom2: users.referal }).exec().then(commonUsers => {
+                if (commonUsers.length > 0) {
+                    for (var i = 0; i < commonUsers.length; i++) {
+                        userIdSuperuser.push(commonUsers[i]);
+                    }
+                    fetchDevice4();
+                } else {
+                    return res.status(200).json({
+                        kml: "",
+                        count: 0,
+                        result: [],
+                    })
+                }
+
+            }).catch(err => console.log(err));
+        } else {
+            return res.status(404).json({
+                message: "Users Not Found."
+            })
+        }
+    }).catch(err => {
+        res.status(500).json({
+            error: err
+        })
+    });;
+
+    function fetchDevice4() {
+        Device.find({ user: userIdSuperuser[i]._id }).populate('hardware').exec().then(device => {
+            if (device) {
+                if (device.length > 0) {
+                    for (var j = 0; j < device.length; j++) {
+                        if (device[j].ruasJalan == ruasJalan) {
+                            deviceArray.push(device[j])
+                        }
+                    }
+                }
+            }
+
+            for (var k = 0; k < deviceArray.length; k++) {
+                Hardware.update({ hardwareId: deviceArray[k].hardware.hardwareId }, { $set: { active: checkDeviceIsActive(deviceArray[k].hardware) } }).then(result => console.log("success updating harware ")).catch(e => console.log("error updating harware :" + e));
+            }
+
+            i++
+            if (i < userIdSuperuser.length) {
+                fetchDevice4()
+            } else {
+                processMonthlyHistory(deviceArray);
+            }
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            })
+        });
+    }
+
+
+    function processMonthlyHistory(deviceArray) {
+        histories
+        histories = [];
+        History.find({
+            "date": {
+                "$regex": monthYear,
+                "$options": "i"
+            }
+        }).then(histories => {
+            var allSegmtnArray = [];
+            for (var i = 0; i < deviceArray.length; i++) {
+                allSegmtnArray.push(deviceArray[i].segment);
+            }
+            var segments = allSegmtnArray.filter(function(elem, pos) {
+                return allSegmtnArray.indexOf(elem) == pos;
+            })
+
+            var kwhs = [];
+            for (var i = 0; i < segments.length; i++) {
+                var totalKwhInSegmtnt = 0;
+                for (var j = 0; j < deviceArray.length; j++) {
+                    if (deviceArray[j].segment === segments[i]) {
+                        totalKwhInSegmtnt += Number(deviceArray[j].hardware.chargeCapacity)
+                    }
+                }
+                kwhs.push({
+                    "segment": segments[i],
+                    "kwhs": totalKwhInSegmtnt
+                });
+            }
+
+            return res.status(404).json({
+                data: kwhs
+            })
+
+        })
+    }
+
+}
+
 
 exports.devices_update_segment = (res, req, next) => {
     const hid = req.params.hid;
