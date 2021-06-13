@@ -1061,6 +1061,8 @@ exports.devices_get_kwh_segmented = (res, req, next) => {
     var monthYear = req.body.monthYear
     var i = 0;
 
+    console.log(userId);
+
     User.findById(userId).exec().then(users => {
         if (users != null) {
             User.find({ referalFrom2: users.referal }).exec().then(commonUsers => {
