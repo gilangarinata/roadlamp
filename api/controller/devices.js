@@ -1054,7 +1054,7 @@ exports.devices_upload_image = (res, req, next) => {
 }
 
 exports.devices_get_kwh_segmented = (res, req, next) => {
-    const userId = req.body.userId;
+    const userId = "req.body.userId";
     const ruasJalan = req.body.ruasJalan;
     var userIdSuperuser = Array();
     var deviceArray = Array()
