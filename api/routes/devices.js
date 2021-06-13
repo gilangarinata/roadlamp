@@ -36,4 +36,6 @@ router.post("/streets", DevicesController.devices_get_street);
 
 router.get("/update/segment/:hid/:segment", DevicesController.devices_update_segment);
 
+router.post("/history/monthly", DevicesController.devices_get_kwh_segmented);
+
 module.exports = router;
