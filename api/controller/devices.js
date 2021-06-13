@@ -1120,7 +1120,6 @@ exports.devices_get_kwh_segmented = (req, res, next) => {
 
 
     function processMonthlyHistory(deviceArray) {
-        histories
         histories = [];
         History.find({
             "date": {
