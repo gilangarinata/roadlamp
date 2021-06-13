@@ -1142,8 +1142,8 @@ exports.devices_get_kwh_segmented = (req, res, next) => {
                 for (var j = 0; j < deviceArray.length; j++) {
                     if (deviceArray[j].segment === segments[i]) {
                         for (var k = 0; k < newHistories.length; k++) {
+                            console.log(newHistories[k].hardwareId + " hid " + deviceArray[j].hardware.hardwareId);
                             if (newHistories[k].hardwareId === deviceArray[j].hardware.hardwareId) {
-                                console.log(deviceArray[j].hardware.hardwareId + " hid");
                                 totalKwhInSegmtnt += Number(newHistories[k].dischargeCapacity)
                             }
                         }
