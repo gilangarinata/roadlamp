@@ -1053,7 +1053,7 @@ exports.devices_upload_image = (res, req, next) => {
 
 }
 
-exports.devices_get_kwh_segmented = (res, req, next) => {
+exports.devices_get_kwh_segmented = (req, res, next) => {
     console.log(req.body);
     const userId = req.body.userId;
     const ruasJalan = req.body.ruasJalan;
