@@ -1172,11 +1172,39 @@ exports.devices_update_segment = (req, res, next) => {
     const hid = req.params.hid;
     const segment = req.params.segment;
 
-    console.log(segment);
+    // console.log(segment);
+
+    // Device.find().populate('hardware').exec().then(device => {
+    //     for (var i = 0; i < device.length; i++) {
+    //         if (device[i].hardware.hardwareId == hid) {
+    //             Device.update({ _id: device[i]._id }, {
+    //                 $set: {
+    //                     segment: segment
+    //                 }
+    //             }).then(result => {
+    //                 return res.status(200).json({
+    //                     message: "sukses",
+    //                     hid: hid,
+    //                 })
+    //             }).catch(e => {
+    //                 return res.status(403).json({
+    //                     message: "gagal update segment",
+    //                     hid: hid,
+    //                 })
+    //             });
+    //         }
+    //     }
+    // }).catch(err => {
+    //     res.status(500).json({
+    //         error: err
+    //     })
+    // });
 
     Device.find().populate('hardware').exec().then(device => {
         for (var i = 0; i < device.length; i++) {
-            if (device[i].hardware.hardwareId == hid) {
+            if (device[i].name.includes('-')) {
+                var str = device[i].name;
+                var segment = str.slice(str.lastIndexOf('-') + 1);
                 Device.update({ _id: device[i]._id }, {
                     $set: {
                         segment: segment
@@ -1193,6 +1221,25 @@ exports.devices_update_segment = (req, res, next) => {
                     })
                 });
             }
+
+
+            // if (device[i].hardware.hardwareId == hid) {
+            //     Device.update({ _id: device[i]._id }, {
+            //         $set: {
+            //             segment: segment
+            //         }
+            //     }).then(result => {
+            //         return res.status(200).json({
+            //             message: "sukses",
+            //             hid: hid,
+            //         })
+            //     }).catch(e => {
+            //         return res.status(403).json({
+            //             message: "gagal update segment",
+            //             hid: hid,
+            //         })
+            //     });
+            // }
         }
     }).catch(err => {
         res.status(500).json({
