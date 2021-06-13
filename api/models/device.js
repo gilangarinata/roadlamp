@@ -48,7 +48,11 @@ const deviceSchema = mongoose.Schema({
     },
     referalFrom2: [
         String
-    ]
+    ],
+    segment: {
+        type: String,
+        default: ""
+    }
 });
 
 deviceSchema.plugin(uniqueValidator);

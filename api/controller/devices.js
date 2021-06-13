@@ -1052,6 +1052,48 @@ exports.devices_upload_image = (res, req, next) => {
 
 }
 
+// return res.status(200).json({
+//     count: device.length,
+//     result: device,
+// }) gilang
+
+exports.devices_update_segment = (res, req, next) => {
+    const hid = req.params.hid;
+    const segment = req.params.hid;
+
+    Device.find().populate('hardware').exec().then(device => {
+        for (var i = 0; i < device.length; i++) {
+            if (device[i].hardware.hardwareId == hid) {
+                Device.update({ _id: device[i]._id }, {
+                    $set: {
+                        segment: segment
+                    }
+                }).then(result => {
+                    return res.status(200).json({
+                        message: "sukses",
+                        hid: hid,
+                    })
+                }).catch(e => {
+                    return res.status(403).json({
+                        message: "gagal update segment",
+                        hid: hid,
+                    })
+                });
+            }
+        }
+        return res.status(200).json({
+            message: "harware id tidak ditemukan / belum didaftarkan user",
+            hid: hid,
+        })
+    }).catch(err => {
+        res.status(500).json({
+            error: err
+        })
+    });
+
+
+}
+
 exports.devices_get_street = (req, res, next) => {
     var query = req.body.query;
     var referal = req.body.referal;
