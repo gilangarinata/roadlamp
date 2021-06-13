@@ -1123,7 +1123,7 @@ exports.devices_get_kwh_segmented = (req, res, next) => {
         newHistories = [];
         History.find().then(histories => {
             for (var i = 0; i < histories.length; i++) {
-                if (histories[i].date.toString().contains(monthYear)) {
+                if (histories[i].date.toString().includes(monthYear)) {
                     newHistories.push(histories[i]);
                 }
             }
