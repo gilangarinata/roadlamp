@@ -1155,7 +1155,7 @@ exports.devices_get_kwh_segmented = (req, res, next) => {
                 });
             }
 
-            return res.status(404).json({
+            return res.status(200).json({
                 data: kwhs
             })
 
