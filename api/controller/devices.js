@@ -1059,7 +1059,8 @@ exports.devices_get_kwh_segmented = (req, res, next) => {
     const ruasJalan = req.body.ruasJalan;
     var userIdSuperuser = Array();
     var deviceArray = Array()
-    var monthYear = req.body.monthYear
+    var month = req.body.month;
+    var year = req.body.year;
     var i = 0;
 
     console.log(userId);
@@ -1123,9 +1124,10 @@ exports.devices_get_kwh_segmented = (req, res, next) => {
         newHistories = [];
         History.find().then(histories => {
             for (var i = 0; i < histories.length; i++) {
-                console.log(histories[i].date.toString() + " hid " + monthYear);
-                if (histories[i].date.toString().includes(monthYear)) {
-                    newHistories.push(histories[i]);
+                if (histories[i].date.toString().includes(year)) {
+                    if (histories[i].date.toString().includes(month)) {
+                        newHistories.push(histories[i]);
+                    }
                 }
             }
 
