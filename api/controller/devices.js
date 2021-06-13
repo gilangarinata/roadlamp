@@ -1165,7 +1165,7 @@ exports.devices_get_kwh_segmented = (req, res, next) => {
 }
 
 
-exports.devices_update_segment = (res, req, next) => {
+exports.devices_update_segment = (req, res, next) => {
     const hid = req.params.hid;
     const segment = req.params.hid;
 
