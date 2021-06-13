@@ -1123,6 +1123,7 @@ exports.devices_get_kwh_segmented = (req, res, next) => {
         newHistories = [];
         History.find().then(histories => {
             for (var i = 0; i < histories.length; i++) {
+                console.log(histories[i].date.toString() + " hid " + monthYear);
                 if (histories[i].date.toString().includes(monthYear)) {
                     newHistories.push(histories[i]);
                 }
@@ -1142,7 +1143,6 @@ exports.devices_get_kwh_segmented = (req, res, next) => {
                 for (var j = 0; j < deviceArray.length; j++) {
                     if (deviceArray[j].segment === segments[i]) {
                         for (var k = 0; k < newHistories.length; k++) {
-                            console.log(newHistories[k].hardwareId + " hid " + deviceArray[j].hardware.hardwareId);
                             if (newHistories[k].hardwareId === deviceArray[j].hardware.hardwareId) {
                                 totalKwhInSegmtnt += Number(newHistories[k].dischargeCapacity)
                             }
