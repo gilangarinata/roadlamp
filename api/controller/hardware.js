@@ -51,6 +51,8 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
         keys.push(key);
     }
 
+    console.log(req.body);
+
     updateHardware(req.body[keys[i]].hardwareId);
 
     function updateHardware(hardwareId) {
