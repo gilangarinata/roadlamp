@@ -179,12 +179,12 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
                 humidity: humidity
             });
 
-            successlog.info("====================================");
-            successlog.info("DATE : " + new Date());
-            successlog.info("HID : " + hardwareId);
-            successlog.info("LAT : " + req.body[keys[i]].latitude);
-            successlog.info("LONG : " + req.body[keys[i]].longitude);
-            successlog.info("====================================");
+            // successlog.info("====================================");
+            // successlog.info("DATE : " + new Date());
+            // successlog.info("HID : " + hardwareId);
+            // successlog.info("LAT : " + req.body[keys[i]].latitude);
+            // successlog.info("LONG : " + req.body[keys[i]].longitude);
+            // successlog.info("====================================");
 
             Hardware.update({ hardwareId: hardwareId }, { $set: hardware }).exec().then(result => {
                 Schedule.find({ hardwareId: hardwareId }).exec().then(schedule => {
