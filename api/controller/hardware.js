@@ -8,6 +8,8 @@ var cron = require('node-cron');
 var lastNotif = "0";
 const request = require('request');
 const openWeatherKey = '815168ce4992ad1ee04830a8556bedf9';
+const errorLog = require('.../logger/logger').errorlog;
+const successlog = require('.../logger/logger').successlog;
 
 
 exports.hardware_get_all = (req, res, next) => {
@@ -51,7 +53,6 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
         keys.push(key);
     }
 
-    console.log(req.body);
 
     updateHardware(req.body[keys[i]].hardwareId);
 
@@ -178,6 +179,7 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
                 humidity: humidity
             });
 
+            successlog.info(hardware);
 
             Hardware.update({ hardwareId: hardwareId }, { $set: hardware }).exec().then(result => {
                 Schedule.find({ hardwareId: hardwareId }).exec().then(schedule => {
