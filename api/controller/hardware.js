@@ -170,8 +170,8 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
                 dischargingTime: req.body[keys[i]].dischargingTime,
                 betteryHealth: Number(req.body[keys[i]].betteryHealth),
                 alarm: req.body[keys[i]].alarm,
-                // longitude: req.body[keys[i]].longitude,
-                // latitude: req.body[keys[i]].latitude,
+                longitude: req.body[keys[i]].longitude,
+                latitude: req.body[keys[i]].latitude,
                 photoPath: resultHardware[0].photoPath,
                 lastUpdate: new Date(),
                 active: isActive,
@@ -179,7 +179,12 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
                 humidity: humidity
             });
 
-            successlog.info(hardware);
+            successlog.info("====================================");
+            successlog.info("DATE : " + new Date());
+            successlog.info("HID : " + hardwareId);
+            successlog.info("LAT : " + req.body[keys[i]].latitude);
+            successlog.info("LONG : " + req.body[keys[i]].longitude);
+            successlog.info("====================================");
 
             Hardware.update({ hardwareId: hardwareId }, { $set: hardware }).exec().then(result => {
                 Schedule.find({ hardwareId: hardwareId }).exec().then(schedule => {
