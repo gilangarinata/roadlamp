@@ -634,7 +634,8 @@ exports.hardware_get = (req, res, next) => {
                         humidity: humidity.toString(),
                         lamp: hardware.lamp,
                         brightness: hardware.brightness,
-                        isActive: isActive
+                        isActive: isActive,
+                        lastUpdate: hardware.lastUpdate
                     },
                 })
             } else {
