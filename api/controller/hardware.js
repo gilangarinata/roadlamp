@@ -54,6 +54,10 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
     }
 
 
+    console.log("===========");
+    console.log(keys);
+    console.log("===========");
+
     var apHid = "";
 
     var pInts = [];
@@ -89,12 +93,6 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
             apHid = keys[j];
         }
     }
-
-    console.log("===========");
-    console.log(apHid);
-    console.log("===========");
-
-
 
     updateHardware(req.body[keys[i]].hardwareId);
 
