@@ -62,7 +62,7 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
         pInts.push(pInt)
     }
 
-    centerHid = pInts.min();
+    centerHid = Math.min.apply(null, pInts);
 
     for (var hid in keys) {
         var pInt = parseInt(hid.hardwareId);
