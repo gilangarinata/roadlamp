@@ -67,24 +67,17 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
             pInt = parseInt(keys[j].replace("B", ""));
         }
 
-
-        console.log("int : " + pInt + "   hid: " + keys[j]);
-
-        // pInts.push(pInt)
+        pInts.push(pInt)
     }
 
-    // centerHid = Math.min.apply(null, pInts);
+    centerHid = Math.min.apply(null, pInts);
 
-
-
-    // for (var i = 0; i < keys.length; i++) {
-    //     var pInt = parseInt(keys[i]);
-    //     if (pInts == centerHid) {
-    //         apHid = keys[i];
-    //     }
-    // }
-
-
+    for (var i = 0; i < keys.length; i++) {
+        var pInt = parseInt(keys[i]);
+        if (pInts == centerHid) {
+            apHid = keys[i];
+        }
+    }
 
     updateHardware(req.body[keys[i]].hardwareId);
 
