@@ -665,7 +665,8 @@ exports.hardware_get = (req, res, next) => {
                         lamp: hardware.lamp,
                         brightness: hardware.brightness,
                         isActive: isActive,
-                        lastUpdate: hardware.lastUpdate
+                        lastUpdate: hardware.lastUpdate,
+                        connectedTo: hardware.connectedTo
                     },
                 })
             } else {
