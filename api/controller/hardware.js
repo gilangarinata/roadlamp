@@ -74,7 +74,7 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
         }
     }
 
-    console.log(apHid);
+    console.log("apHid : " + apHid);
 
     updateHardware(req.body[keys[i]].hardwareId);
 
