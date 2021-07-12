@@ -57,10 +57,13 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
 
     var pInts = [];
     var centerHid = -1;
+
+
+    console.log("apHid : " + keys);
+
     for (var hid in keys) {
         var pInt = parseInt(hid.hardwareId);
 
-        console.log("apHid : " + hid.hardwareId);
         pInts.push(pInt)
     }
 
