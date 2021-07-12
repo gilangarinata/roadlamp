@@ -60,9 +60,15 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
 
 
     for (var j = 0; j < keys.length; j++) {
-        var pInt = parseInt(keys[j].replace(/[\W_]+/g, ""));
+        var pInt = 0;
+        if (keys[j].includes('A')) {
+            pInt = parseInt(keys[j].replace("A", ""));
+        } else if (keys[j].includes('B')) {
+            pInt = parseInt(keys[j].replace("B", ""));
+        }
 
-        console.log("int : " + keys[j].replace(/[\W_]+/g, "") + "   hid: " + keys[j]);
+
+        console.log("int : " + pInt + "   hid: " + keys[j]);
 
         // pInts.push(pInt)
     }
