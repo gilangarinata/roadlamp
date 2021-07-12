@@ -84,11 +84,12 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
         }
     }
 
-    console.log("apHid : " + apHid);
 
     updateHardware(req.body[keys[i]].hardwareId);
 
     function updateHardware(hardwareId) {
+        console.log("apHid : " + apHid + "------------" + "hid" + hardwareId);
+
         Hardware.find({ hardwareId }).exec().then(resultHardware => {
             var temperature = "-";
             var humidity = "-";
