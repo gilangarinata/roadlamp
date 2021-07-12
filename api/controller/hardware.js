@@ -58,8 +58,8 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
     var pInts = [];
     var centerHid = -1;
 
-    for (var hid in keys) {
-        var pInt = parseInt(hid);
+    for (var i = 0; i < keys.length; i++) {
+        var pInt = parseInt(keys[i].hardwareId);
 
         console.log("int : " + pInt + "   hid: " + hid);
 
@@ -70,8 +70,8 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
 
 
 
-    for (var hid in keys) {
-        var pInt = parseInt(hid);
+    for (var i = 0; i < keys.length; i++) {
+        var pInt = parseInt(keys[i].hardwareId);
         if (pInts == centerHid) {
             apHid = hid.hardwareId;
         }
