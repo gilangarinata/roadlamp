@@ -64,14 +64,14 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
 
     centerHid = Math.min.apply(null, pInts);
 
+    console.log("apHid : " + centerHid);
+
     for (var hid in keys) {
         var pInt = parseInt(hid.hardwareId);
         if (pInts == centerHid) {
             apHid = hid.hardwareId;
         }
     }
-
-    console.log("apHid : " + apHid);
 
     updateHardware(req.body[keys[i]].hardwareId);
 
