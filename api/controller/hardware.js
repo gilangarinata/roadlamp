@@ -79,6 +79,8 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
             pInt = parseInt(keys[j].replace("A", ""));
         } else if (keys[j].includes('B')) {
             pInt = parseInt(keys[j].replace("B", ""));
+        } else if (keys[j].includes('T')) {
+            pInt = parseInt(keys[j].replace("T", ""));
         }
         if (pInts == centerHid) {
             apHid = keys[j];
