@@ -60,10 +60,9 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
 
 
     for (var j = 0; j < keys.length; j++) {
-        console.log("aaa");
         // var pInt = parseInt(keys[i]);
 
-        // console.log("int : " + "pInt" + "   hid: " + "req.body[keys[i]].hardwareId");
+        console.log("int : " + "pInt" + "   hid: " + "aaaaa");
 
         // pInts.push(pInt)
     }
