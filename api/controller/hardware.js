@@ -82,6 +82,11 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
         } else if (keys[j].includes('T')) {
             pInt = parseInt(keys[j].replace("T", ""));
         }
+
+        console.log("=====pint cent======");
+        console.log(pInts + "   " + centerHid);
+        console.log("===========");
+
         if (pInts == centerHid) {
             apHid = keys[j];
         }
@@ -96,7 +101,7 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
     updateHardware(req.body[keys[i]].hardwareId);
 
     function updateHardware(hardwareId) {
-        console.log("apHid : " + apHid + "------------" + "hid" + hardwareId);
+        console.log("apHid : " + apHid + "------------" + "hid : " + hardwareId);
 
         Hardware.find({ hardwareId }).exec().then(resultHardware => {
             var temperature = "-";
