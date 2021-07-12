@@ -200,8 +200,8 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
                     const dateLastUpdate = resultHardware[0].lastUpdate;
                     const diffTime = Math.abs(dateNow - dateLastUpdate);
                     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    console.log(diffTime + " milliseconds");
-                    console.log(diffDays + " days");
+                    // console.log(diffTime + " milliseconds");
+                    // console.log(diffDays + " days");
                     //1800000
                     if (diffTime < 180000) { // if there is data updated less than 120 second 
                         isActive = true;
@@ -364,7 +364,7 @@ exports.hardware_update_hardware = (req, res, next) => {
 
 
 function updateHardware(resultHardware, temperature, humidity, req, res, hardwareId) {
-    console.log(humidity + "  " + temperature);
+    // console.log(humidity + "  " + temperature);
     //add new hardware if hardwareId doesn't exist
     if (resultHardware.length < 1) {
         const hardware = new Hardware({
@@ -403,8 +403,8 @@ function updateHardware(resultHardware, temperature, humidity, req, res, hardwar
                 const dateLastUpdate = resultHardware[0].lastUpdate;
                 const diffTime = Math.abs(dateNow - dateLastUpdate);
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                console.log(diffTime + " milliseconds");
-                console.log(diffDays + " days");
+                // console.log(diffTime + " milliseconds");
+                // console.log(diffDays + " days");
 
                 if (diffTime < 180000) { // if there is data updated less than 120 second 
                     isActive = true;
@@ -792,7 +792,7 @@ exports.hardware_update_history = (req, res, next) => {
                 });
             });
         } else {
-            console.log(historyUpdate)
+            // console.log(historyUpdate)
             historyAdd.save().then(result => {
                 res.status(200).json({
                     message: 'New History Created.',
@@ -929,7 +929,6 @@ exports.hardware_history_get = (req, res, next) => {
 }
 
 exports.hardware_delete_all = (req, res, next) => {
-    console.log("asas")
     Hardware.deleteMany().exec().then(message => {
         res.status(200).json({
             message: message
