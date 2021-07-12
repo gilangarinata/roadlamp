@@ -73,7 +73,7 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
     for (var i = 0; i < keys.length; i++) {
         var pInt = parseInt(keys[i].hardwareId);
         if (pInts == centerHid) {
-            apHid = hid.hardwareId;
+            apHid = keys[i].hardwareId;
         }
     }
 
