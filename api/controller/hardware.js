@@ -687,7 +687,9 @@ exports.hardware_get = (req, res, next) => {
                         humidity: "",
                         lamp: hardware.lamp,
                         brightness: hardware.brightness,
-                        isActive: isActive
+                        isActive: isActive,
+                        lastUpdate: hardware.lastUpdate,
+                        connectedTo: hardware.connectedTo
                     },
                 })
 
