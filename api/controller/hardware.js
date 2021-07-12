@@ -72,10 +72,15 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
 
     centerHid = Math.min.apply(null, pInts);
 
-    for (var i = 0; i < keys.length; i++) {
-        var pInt = parseInt(keys[i]);
+    for (var j = 0; j < keys.length; j++) {
+        var pInt = 0;
+        if (keys[j].includes('A')) {
+            pInt = parseInt(keys[j].replace("A", ""));
+        } else if (keys[j].includes('B')) {
+            pInt = parseInt(keys[j].replace("B", ""));
+        }
         if (pInts == centerHid) {
-            apHid = keys[i];
+            apHid = keys[j];
         }
     }
 
