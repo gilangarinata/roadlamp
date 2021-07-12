@@ -67,6 +67,9 @@ const hardwareSchema = mongoose.Schema({
     },
     humidity: {
         type: String
+    },
+    connectedTo: {
+        type: String
     }
 });
 

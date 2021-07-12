@@ -53,6 +53,23 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
         keys.push(key);
     }
 
+    var apHid = "";
+
+    var pInts = [];
+    var centerHid = -1;
+    for (var hid in keys) {
+        var pInt = parseInt(hid.hardwareId);
+        pInts.push(pInt)
+    }
+
+    centerHid = pInts.min();
+
+    for (var hid in keys) {
+        var pInt = parseInt(hid.hardwareId);
+        if (pInts == centerHid) {
+            apHid = hid.hardwareId;
+        }
+    }
 
     updateHardware(req.body[keys[i]].hardwareId);
 
@@ -74,11 +91,11 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
                         if (humidityOwm != null) {
                             humidity = humidityOwm;
                         }
-                        updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId);
+                        updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId, apHid);
                     } else {
                         temperature = "-";
                         humidity = "-";
-                        updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId);
+                        updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId, apHid);
                     }
                 });
             } else {
@@ -95,11 +112,11 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
                         if (humidityOwm != null) {
                             humidity = humidityOwm;
                         }
-                        updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId);
+                        updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId, apHid);
                     } else {
                         temperature = "-";
                         humidity = "-";
-                        updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId);
+                        updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId, apHid);
                     }
                 });
             }
@@ -112,9 +129,15 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
     }
 
 
-    function updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId) {
+    function updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId, apHid) {
         //add new hardware if hardwareId doesn't exist
         if (resultHardware.length < 1) {
+            var connectedTo = "";
+            if (apHid == hardwareId) {
+                connectedTo = "AP";
+            } else {
+                connectedTo = apHid;
+            }
             const hardware = new Hardware({
                 _id: new mongoose.Types.ObjectId(),
                 name: req.body[keys[i]].name,
@@ -127,7 +150,8 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
                 latitude: req.body[keys[i]].latitude,
                 hardwareId: req.body[keys[i]].hardwareId,
                 temperature: temperature,
-                humidity: humidity
+                humidity: humidity,
+                connectedTo: connectedTo
             });
 
             hardware.save().then(result => {
@@ -143,7 +167,12 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
 
         } else {
             var isActive = false;
-
+            var connectedTo = "";
+            if (apHid == hardwareId) {
+                connectedTo = "AP";
+            } else {
+                connectedTo = apHid;
+            }
 
             if (resultHardware[0].lastUpdate != null) {
                 try {
@@ -176,7 +205,8 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
                 lastUpdate: new Date(),
                 active: isActive,
                 temperature: temperature,
-                humidity: humidity
+                humidity: humidity,
+                connectedTo: connectedTo
             });
 
             // successlog.info("====================================");
