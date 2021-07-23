@@ -14,6 +14,8 @@ router.post("/", HardwareController.hardware_update_hardware);
 
 router.post("/v2", HardwareController.hardware_update_hardware_v2);
 
+router.post("dev/v2", HardwareController.hardware_update_hardware_v2);
+
 router.get("/", HardwareController.hardware_get_all);
 
 router.get("/:id", HardwareController.hardware_get);

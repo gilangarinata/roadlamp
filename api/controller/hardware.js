@@ -308,6 +308,271 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
 
 }
 
+
+exports.hardware_update_hardware_v2_dev = (req, res, next) => {
+    var keys = [];
+    var i = 0;
+    var resultObj = {};
+    for (var key in req.body) {
+        keys.push(key);
+    }
+
+
+    console.log("===========");
+    console.log(req.body);
+    console.log("===========");
+
+    var apHid = "";
+
+    var pInts = [];
+    var centerHid = -1;
+
+
+    for (var j = 0; j < keys.length; j++) {
+        var pInt = 0;
+        if (keys[j].includes('A')) {
+            pInt = parseInt(keys[j].replace("A", ""));
+        } else if (keys[j].includes('B')) {
+            pInt = parseInt(keys[j].replace("B", ""));
+        } else if (keys[j].includes('T')) {
+            pInt = parseInt(keys[j].replace("T", ""));
+        }
+
+        pInts.push(pInt)
+    }
+
+    centerHid = Math.min.apply(null, pInts);
+
+    for (var j = 0; j < keys.length; j++) {
+        var pInt = 0;
+        if (keys[j].includes('A')) {
+            pInt = parseInt(keys[j].replace("A", ""));
+        } else if (keys[j].includes('B')) {
+            pInt = parseInt(keys[j].replace("B", ""));
+        } else if (keys[j].includes('T')) {
+            pInt = parseInt(keys[j].replace("T", ""));
+        }
+
+        if (pInt == centerHid) {
+            apHid = keys[j];
+        }
+    }
+
+    updateHardware(req.body[keys[i]].hardwareId);
+
+    function updateHardware(hardwareId) {
+        console.log("apHid : " + apHid + "------------" + "hid : " + hardwareId);
+
+        Hardware.find({ hardwareId }).exec().then(resultHardware => {
+            var temperature = "-";
+            var humidity = "-";
+            if (resultHardware.length > 0) {
+                const uri = 'http://api.openweathermap.org/data/2.5/weather?lat=' + resultHardware[0].latitude + '&lon=' + resultHardware[0].longitude + '&appid=' + openWeatherKey + '&units=metric';
+                request(uri, function(error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                        var obj = JSON.parse(response.body);
+                        var temperatureOwm = obj.main.temp; //Own = Open Weather Map
+                        var humidityOwm = obj.main.humidity;
+
+                        if (temperatureOwm != null) {
+                            temperature = temperatureOwm;
+                        }
+                        if (humidityOwm != null) {
+                            humidity = humidityOwm;
+                        }
+                        updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId, apHid);
+                    } else {
+                        temperature = "-";
+                        humidity = "-";
+                        updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId, apHid);
+                    }
+                });
+            } else {
+                const uri = 'http://api.openweathermap.org/data/2.5/weather?lat=' + req.body[keys[i]].latitude + '&lon=' + req.body[keys[i]].longitude + '&appid=' + openWeatherKey + '&units=metric';
+                request(uri, function(error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                        var obj = JSON.parse(response.body);
+                        var temperatureOwm = obj.main.temp; //Own = Open Weather Map
+                        var humidityOwm = obj.main.humidity;
+
+                        if (temperatureOwm != null) {
+                            temperature = temperatureOwm;
+                        }
+                        if (humidityOwm != null) {
+                            humidity = humidityOwm;
+                        }
+                        updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId, apHid);
+                    } else {
+                        temperature = "-";
+                        humidity = "-";
+                        updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId, apHid);
+                    }
+                });
+            }
+
+
+
+        }).catch(err => {
+            console.log(err)
+        });
+    }
+
+
+    function updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId, apHid) {
+        //add new hardware if hardwareId doesn't exist
+        if (resultHardware.length < 1) {
+            var connectedTo = "";
+            if (apHid == hardwareId) {
+                connectedTo = "AP";
+            } else {
+                connectedTo = apHid;
+            }
+            const hardware = new Hardware({
+                _id: new mongoose.Types.ObjectId(),
+                name: req.body[keys[i]].name,
+                capacity: Number(req.body[keys[i]].capacity),
+                chargingTime: Number(req.body[keys[i]].chargingTime),
+                dischargingTime: req.body[keys[i]].dischargingTime,
+                betteryHealth: Number(req.body[keys[i]].betteryHealth),
+                alarm: req.body[keys[i]].alarm,
+                longitude: req.body[keys[i]].longitude,
+                latitude: req.body[keys[i]].latitude,
+                hardwareId: req.body[keys[i]].hardwareId,
+                temperature: temperature,
+                humidity: humidity,
+                connectedTo: connectedTo
+            });
+
+            hardware.save().then(result => {
+                res.status(200).json({
+                    message: 'New Hardware Created.'
+                });
+            }).catch(err => {
+                console.log(err)
+                res.status(500).json({
+                    error: err
+                })
+            });
+
+        } else {
+            var isActive = false;
+            var connectedTo = "";
+            if (apHid == hardwareId) {
+                connectedTo = "AP";
+            } else {
+                connectedTo = apHid;
+            }
+
+            if (resultHardware[0].lastUpdate != null) {
+                try {
+                    const dateNow = new Date();
+                    const dateLastUpdate = resultHardware[0].lastUpdate;
+                    const diffTime = Math.abs(dateNow - dateLastUpdate);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    // console.log(diffTime + " milliseconds");
+                    // console.log(diffDays + " days");
+                    //1800000
+                    if (diffTime < 180000) { // if there is data updated less than 120 second 
+                        isActive = true;
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+
+
+            const hardware = new Hardware({
+                name: req.body[keys[i]].name,
+                capacity: Number(req.body[keys[i]].capacity),
+                chargingTime: Number(req.body[keys[i]].chargingTime),
+                dischargingTime: req.body[keys[i]].dischargingTime,
+                betteryHealth: Number(req.body[keys[i]].betteryHealth),
+                alarm: req.body[keys[i]].alarm,
+                longitude: req.body[keys[i]].longitude,
+                latitude: req.body[keys[i]].latitude,
+                photoPath: resultHardware[0].photoPath,
+                lastUpdate: new Date(),
+                active: isActive,
+                temperature: temperature,
+                humidity: humidity,
+                connectedTo: connectedTo
+            });
+
+            // successlog.info("====================================");
+            // successlog.info("DATE : " + new Date());
+            // successlog.info("HID : " + hardwareId);
+            // successlog.info("LAT : " + req.body[keys[i]].latitude);
+            // successlog.info("LONG : " + req.body[keys[i]].longitude);
+            // successlog.info("====================================");
+
+            Hardware.update({ hardwareId: hardwareId }, { $set: hardware }).exec().then(result => {
+                Schedule.find({ hardwareId: hardwareId }).exec().then(schedule => {
+                    var sch = schedule.sort(function(a, b) {
+                        var dateA = new Date("01/01/2020" + " " + String(a.hour) + ":" + String(a.minute) + ":00");
+                        var dateB = new Date("01/01/2020" + " " + String(b.hour) + ":" + String(b.minute) + ":00");
+                        return dateA - dateB;
+                    });
+
+                    var alarm = resultHardware[0].alarm;
+
+                    if (lastNotif === "0" && resultHardware[0].alarm != "0") {
+                        if (alarm === "1") showNotif("Lampu Tidak Menyala")
+                        else if (alarm === "2") showNotif("Solar Cell atau MPPT Rusak")
+                        else if (alarm === "3") showNotif("Baterai Short")
+                        else if (alarm === "4") showNotif("Baterai Habis / Baterai Rusak")
+                        else if (alarm === "5") showNotif("Sistem Failure")
+                        lastNotif = resultHardware[0].alarm;
+                    } else if (lastNotif != "0" && resultHardware[0].alarm === "0") {
+                        lastNotif = "0";
+                    }
+
+                    function showNotif(message) {
+                        var payload = {
+                            notification: {
+                                title: "Pemberitahuan Device ID : " + resultHardware[0].hardwareId,
+                                body: message
+                            }
+                        };
+                        var topic = "seti-app-" + resultHardware[0].hardwareId;
+                        Notification.admin.messaging().sendToTopic(topic, payload)
+                            .then(function(response) {
+                                console.log("Successfully sent message:", response);
+                            })
+                            .catch(function(error) {
+                                console.log("Error sending message:", error);
+                            });
+                    }
+
+                    resultObj[hardwareId] = {
+                        lamp: resultHardware[0].lamp != null ? resultHardware[0].lamp : false,
+                        brightness: resultHardware[0].brightness != null ? resultHardware[0].brightness : 0,
+                        count: schedule.length,
+                        schedule: sch.map(schedule => {
+                            return {
+                                hour: schedule.hour,
+                                minute: schedule.minute,
+                                brightness: schedule.brightness
+                            }
+                        })
+                    }
+                    i++;
+                    if (i < keys.length) {
+                        updateHardware(req.body[keys[i]].hardwareId);
+                    } else {
+                        res.status(200).json(resultObj);
+                    }
+                }).catch(err => {
+                    console.log(err)
+                });
+            }).catch(err => {
+                console.log(err)
+            });
+        }
+    }
+
+}
+
+
 exports.hardware_update_hardware = (req, res, next) => {
     const hardwareId = req.body.hardwareId;
     Hardware.find({ hardwareId }).exec().then(resultHardware => {
