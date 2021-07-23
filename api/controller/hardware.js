@@ -315,10 +315,9 @@ exports.hardware_update_hardware_v2_dev = (req, res, next) => {
     console.log(req.body);
     console.log("===========");
 
-    res.status(200).json({
-        message: 'testing'
-    });
-
+    // res.status(200).json({
+    //     message: 'testing'
+    // });
 
     var keys = [];
     var i = 0;
