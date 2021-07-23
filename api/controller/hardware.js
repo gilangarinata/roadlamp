@@ -318,7 +318,7 @@ exports.hardware_update_hardware_v2_dev = (req, res, next) => {
     }
 
 
-    console.log("===========");
+    console.log("======body=====");
     console.log(req.body);
     console.log("===========");
 
