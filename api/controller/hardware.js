@@ -440,6 +440,7 @@ exports.hardware_update_hardware_v3 = (req, res, next) => {
             var chargingTime = req.body.b;
             var dischargingTime = req.body.c;
             var batteryHealth = 100;
+            var batteryHealthDecimal = 100.00000;
 
             const hardware = new Hardware({
                 _id: new mongoose.Types.ObjectId(),
@@ -454,7 +455,8 @@ exports.hardware_update_hardware_v3 = (req, res, next) => {
                 hardwareId: hardwareId,
                 temperature: temperature,
                 humidity: humidity,
-                connectedTo: "-"
+                connectedTo: "-",
+                batteryHealthDecimal: batteryHealthDecimal
             });
 
             updateHistory();
@@ -499,7 +501,8 @@ exports.hardware_update_hardware_v3 = (req, res, next) => {
             var lastDay = resultHardware[0].lastUpdate.getDate();
             var betteryHealth = 100;
             if (currentDay != lastDay) {
-                betteryHealth = resultHardware[0].betteryHealth - 0.00001;
+                var betteryHealthDec = resultHardware[0].batteryHealthDecimal - 0.00001;
+                batteryHealth = parseInt(betteryHealthDec);
             } else {
                 betteryHealth = resultHardware[0].betteryHealth
             }

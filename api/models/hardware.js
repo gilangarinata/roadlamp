@@ -70,6 +70,9 @@ const hardwareSchema = mongoose.Schema({
     },
     connectedTo: {
         type: String
+    },
+    batteryHealthDecimal: {
+        type: NumberDecimal
     }
 });
 
