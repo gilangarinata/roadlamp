@@ -498,16 +498,24 @@ exports.hardware_update_hardware_v3 = (req, res, next) => {
             var dischargingTime = req.body.c;
             var d = new Date();
             var currentDay = d.getDate();
-            var lastDay = resultHardware[0].lastUpdate.getDate();
+            var lastDay;
+            if (resultHardware[0].lastUpdate != null) {
+                lastDay = resultHardware[0].lastUpdate.getDate();
+            }
             var betteryHealth = 100;
             var batteryHealthDecimal = "100.00000";
-            if (currentDay != lastDay) {
-                var betteryHealthDec = parseFloat(resultHardware[0].batteryHealthDecimal) - 0.00001;
-                batteryHealthDecimal = betteryHealthDec.toString();
-                batteryHealth = parseInt(betteryHealthDec);
+            if (lastDay != null) {
+                if (currentDay != lastDay) {
+                    var betteryHealthDec = parseFloat(resultHardware[0].batteryHealthDecimal) - 0.00001;
+                    batteryHealthDecimal = betteryHealthDec.toString();
+                    batteryHealth = parseInt(betteryHealthDec);
+                } else {
+                    betteryHealth = resultHardware[0].betteryHealth
+                }
             } else {
                 betteryHealth = resultHardware[0].betteryHealth
             }
+
 
             const hardware = new Hardware({
                 name: "",
