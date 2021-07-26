@@ -308,6 +308,265 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
 
 }
 
+exports.hardware_update_hardware_v3 = (req, res, next) => {
+    console.log("======body=====");
+    console.log(req.body);
+    console.log("===========");
+
+    var hardwareId = req.body.f;
+
+    Hardware.find({ hardwareId }).exec().then(resultHardware => {
+        var temperature = "-";
+        var humidity = "-";
+        if (resultHardware.length > 0) {
+            const uri = 'http://api.openweathermap.org/data/2.5/weather?lat=' + resultHardware[0].latitude + '&lon=' + resultHardware[0].longitude + '&appid=' + openWeatherKey + '&units=metric';
+            request(uri, function(error, response, body) {
+                if (!error && response.statusCode == 200) {
+                    var obj = JSON.parse(response.body);
+                    var temperatureOwm = obj.main.temp; //Own = Open Weather Map
+                    var humidityOwm = obj.main.humidity;
+
+                    if (temperatureOwm != null) {
+                        temperature = temperatureOwm;
+                    }
+                    if (humidityOwm != null) {
+                        humidity = humidityOwm;
+                    }
+                    updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId, apHid);
+                } else {
+                    temperature = "-";
+                    humidity = "-";
+                    updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId, apHid);
+                }
+            });
+        } else {
+            const uri = 'http://api.openweathermap.org/data/2.5/weather?lat=' + req.body[keys[i]].latitude + '&lon=' + req.body[keys[i]].longitude + '&appid=' + openWeatherKey + '&units=metric';
+            request(uri, function(error, response, body) {
+                if (!error && response.statusCode == 200) {
+                    var obj = JSON.parse(response.body);
+                    var temperatureOwm = obj.main.temp; //Own = Open Weather Map
+                    var humidityOwm = obj.main.humidity;
+
+                    if (temperatureOwm != null) {
+                        temperature = temperatureOwm;
+                    }
+                    if (humidityOwm != null) {
+                        humidity = humidityOwm;
+                    }
+                    updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId, apHid);
+                } else {
+                    temperature = "-";
+                    humidity = "-";
+                    updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId, apHid);
+                }
+            });
+        }
+
+    }).catch(err => {
+        console.log(err)
+    });
+
+    function updateHistory() {
+        var date = dateFormat(new Date(), "yyyy-mm-dd");
+        var chargeCapacity = req.body.d;
+        var dischargeCapacity = req.body.e;
+        var batteryCapacity = 0;
+        var batteryLife = 0;
+        var hardwareId = req.body.f;
+
+        const historyUpdate = new History({
+            date: date,
+            chargeCapacity: chargeCapacity,
+            dischargeCapacity: dischargeCapacity,
+            batteryCapacity: batteryCapacity,
+            batteryLife: batteryLife,
+            hardwareId: hardwareId
+        });
+
+        const historyAdd = new History({
+            _id: new mongoose.Types.ObjectId(),
+            date: date,
+            chargeCapacity: chargeCapacity,
+            dischargeCapacity: dischargeCapacity,
+            batteryCapacity: batteryCapacity,
+            batteryLife: batteryLife,
+            hardwareId: hardwareId
+        });
+
+
+        History.find({ date: date, hardwareId: hardwareId }).exec().then(history => {
+            if (history.length > 0) {
+                History.update({ hardwareId: hardwareId, date: date }, { $set: historyUpdate }).exec().then(result => {
+                    console.log("history update success");
+                }).catch((err) => {
+                    res.status(500).json({
+                        error: err,
+                    });
+                });
+            } else {
+                // console.log(historyUpdate)
+                historyAdd.save().then(result => {
+                    console.log("new history created");
+                }).catch(err => {
+                    console.log(err)
+                    res.status(500).json({
+                        error: err
+                    })
+                });
+            }
+        }).catch((err) => {
+            res.status(500).json({
+                error: err,
+            });
+        });
+    }
+
+
+    function updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId, apHid) {
+        //add new hardware if hardwareId doesn't exist
+        if (resultHardware.length < 1) {
+            var capacity = req.body.a;
+            var chargingTime = req.body.b;
+            var dischargingTime = req.body.c;
+            var batteryHealth = 0;
+
+            const hardware = new Hardware({
+                _id: new mongoose.Types.ObjectId(),
+                name: "",
+                capacity: Number(capacity),
+                chargingTime: Number(chargingTime),
+                dischargingTime: dischargingTime,
+                betteryHealth: batteryHealth,
+                alarm: "0",
+                longitude: "0.0",
+                latitude: "0.0",
+                hardwareId: hardwareId,
+                temperature: temperature,
+                humidity: humidity,
+                connectedTo: "-"
+            });
+
+            updateHistory();
+
+            hardware.save().then(result => {
+                res.status(200).json({
+                    message: 'New Hardware Created.'
+                });
+            }).catch(err => {
+                console.log(err)
+                res.status(500).json({
+                    error: err
+                })
+            });
+
+        } else {
+            updateHistory();
+
+            if (resultHardware[0].lastUpdate != null) {
+                try {
+                    const dateNow = new Date();
+                    const dateLastUpdate = resultHardware[0].lastUpdate;
+                    const diffTime = Math.abs(dateNow - dateLastUpdate);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    // console.log(diffTime + " milliseconds");
+                    // console.log(diffDays + " days");
+                    //1800000
+                    if (diffTime < 180000) { // if there is data updated less than 120 second 
+                        isActive = true;
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+
+
+            var capacity = req.body.a;
+            var chargingTime = req.body.b;
+            var dischargingTime = req.body.c;
+            var batteryHealth = 0;
+
+            const hardware = new Hardware({
+                _id: new mongoose.Types.ObjectId(),
+                name: "",
+                capacity: Number(capacity),
+                chargingTime: Number(chargingTime),
+                dischargingTime: dischargingTime,
+                betteryHealth: batteryHealth,
+                alarm: "0",
+                longitude: resultHardware[0].longitude,
+                latitude: resultHardware[0].latitude,
+                hardwareId: hardwareId,
+                temperature: temperature,
+                humidity: humidity,
+                connectedTo: "-"
+            });
+
+            Hardware.update({ hardwareId: hardwareId }, { $set: hardware }).exec().then(result => {
+                Schedule.find({ hardwareId: hardwareId }).exec().then(schedule => {
+                    var sch = schedule.sort(function(a, b) {
+                        var dateA = new Date("01/01/2020" + " " + String(a.hour) + ":" + String(a.minute) + ":00");
+                        var dateB = new Date("01/01/2020" + " " + String(b.hour) + ":" + String(b.minute) + ":00");
+                        return dateA - dateB;
+                    });
+
+                    var alarm = resultHardware[0].alarm;
+
+                    if (lastNotif === "0" && resultHardware[0].alarm != "0") {
+                        if (alarm === "1") showNotif("Lampu Tidak Menyala")
+                        else if (alarm === "2") showNotif("Solar Cell atau MPPT Rusak")
+                        else if (alarm === "3") showNotif("Baterai Short")
+                        else if (alarm === "4") showNotif("Baterai Habis / Baterai Rusak")
+                        else if (alarm === "5") showNotif("Sistem Failure")
+                        lastNotif = resultHardware[0].alarm;
+                    } else if (lastNotif != "0" && resultHardware[0].alarm === "0") {
+                        lastNotif = "0";
+                    }
+
+                    function showNotif(message) {
+                        var payload = {
+                            notification: {
+                                title: "Pemberitahuan Device ID : " + resultHardware[0].hardwareId,
+                                body: message
+                            }
+                        };
+                        var topic = "seti-app-" + resultHardware[0].hardwareId;
+                        Notification.admin.messaging().sendToTopic(topic, payload)
+                            .then(function(response) {
+                                console.log("Successfully sent message:", response);
+                            })
+                            .catch(function(error) {
+                                console.log("Error sending message:", error);
+                            });
+                    }
+
+                    resultObj[hardwareId] = {
+                        lamp: resultHardware[0].lamp != null ? resultHardware[0].lamp : false,
+                        brightness: resultHardware[0].brightness != null ? resultHardware[0].brightness : 0,
+                        count: schedule.length,
+                        schedule: sch.map(schedule => {
+                            return {
+                                hour: schedule.hour,
+                                minute: schedule.minute,
+                                brightness: schedule.brightness
+                            }
+                        })
+                    }
+                    i++;
+                    if (i < keys.length) {
+                        updateHardware(req.body[keys[i]].hardwareId);
+                    } else {
+                        res.status(200).json(resultObj);
+                    }
+                }).catch(err => {
+                    console.log(err)
+                });
+            }).catch(err => {
+                console.log(err)
+            });
+        }
+    }
+
+}
 
 exports.hardware_update_hardware_v2_dev = (req, res, next) => {
 
