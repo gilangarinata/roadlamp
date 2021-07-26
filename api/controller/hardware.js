@@ -10,7 +10,7 @@ const request = require('request');
 const openWeatherKey = '815168ce4992ad1ee04830a8556bedf9';
 // const errorLog = require('../../logger/logger').errorlog;
 const successlog = require('../../logger/logger').successlog;
-
+var dateFormat = require('dateformat');
 
 exports.hardware_get_all = (req, res, next) => {
     Hardware.find()
