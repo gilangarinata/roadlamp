@@ -341,7 +341,7 @@ exports.hardware_update_hardware_v3 = (req, res, next) => {
                 }
             });
         } else {
-            const uri = 'http://api.openweathermap.org/data/2.5/weather?lat=' + req.body[keys[i]].latitude + '&lon=' + req.body[keys[i]].longitude + '&appid=' + openWeatherKey + '&units=metric';
+            const uri = 'http://api.openweathermap.org/data/2.5/weather?lat=' + 0.0 + '&lon=' + 0.0 + '&appid=' + openWeatherKey + '&units=metric';
             request(uri, function(error, response, body) {
                 if (!error && response.statusCode == 200) {
                     var obj = JSON.parse(response.body);
