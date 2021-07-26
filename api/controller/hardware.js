@@ -439,7 +439,7 @@ exports.hardware_update_hardware_v3 = (req, res, next) => {
             var capacity = req.body.a;
             var chargingTime = req.body.b;
             var dischargingTime = req.body.c;
-            var batteryHealth = 0;
+            var batteryHealth = 100;
 
             const hardware = new Hardware({
                 _id: new mongoose.Types.ObjectId(),
@@ -494,17 +494,26 @@ exports.hardware_update_hardware_v3 = (req, res, next) => {
             var capacity = req.body.a;
             var chargingTime = req.body.b;
             var dischargingTime = req.body.c;
-            var batteryHealth = 0;
+            var d = new Date();
+            var currentDay = d.getDate();
+            var lastDay = resultHardware[0].lastUpdate.getDate();
+            var betteryHealth = 100;
+            if (currentDay != lastDay) {
+                betteryHealth = resultHardware[0].betteryHealth - 0.00001;
+            } else {
+                betteryHealth = resultHardware[0].betteryHealth
+            }
 
             const hardware = new Hardware({
                 name: "",
                 capacity: Number(capacity),
                 chargingTime: Number(chargingTime),
                 dischargingTime: dischargingTime,
-                betteryHealth: batteryHealth,
+                betteryHealth: betteryHealth,
                 alarm: "0",
                 longitude: resultHardware[0].longitude,
                 latitude: resultHardware[0].latitude,
+                lastUpdate: new Date(),
                 hardwareId: hardwareId,
                 temperature: temperature,
                 humidity: humidity,
