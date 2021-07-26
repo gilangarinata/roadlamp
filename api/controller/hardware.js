@@ -455,6 +455,7 @@ exports.hardware_update_hardware_v3 = (req, res, next) => {
                 hardwareId: hardwareId,
                 temperature: temperature,
                 humidity: humidity,
+                lastUpdate: new Date(),
                 connectedTo: "-",
                 batteryHealthDecimal: batteryHealthDecimal
             });
