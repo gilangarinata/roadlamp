@@ -354,11 +354,11 @@ exports.hardware_update_hardware_v3 = (req, res, next) => {
                     if (humidityOwm != null) {
                         humidity = humidityOwm;
                     }
-                    updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId, apHid);
+                    updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId);
                 } else {
                     temperature = "-";
                     humidity = "-";
-                    updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId, apHid);
+                    updateHardwareV2(resultHardware, temperature, humidity, req, res, hardwareId);
                 }
             });
         }
