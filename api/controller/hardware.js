@@ -315,6 +315,7 @@ exports.hardware_update_hardware_v3 = (req, res, next) => {
 
     var hardwareId = req.body.f;
 
+
     Hardware.find({ hardwareId }).exec().then(resultHardware => {
         var temperature = "-";
         var humidity = "-";
@@ -496,7 +497,6 @@ exports.hardware_update_hardware_v3 = (req, res, next) => {
             var batteryHealth = 0;
 
             const hardware = new Hardware({
-                _id: new mongoose.Types.ObjectId(),
                 name: "",
                 capacity: Number(capacity),
                 chargingTime: Number(chargingTime),
