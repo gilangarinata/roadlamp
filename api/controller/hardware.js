@@ -10,7 +10,7 @@ const request = require('request');
 const openWeatherKey = '815168ce4992ad1ee04830a8556bedf9';
 // const errorLog = require('../../logger/logger').errorlog;
 const successlog = require('../../logger/logger').successlog;
-var dateFormat = require('dateformat');
+
 
 exports.hardware_get_all = (req, res, next) => {
     Hardware.find()
@@ -367,7 +367,17 @@ exports.hardware_update_hardware_v3 = (req, res, next) => {
     });
 
     function updateHistory() {
-        var date = dateFormat(new Date(), "yyyy-mm-dd");
+        var d = new Date(),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
+
+        var date = year + '-' + month + '-' + day;
         var chargeCapacity = req.body.d;
         var dischargeCapacity = req.body.e;
         var batteryCapacity = 0;
