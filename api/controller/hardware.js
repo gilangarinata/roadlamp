@@ -512,63 +512,8 @@ exports.hardware_update_hardware_v3 = (req, res, next) => {
             });
 
             Hardware.update({ hardwareId: hardwareId }, { $set: hardware }).exec().then(result => {
-                Schedule.find({ hardwareId: hardwareId }).exec().then(schedule => {
-                    var sch = schedule.sort(function(a, b) {
-                        var dateA = new Date("01/01/2020" + " " + String(a.hour) + ":" + String(a.minute) + ":00");
-                        var dateB = new Date("01/01/2020" + " " + String(b.hour) + ":" + String(b.minute) + ":00");
-                        return dateA - dateB;
-                    });
-
-                    var alarm = resultHardware[0].alarm;
-
-                    if (lastNotif === "0" && resultHardware[0].alarm != "0") {
-                        if (alarm === "1") showNotif("Lampu Tidak Menyala")
-                        else if (alarm === "2") showNotif("Solar Cell atau MPPT Rusak")
-                        else if (alarm === "3") showNotif("Baterai Short")
-                        else if (alarm === "4") showNotif("Baterai Habis / Baterai Rusak")
-                        else if (alarm === "5") showNotif("Sistem Failure")
-                        lastNotif = resultHardware[0].alarm;
-                    } else if (lastNotif != "0" && resultHardware[0].alarm === "0") {
-                        lastNotif = "0";
-                    }
-
-                    function showNotif(message) {
-                        var payload = {
-                            notification: {
-                                title: "Pemberitahuan Device ID : " + resultHardware[0].hardwareId,
-                                body: message
-                            }
-                        };
-                        var topic = "seti-app-" + resultHardware[0].hardwareId;
-                        Notification.admin.messaging().sendToTopic(topic, payload)
-                            .then(function(response) {
-                                console.log("Successfully sent message:", response);
-                            })
-                            .catch(function(error) {
-                                console.log("Error sending message:", error);
-                            });
-                    }
-
-                    resultObj[hardwareId] = {
-                        lamp: resultHardware[0].lamp != null ? resultHardware[0].lamp : false,
-                        brightness: resultHardware[0].brightness != null ? resultHardware[0].brightness : 0,
-                        count: schedule.length,
-                        schedule: sch.map(schedule => {
-                            return {
-                                hour: schedule.hour,
-                                minute: schedule.minute,
-                                brightness: schedule.brightness
-                            }
-                        })
-                    }
-                    i++;
-                    if (i < keys.length) {
-                        updateHardware(req.body[keys[i]].hardwareId);
-                    } else {
-                        res.status(200).json(resultObj);
-                    }
-                }).catch(err => {
-                    console.log(err)
+                res.status(200).json({
+                    lamp: resultHardware[0].lamp != null ? resultHardware[0].lamp : false,
                 });
             }).catch(err => {
                 console.log(err)
