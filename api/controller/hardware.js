@@ -517,6 +517,10 @@ exports.hardware_update_hardware_v3 = (req, res, next) => {
                 betteryHealth = resultHardware[0].betteryHealth
             }
 
+            if (resultHardware[0].batteryHealth == 0) {
+                betteryHealth = 100;
+            }
+
 
             const hardware = new Hardware({
                 name: "",
@@ -531,9 +535,12 @@ exports.hardware_update_hardware_v3 = (req, res, next) => {
                 hardwareId: hardwareId,
                 temperature: temperature,
                 humidity: humidity,
+                active: isActive,
+                photoPath: resultHardware[0].photoPath,
                 connectedTo: "-",
                 batteryHealthDecimal: batteryHealthDecimal
             });
+
 
             Hardware.update({ hardwareId: hardwareId }, { $set: hardware }).exec().then(result => {
                 res.status(200).json({
