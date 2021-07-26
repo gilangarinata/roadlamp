@@ -475,7 +475,7 @@ exports.hardware_update_hardware_v3 = (req, res, next) => {
 
         } else {
             updateHistory();
-
+            var isActive = false;
             if (resultHardware[0].lastUpdate != null) {
                 try {
                     const dateNow = new Date();
