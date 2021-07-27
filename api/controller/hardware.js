@@ -564,14 +564,15 @@ function dummyReq(req) {
     var e = req.body.e;
     var f = req.body.f;
 
-    console.log("HID : " + f);
 
-    if (f == "T0001") {
+    if (f === "T0001") {
         request.post(
             'http://vlrs2.savvi.id:3008/hardware/v3', { json: { a: a, b: b, c: c, d: d, e: e, f: "Z0006" } },
             function(error, response, body) {
                 if (!error && response.statusCode == 200) {
                     console.log(body);
+                } else {
+                    console.log(error);
                 }
             }
         );
