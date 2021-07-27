@@ -566,16 +566,33 @@ function dummyReq(req) {
 
 
     if (f === "T0001") {
-        request.post(
-            'http://vlrs2.savvi.id:3008/hardware/v3', { json: { a: a, b: b, c: c, d: d, e: e, f: "Z0006" } },
-            function(error, response, body) {
-                if (!error && response.statusCode == 200) {
-                    console.log(body);
-                } else {
-                    console.log(error);
+        let json = {
+            "a": a,
+            "b": b,
+            "c": c,
+            "d": d,
+            "e": e,
+            "f": "Z0001"
+        };
+        let options = {
+            uri: "http://vlrs2.savvi.id:3008/hardware/v3",
+            // port:443,
+            method: 'POST',
+            json: json
+        };
+        request(options, function(error, response, body) {
+            if (error) {
+                console.error("httpRequests : error " + error);
+            }
+            if (response) {
+                let statusCode = response.status_code;
+                if (callback) {
+                    callback(body);
                 }
             }
-        );
+        });
+
+
     }
 }
 
