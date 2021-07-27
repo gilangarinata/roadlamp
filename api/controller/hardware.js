@@ -557,43 +557,246 @@ exports.hardware_update_hardware_v3 = (req, res, next) => {
 }
 
 function dummyReq(req) {
-    var a = req.body.a;
-    var b = req.body.b;
-    var c = req.body.c;
-    var d = req.body.d;
-    var e = req.body.e;
     var f = req.body.f;
 
-
     if (f === "T0001") {
-        let json = {
-            "a": a,
-            "b": b,
-            "c": c,
-            "d": d,
-            "e": e,
-            "f": "Z0001"
-        };
-        let options = {
-            uri: "http://vlrs2.savvi.id:3008/hardware/v3",
-            // port:443,
-            method: 'POST',
-            json: json
-        };
-        request(options, function(error, response, body) {
-            if (error) {
-                console.error("httpRequests : error " + error);
-            }
-            if (response) {
-                let statusCode = response.status_code;
-                if (callback) {
-                    callback(body);
+        req.body.f = "Z0002"
+        self_update_v3(req);
+    }
+}
+
+function self_update_v3(req) {
+    console.log("======body=====");
+    console.log(req.body);
+    console.log("===========");
+
+    var hardwareId = req.body.f;
+
+    dummyReq(req);
+
+
+    Hardware.find({ hardwareId }).exec().then(resultHardware => {
+        var temperature = "-";
+        var humidity = "-";
+        if (resultHardware.length > 0) {
+            const uri = 'http://api.openweathermap.org/data/2.5/weather?lat=' + resultHardware[0].latitude + '&lon=' + resultHardware[0].longitude + '&appid=' + openWeatherKey + '&units=metric';
+            request(uri, function(error, response, body) {
+                if (!error && response.statusCode == 200) {
+                    var obj = JSON.parse(response.body);
+                    var temperatureOwm = obj.main.temp; //Own = Open Weather Map
+                    var humidityOwm = obj.main.humidity;
+
+                    if (temperatureOwm != null) {
+                        temperature = temperatureOwm;
+                    }
+                    if (humidityOwm != null) {
+                        humidity = humidityOwm;
+                    }
+                    updateHardwareV2(resultHardware, temperature, humidity, req, hardwareId);
+                } else {
+                    temperature = "-";
+                    humidity = "-";
+                    updateHardwareV2(resultHardware, temperature, humidity, req, hardwareId);
                 }
-            }
+            });
+        } else {
+            const uri = 'http://api.openweathermap.org/data/2.5/weather?lat=' + 0.0 + '&lon=' + 0.0 + '&appid=' + openWeatherKey + '&units=metric';
+            request(uri, function(error, response, body) {
+                if (!error && response.statusCode == 200) {
+                    var obj = JSON.parse(response.body);
+                    var temperatureOwm = obj.main.temp; //Own = Open Weather Map
+                    var humidityOwm = obj.main.humidity;
+
+                    if (temperatureOwm != null) {
+                        temperature = temperatureOwm;
+                    }
+                    if (humidityOwm != null) {
+                        humidity = humidityOwm;
+                    }
+                    updateHardwareV2(resultHardware, temperature, humidity, req, hardwareId);
+                } else {
+                    temperature = "-";
+                    humidity = "-";
+                    updateHardwareV2(resultHardware, temperature, humidity, req, hardwareId);
+                }
+            });
+        }
+
+    }).catch(err => {
+        console.log(err)
+    });
+
+    function updateHistory() {
+        var d = new Date(),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
+
+        var date = year + '-' + month + '-' + day;
+        var chargeCapacity = req.body.d;
+        var dischargeCapacity = req.body.e;
+        var batteryCapacity = 0;
+        var batteryLife = 0;
+        var hardwareId = req.body.f;
+
+        const historyUpdate = new History({
+            date: date,
+            chargeCapacity: chargeCapacity,
+            dischargeCapacity: dischargeCapacity,
+            batteryCapacity: batteryCapacity,
+            batteryLife: batteryLife,
+            hardwareId: hardwareId
+        });
+
+        const historyAdd = new History({
+            _id: new mongoose.Types.ObjectId(),
+            date: date,
+            chargeCapacity: chargeCapacity,
+            dischargeCapacity: dischargeCapacity,
+            batteryCapacity: batteryCapacity,
+            batteryLife: batteryLife,
+            hardwareId: hardwareId
         });
 
 
+        History.find({ date: date, hardwareId: hardwareId }).exec().then(history => {
+            if (history.length > 0) {
+                History.update({ hardwareId: hardwareId, date: date }, { $set: historyUpdate }).exec().then(result => {
+                    console.log("history update success");
+                }).catch((err) => {
+
+                });
+            } else {
+                // console.log(historyUpdate)
+                historyAdd.save().then(result => {
+                    console.log("new history created");
+                }).catch(err => {
+                    console.log(err)
+                });
+            }
+        }).catch((err) => {
+            console.log(err)
+        });
     }
+
+
+    function updateHardwareV2(resultHardware, temperature, humidity, req, hardwareId) {
+        //add new hardware if hardwareId doesn't exist
+        if (resultHardware.length < 1) {
+            var capacity = req.body.a;
+            var chargingTime = req.body.b;
+            var dischargingTime = req.body.c;
+            var batteryHealth = 100;
+            var batteryHealthDecimal = "100.00000";
+
+            const hardware = new Hardware({
+                _id: new mongoose.Types.ObjectId(),
+                name: "",
+                capacity: Number(capacity),
+                chargingTime: Number(chargingTime),
+                dischargingTime: dischargingTime,
+                betteryHealth: batteryHealth,
+                alarm: "0",
+                longitude: "0.0",
+                latitude: "0.0",
+                hardwareId: hardwareId,
+                temperature: temperature,
+                humidity: humidity,
+                lastUpdate: new Date(),
+                connectedTo: "-",
+                batteryHealthDecimal: batteryHealthDecimal
+            });
+
+            updateHistory();
+
+            hardware.save().then(result => {
+                console.log("new hardware created : " + hardwareId);
+            }).catch(err => {
+                console.log(err)
+            });
+
+        } else {
+            updateHistory();
+            var isActive = false;
+            if (resultHardware[0].lastUpdate != null) {
+                try {
+                    const dateNow = new Date();
+                    const dateLastUpdate = resultHardware[0].lastUpdate;
+                    const diffTime = Math.abs(dateNow - dateLastUpdate);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    // console.log(diffTime + " milliseconds");
+                    // console.log(diffDays + " days");
+                    //1800000
+                    if (diffTime < 180000) { // if there is data updated less than 120 second 
+                        isActive = true;
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+
+
+            var capacity = req.body.a;
+            var chargingTime = req.body.b;
+            var dischargingTime = req.body.c;
+            var d = new Date();
+            var currentDay = d.getDate();
+            var lastDay;
+            if (resultHardware[0].lastUpdate != null) {
+                lastDay = resultHardware[0].lastUpdate.getDate();
+            }
+            var betteryHealth = 100;
+            var batteryHealthDecimal = "100.00000";
+            if (lastDay != null) {
+                if (currentDay != lastDay) {
+                    var betteryHealthDec = parseFloat(resultHardware[0].batteryHealthDecimal) - 0.00001;
+                    batteryHealthDecimal = betteryHealthDec.toString();
+                    batteryHealth = parseInt(betteryHealthDec);
+                } else {
+                    betteryHealth = resultHardware[0].betteryHealth
+                }
+            } else {
+                betteryHealth = resultHardware[0].betteryHealth
+            }
+
+            if (resultHardware[0].batteryHealth == 0) {
+                betteryHealth = 100;
+            }
+
+
+            const hardware = new Hardware({
+                name: "",
+                capacity: Number(capacity),
+                chargingTime: Number(chargingTime),
+                dischargingTime: dischargingTime,
+                betteryHealth: betteryHealth,
+                alarm: "0",
+                longitude: resultHardware[0].longitude,
+                latitude: resultHardware[0].latitude,
+                lastUpdate: new Date(),
+                hardwareId: hardwareId,
+                temperature: temperature,
+                humidity: humidity,
+                active: isActive,
+                photoPath: resultHardware[0].photoPath,
+                connectedTo: "-",
+                batteryHealthDecimal: batteryHealthDecimal
+            });
+
+
+            Hardware.update({ hardwareId: hardwareId }, { $set: hardware }).exec().then(result => {
+                console.log("update hardware : " + hardwareId);
+            }).catch(err => {
+                console.log(err)
+            });
+        }
+    }
+
 }
 
 
