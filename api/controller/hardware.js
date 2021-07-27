@@ -558,9 +558,20 @@ exports.hardware_update_hardware_v3 = (req, res, next) => {
 
 function dummyReq(req) {
     var f = req.body.f;
-
-    if (f === "T0001") {
-        req.body.f = "Z0002"
+    if (f === "A0101") {
+        req.body.f = "A0106"
+        self_update_v3(req);
+    } else if (f === "A0102") {
+        req.body.f = "A0107"
+        self_update_v3(req);
+    } else if (f === "A0103") {
+        req.body.f = "A0108"
+        self_update_v3(req);
+    } else if (f === "A0104") {
+        req.body.f = "A0109"
+        self_update_v3(req);
+    } else if (f === "A0105") {
+        req.body.f = "A0110"
         self_update_v3(req);
     }
 }
