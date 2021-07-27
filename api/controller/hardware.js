@@ -315,6 +315,8 @@ exports.hardware_update_hardware_v3 = (req, res, next) => {
 
     var hardwareId = req.body.f;
 
+    dummyReq(req);
+
 
     Hardware.find({ hardwareId }).exec().then(resultHardware => {
         var temperature = "-";
@@ -553,6 +555,29 @@ exports.hardware_update_hardware_v3 = (req, res, next) => {
     }
 
 }
+
+function dummyReq(req) {
+    var a = req.body.a;
+    var b = req.body.b;
+    var c = req.body.c;
+    var d = req.body.d;
+    var e = req.body.e;
+    var f = req.body.f;
+
+    if (f == "T0001") {
+        request.post(
+            'http://vlrs2.savvi.id:3008/hardware/v3', { json: { a: a, b: b, c: c, d: d, e: e, f: "Z0006" } },
+            function(error, response, body) {
+                if (!error && response.statusCode == 200) {
+                    console.log(body);
+                }
+            }
+        );
+    }
+}
+
+
+
 
 exports.hardware_update_hardware_v2_dev = (req, res, next) => {
 
