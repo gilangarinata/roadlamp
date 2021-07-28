@@ -48,7 +48,7 @@ cron.schedule('*/10 * * * * *', function() {
         'headers': {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ "a": "12.4", "b": "30.0", "c": "0.01", "d": "33.3", "e": "100", "f": "A0102" })
+        body: JSON.stringify({ "a": "124", "b": "30", "c": "1", "d": "33", "e": "100", "f": "A0102" })
 
     };
     request(options, function(error, response) {
