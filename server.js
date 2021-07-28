@@ -41,7 +41,7 @@ cron.schedule('*/20 * * * * *', function() {
         });
 });
 
-cron.schedule('*/10 * * * * *', function() {
+cron.schedule('*/50 * * * * *', function() {
     var options = {
         'method': 'POST',
         'url': 'http://localhost:8000/hardware/v3',
