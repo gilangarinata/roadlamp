@@ -44,7 +44,7 @@ cron.schedule('*/20 * * * * *', function() {
 cron.schedule('*/10 * * * * *', function() {
     var options = {
         'method': 'POST',
-        'url': 'http://vlrs2.savvi.id:3008/hardware/v3',
+        'url': 'http://localhost:8000/hardware/v3',
         'headers': {
             'Content-Type': 'application/json'
         },
