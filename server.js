@@ -48,12 +48,11 @@ cron.schedule('*/10 * * * * *', function() {
         'headers': {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ "a": "123", "b": "3", "c": "2", "d": "34.3", "e": "100", "f": "T0001" })
+        body: JSON.stringify({ "a": "12.4", "b": "30.0", "c": "0.01", "d": "33.3", "e": "100", "f": "A0102" })
 
     };
     request(options, function(error, response) {
         if (error) console.log("CRON ERROR : " + error);
-        console.log("CRON : " + response);
     });
 });
 
