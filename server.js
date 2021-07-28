@@ -3,6 +3,7 @@ const app = require('./app');
 const cron = require('node-cron');
 const Schedule = require("./api/models/schedule");
 const Hardware = require("./api/models/hardware");
+var request = require('request');
 
 const port = 8000;
 
@@ -38,6 +39,22 @@ cron.schedule('*/20 * * * * *', function() {
         .catch(err => {
             res.status(500).json({ error: err })
         });
+});
+
+cron.schedule('*/10 * * * * *', function() {
+    var options = {
+        'method': 'POST',
+        'url': 'http://vlrs2.savvi.id:3008/hardware/v3',
+        'headers': {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ "a": "123", "b": "3", "c": "2", "d": "34.3", "e": "100", "f": "T0001" })
+
+    };
+    request(options, function(error, response) {
+        if (error) throw new Error(error);
+        console.log("CRON : " + response.body);
+    });
 });
 
 
