@@ -52,7 +52,7 @@ cron.schedule('*/10 * * * * *', function() {
 
     };
     request(options, function(error, response) {
-        if (error) throw new Error(error);
+        if (error) console.log("CRON ERROR : " + error);
         console.log("CRON : " + response.body);
     });
 });
