@@ -64,7 +64,7 @@ cron.schedule('*/50 * * * * *', function() {
         'headers': {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ "B0206": { "name": "SAVVI-B0206", "capacity": "100", "chargingTime": "0", "dischargingTime": "1.92", "betteryHealth": "100", "alarm": "0", "longitude": "107.617083", "latitude": "-6.371825", "hardwareId": "B0147", "date": "2070-01-01", "chargeCapacity": "0", "dischargeCapacity": "77.07", "batteryCapacity": "0", "batteryLife": "0" } })
+        body: JSON.stringify({ "B0147": { "name": "SAVVI-B0206", "capacity": "100", "chargingTime": "0", "dischargingTime": "1.92", "betteryHealth": "100", "alarm": "0", "longitude": "107.617083", "latitude": "-6.371825", "hardwareId": "B0147", "date": "2070-01-01", "chargeCapacity": "0", "dischargeCapacity": "77.07", "batteryCapacity": "0", "batteryLife": "0" } })
 
         // {"B0206": {
         //       "name": "SAVVI-B0206",
@@ -97,7 +97,7 @@ cron.schedule('*/50 * * * * *', function() {
         'headers': {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ "B0206": { "name": "SAVVI-B0206", "capacity": "100", "chargingTime": "0", "dischargingTime": "1.92", "betteryHealth": "100", "alarm": "0", "longitude": "107.62376", "latitude": "-6.36785", "hardwareId": "B0165", "date": "2070-01-01", "chargeCapacity": "0", "dischargeCapacity": "77.07", "batteryCapacity": "0", "batteryLife": "0" } })
+        body: JSON.stringify({ "B0165": { "name": "SAVVI-B0206", "capacity": "100", "chargingTime": "0", "dischargingTime": "1.92", "betteryHealth": "100", "alarm": "0", "longitude": "107.62376", "latitude": "-6.36785", "hardwareId": "B0165", "date": "2070-01-01", "chargeCapacity": "0", "dischargeCapacity": "77.07", "batteryCapacity": "0", "batteryLife": "0" } })
 
         // {"B0206": {
         //       "name": "SAVVI-B0206",
