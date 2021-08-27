@@ -60,12 +60,29 @@ cron.schedule('*/50 * * * * *', function() {
 cron.schedule('*/50 * * * * *', function() {
     var options = {
         'method': 'POST',
-        'url': 'http://localhost:8000/hardware/v3',
+        'url': 'http://localhost:8000/hardware/v2',
         'headers': {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ "a": "45", "b": "0", "c": "0.02", "d": "33", "e": "100", "f": "B0165" })
+        body: JSON.stringify({ "B0206": { "name": "SAVVI-B0206", "capacity": "100", "chargingTime": "0", "dischargingTime": "1.92", "betteryHealth": "100", "alarm": "0", "longitude": "107.617083", "latitude": "-6.371825", "hardwareId": "B0147", "date": "2070-01-01", "chargeCapacity": "0", "dischargeCapacity": "77.07", "batteryCapacity": "0", "batteryLife": "0" } })
 
+        // {"B0206": {
+        //       "name": "SAVVI-B0206",
+        //       "capacity": "100",
+        //       "chargingTime": "0",
+        //       "dischargingTime": "1.92",
+        //       "betteryHealth": "100",
+        //       "alarm": "0",
+        //       "longitude": "107.99540",
+        //       "latitude": "-6.31461",
+        //       "hardwareId": "B0165",
+        //       "date": "2070-01-01",
+        //       "chargeCapacity": "0",
+        //       "dischargeCapacity": "77.07",
+        //       "batteryCapacity": "0",
+        //       "batteryLife": "0"
+        //     }
+        // }
 
     };
     request(options, function(error, response) {
