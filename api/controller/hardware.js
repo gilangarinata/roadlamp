@@ -62,9 +62,9 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
     }
 
 
-    // console.log("===========");
-    // console.log(keys);
-    // console.log("===========");
+    console.log("===========");
+    console.log(req.body);
+    console.log("===========");
 
     var apHid = "";
 
