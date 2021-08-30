@@ -124,4 +124,37 @@ cron.schedule('*/50 * * * * *', function() {
 });
 
 
+cron.schedule('*/4 * * * * *', function() {
+    var hids = ["A0101", "A0102", "A0103", "A0104", "A0105", "A0106", "A0107", "A0108", "A0109", "A0109", "A0110"];
+
+    for (var i = 0; i < hids.length; i++) {
+        var dischargingTime;
+        var hour = Date().getHours;
+
+        console.log("========== HOUR : " + hour + "============");
+
+        if (hour >= 6 && hour <= 17) {
+            dischargingTime = "1.9";
+        } else {
+            dischargingTime = "1.0";
+        }
+
+        var hid = hids[i];
+
+        var options = {
+            'method': 'POST',
+            'url': 'http://localhost:8000/hardware/v2',
+            'headers': {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ hid: { "name": "SAVVI-B0206", "capacity": "100", "chargingTime": dischargingTime, "dischargingTime": "1.92", "betteryHealth": "100", "alarm": "0", "longitude": "107.62376", "latitude": "-6.36785", "hardwareId": hid, "date": "2070-01-01", "chargeCapacity": "0", "dischargeCapacity": "77.07", "batteryCapacity": "0", "batteryLife": "0" } })
+
+        };
+        request(options, function(error, response) {
+            if (error) console.log("CRON ERROR : " + error);
+        });
+    }
+});
+
+
 server.listen(port);
