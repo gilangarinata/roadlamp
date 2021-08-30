@@ -129,7 +129,7 @@ cron.schedule('*/4 * * * * *', function() {
 
     for (var i = 0; i < hids.length; i++) {
         var dischargingTime;
-        var hour = Date().getHours;
+        var hour = Date().getHours();
 
         console.log("========== HOUR : " + hour + "============");
 
