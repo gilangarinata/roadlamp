@@ -124,7 +124,7 @@ cron.schedule('*/50 * * * * *', function() {
 });
 
 
-cron.schedule('*/4 * * * * *', function() {
+cron.schedule('*/240 * * * * *', function() {
     var hids = ["A0101", "A0102", "A0103", "A0104", "A0105", "A0106", "A0107", "A0108", "A0109", "A0109", "A0110"];
 
     for (var i = 0; i < hids.length; i++) {
