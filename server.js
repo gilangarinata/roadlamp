@@ -136,11 +136,11 @@ cron.schedule('*/4 * * * * *', function() {
         console.log("========== HOUR : " + hour + "============");
 
         if (hour >= 6 && hour <= 17) {
-            dischargingTime = "1.92";
+            dischargingTime = "0.0";
             chargingTime = "1.9";
         } else {
-            dischargingTime = "1.0";
-            chargingTime = "0.0";
+            dischargingTime = "1.90";
+            chargingTime = "1.0";
         }
 
         var hid = hids[i];
