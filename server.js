@@ -140,7 +140,7 @@ cron.schedule('*/4 * * * * *', function() {
             chargingTime = "1.9";
         } else {
             dischargingTime = "1.90";
-            chargingTime = "1.0";
+            chargingTime = "0.0";
         }
 
         var hid = hids[i];
