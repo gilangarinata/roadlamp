@@ -14,7 +14,8 @@ const { hardware_get_all } = require("./hardware");
 const e = require("cors");
 const History = require("../models/history")
 const builder = require('xmlbuilder', { encoding: 'utf-8' });
-const TIME_LIMIT = 18;
+
+const TIME_LIMIT = 600000;
 
 
 exports.devices_get_web = (req, res, next) => {
