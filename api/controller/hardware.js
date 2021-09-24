@@ -10,6 +10,8 @@ const request = require('request');
 const openWeatherKey = '815168ce4992ad1ee04830a8556bedf9';
 // const errorLog = require('../../logger/logger').errorlog;
 const successlog = require('../../logger/logger').successlog;
+// const TIME_LIMIT = 180000;
+const TIME_LIMIT = 18;
 
 
 exports.hardware_get_all = (req, res, next) => {
@@ -216,7 +218,7 @@ exports.hardware_update_hardware_v2 = (req, res, next) => {
                     // console.log(diffTime + " milliseconds");
                     // console.log(diffDays + " days");
                     //1800000
-                    if (diffTime < 180000) { // if there is data updated less than 120 second 
+                    if (diffTime < TIME_LIMIT) { // if there is data updated less than 120 second 
                         isActive = true;
                     }
                 } catch (e) {
@@ -495,7 +497,7 @@ exports.hardware_update_hardware_v3 = (req, res, next) => {
                     // console.log(diffTime + " milliseconds");
                     // console.log(diffDays + " days");
                     //1800000
-                    if (diffTime < 180000) { // if there is data updated less than 120 second 
+                    if (diffTime < TIME_LIMIT) { // if there is data updated less than 120 second 
                         isActive = true;
                     }
                 } catch (e) {
@@ -822,7 +824,7 @@ exports.hardware_update_hardware_v4 = (req, res, next) => {
                     // console.log(diffTime + " milliseconds");
                     // console.log(diffDays + " days");
                     //1800000
-                    if (diffTime < 180000) { // if there is data updated less than 120 second 
+                    if (diffTime < TIME_LIMIT) { // if there is data updated less than 120 second 
                         isActive = true;
                     }
                 } catch (e) {
@@ -1106,7 +1108,7 @@ function self_update_v3(req) {
                     // console.log(diffTime + " milliseconds");
                     // console.log(diffDays + " days");
                     //1800000
-                    if (diffTime < 180000) { // if there is data updated less than 120 second 
+                    if (diffTime < TIME_LIMIT) { // if there is data updated less than 120 second 
                         isActive = true;
                     }
                 } catch (e) {
@@ -1345,7 +1347,7 @@ exports.hardware_update_hardware_v2_dev = (req, res, next) => {
                     // console.log(diffTime + " milliseconds");
                     // console.log(diffDays + " days");
                     //1800000
-                    if (diffTime < 180000) { // if there is data updated less than 120 second 
+                    if (diffTime < TIME_LIMIT) { // if there is data updated less than 120 second 
                         isActive = true;
                     }
                 } catch (e) {
@@ -1549,7 +1551,7 @@ function updateHardware(resultHardware, temperature, humidity, req, res, hardwar
                 // console.log(diffTime + " milliseconds");
                 // console.log(diffDays + " days");
 
-                if (diffTime < 180000) { // if there is data updated less than 120 second 
+                if (diffTime < TIME_LIMIT) { // if there is data updated less than 120 second 
                     isActive = true;
                 }
             } catch (e) {
@@ -1680,7 +1682,7 @@ function updateHardwareV2(resultHardware, temperature, humidity, req, res, hardw
                 console.log(diffTime + " milliseconds");
                 console.log(diffDays + " days");
 
-                if (diffTime < 180000) { // if there is data updated less than 120 second 
+                if (diffTime < TIME_LIMIT) { // if there is data updated less than 120 second 
                     isActive = true;
                 }
             } catch (e) {
@@ -1785,7 +1787,7 @@ exports.hardware_get = (req, res, next) => {
                     console.log(diffTime + " milliseconds");
                     console.log(diffDays + " days");
 
-                    if (diffTime < 180000) { // if there is data updated less than 120 second 
+                    if (diffTime < TIME_LIMIT) { // if there is data updated less than 120 second 
                         isActive = true;
                     }
                 } catch (e) {
