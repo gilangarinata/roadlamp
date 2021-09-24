@@ -14,6 +14,7 @@ const { hardware_get_all } = require("./hardware");
 const e = require("cors");
 const History = require("../models/history")
 const builder = require('xmlbuilder', { encoding: 'utf-8' });
+const TIME_LIMIT = 18;
 
 
 exports.devices_get_web = (req, res, next) => {
@@ -684,7 +685,7 @@ exports.devices_get_v3 = (req, res, next) => {
                     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                     // console.log(dateNow + "    " + dateLastUpdate);
 
-                    if (diffTime < 180000) { // if there is data updated less than 120 second 
+                    if (diffTime < TIME_LIMIT) { // if there is data updated less than 120 second 
                         isActive = true;
                     }
                 } catch (e) {
