@@ -26,4 +26,8 @@ router.get("/getAllUserAdmin/:query", UsersController.get_all_user_admin);
 
 router.get("/addReferalFrom/:userId/:referal", UsersController.add_referal_from);
 
+router.get("/change-password/:userId/:newPassword", UsersController.change_password);
+
+router.get("/change-username/:userId/:newUsername", UsersController.change_username);
+
 module.exports = router;

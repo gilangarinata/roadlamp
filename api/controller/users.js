@@ -457,3 +457,45 @@ exports.add_referal_from = (req, res, next) => {
     });
 
 }
+
+exports.change_password = (req, res, next) => {
+    var userId = req.params.userId;
+    var newPassword = req.params.newPassword;
+    User.findById(userId).exec().then(user => {
+        bcrypt.hash(newPassword, 10, (err, hash) => {
+            var newUser = User({
+                password: hash
+            });
+            User.update({ _id: user._id }, { $set: newUser }).exec().then(result => {
+                res.status(200).json({
+                    status: "success",
+                });
+            }).catch((err) => {
+                console.log(err);
+                res.status(500).json({
+                    error: err,
+                });
+            });
+        });
+    });
+}
+
+exports.change_username = (req, res, next) => {
+    var userId = req.params.userId;
+    var newUsername = req.params.newUsername;
+    User.findById(userId).exec().then(user => {
+        var newUser = User({
+            username: newUsername
+        });
+        User.update({ _id: user._id }, { $set: newUser }).exec().then(result => {
+            res.status(200).json({
+                status: "success",
+            });
+        }).catch((err) => {
+            console.log(err);
+            res.status(500).json({
+                error: err,
+            });
+        });
+    });
+}
