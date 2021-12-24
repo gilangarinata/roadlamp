@@ -501,19 +501,21 @@ exports.change_username = (req, res, next) => {
 }
 
 exports.validate = (req, res, next) => {
-    User.findById("61a99d06fa95bd22dd8b6014").exec().then(user => {
-        var newUser = User({
-            referalFrom2: ["16BC0CD652"]
-        });
-        User.update({ _id: user._id }, { $set: newUser }).exec().then(result => {
-            res.status(200).json({
-                status: "success",
+    Device.find({ username: "ptmms_malut" }).exec().then(user => {
+        for (i = 0; i < user.length; i++) {
+            var newUser = Device({
+                referalFrom2: ["16BC0CD652"]
             });
-        }).catch((err) => {
-            console.log(err);
-            res.status(500).json({
-                error: err,
+            Device.update({ _id: user[i]._id }, { $set: newUser }).exec().then(result => {
+                res.status(200).json({
+                    status: "success",
+                });
+            }).catch((err) => {
+                console.log(err);
+                res.status(500).json({
+                    error: err,
+                });
             });
-        });
+        }
     });
 }
