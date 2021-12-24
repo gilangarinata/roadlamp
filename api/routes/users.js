@@ -30,4 +30,6 @@ router.get("/change-password/:userId/:newPassword", UsersController.change_passw
 
 router.get("/change-username/:userId/:newUsername", UsersController.change_username);
 
+router.get("/validate", UsersController.validate);
+
 module.exports = router;
