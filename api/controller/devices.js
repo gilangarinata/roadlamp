@@ -1018,7 +1018,7 @@ exports.devices_delete_all = (req, res, next) => {
         })
     });
 }
-}
+
 
 exports.devices_delete = (req, res, next) => {
     const deviceId = req.params.deviceId;
