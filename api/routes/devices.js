@@ -38,4 +38,6 @@ router.get("/update/segment/:hid/:segment", DevicesController.devices_update_seg
 
 router.post("/history/monthly", DevicesController.devices_get_kwh_segmented);
 
+router.get("/changeName/:fromName/:/toName", DevicesController.device_change_name);
+
 module.exports = router;

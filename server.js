@@ -10,13 +10,16 @@ const port = 8000;
 const server = http.createServer(app);
 process.env.TZ = 'Asia/Jakarta'
 
-cron.schedule('*/20 * * * * *', function() {
+cron.schedule('*/5 * * * * *', function() {
     Schedule.find()
         .exec()
         .then(schedules => {
             var datetime = new Date();
             const minutesNow = datetime.getMinutes();
             const hoursNow = datetime.getHours();
+
+            var timeNow = hoursNow + ":" + minutesNow;
+            console.log(timeNow);
 
             for (var i = 0; i < schedules.length; i++) {
                 // console.log(parseInt(schedules[i].hour) + "  " + hoursNow + " ====  " + parseInt(schedules[i].minute) + "   " + minutesNow);
