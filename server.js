@@ -58,6 +58,39 @@ cron.schedule('*/50 * * * * *', function() {
 });
 
 cron.schedule('*/50 * * * * *', function() {
+    var dischargingTime;
+    var chargingTime;
+    var date = new Date();
+    var hour = date.getHours();
+
+    console.log("========== HOUR : " + hour + "============");
+
+    if (hour >= 6 && hour <= 17) {
+        dischargingTime = "0.0";
+        chargingTime = "1.9";
+    } else {
+        dischargingTime = "1.90";
+        chargingTime = "0.0";
+    }
+
+
+    var options = {
+        'method': 'POST',
+        'url': 'http://localhost:8000/hardware/v3',
+        'headers': {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ "a": "45", "b": chargingTime, "c": dischargingTime, "d": "33", "e": "100", "f": "A0126" })
+
+
+    };
+    request(options, function(error, response) {
+        if (error) console.log("CRON ERROR : " + error);
+    });
+});
+
+
+cron.schedule('*/50 * * * * *', function() {
     Hardware.find({ hardwareId: "B0145" }).exec().then(resultHardware => {
         if (resultHardware.length > 0) {
             if (resultHardware[0].active) {
