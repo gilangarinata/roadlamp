@@ -417,6 +417,19 @@ exports.hardware_update_hardware_v3 = (req, res, next) => {
         });
 
 
+        if (hardwareId === "A0111") {
+            successlog.info("====================================");
+            successlog.info("DATE : " + new Date());
+            successlog.info("chargeCapacity : " + chargeCapacity);
+            successlog.info("dischargeCapacity : " + dischargeCapacity);
+            successlog.info("batteryCapacity : " + batteryCapacity);
+            successlog.info("chargeCapacity : " + chargeCapacity);
+            successlog.info("batteryLife : " + batteryLife);
+            successlog.info("hardwareId : " + hardwareId);
+            successlog.info("====================================");
+        }
+
+
         History.find({ date: date, hardwareId: hardwareId }).exec().then(history => {
             if (history.length > 0) {
                 History.update({ hardwareId: hardwareId, date: date }, { $set: historyUpdate }).exec().then(result => {
