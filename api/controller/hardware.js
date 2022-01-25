@@ -654,6 +654,8 @@ exports.hardware_update_hardware_v4 = (req, res, next) => {
         var batteryLife = 0;
         var hardwareId = hardwareId;
 
+        console.log("V4" + hardwareId);
+
         const historyUpdate = new History({
             date: date,
             chargeCapacity: chargeCapacity,
