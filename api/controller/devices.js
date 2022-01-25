@@ -96,7 +96,7 @@ exports.devices_get_web = (req, res, next) => {
                 }
             }
             for (var k = 0; k < deviceArray.length; k++) {
-                Hardware.update({ hardwareId: deviceArray[k].hardware.hardwareId }, { $set: { active: checkDeviceIsActive(deviceArray[k].hardware) } }).then(result => console.log("success updating harware")).catch(e => console.log("error updating harware :" + e));
+                Hardware.update({ hardwareId: deviceArray[k].hardware.hardwareId }, { $set: { active: checkDeviceIsActive(deviceArray[k].hardware) } }).then(result => { /*console.log("success updating harware")*/ }).catch(e => console.log("error updating harware :" + e));
             }
 
             i++
@@ -232,7 +232,7 @@ exports.devices_get_web_map = (req, res, next) => {
             }
 
             for (var k = 0; k < deviceArray.length; k++) {
-                Hardware.update({ hardwareId: deviceArray[k].hardware.hardwareId }, { $set: { active: checkDeviceIsActive(deviceArray[k].hardware) } }).then(result => console.log("success updating harware")).catch(e => console.log("error updating harware :" + e));
+                Hardware.update({ hardwareId: deviceArray[k].hardware.hardwareId }, { $set: { active: checkDeviceIsActive(deviceArray[k].hardware) } }).then(result => { /*console.log("success updating harware")*/ }).catch(e => console.log("error updating harware :" + e));
             }
 
             i++
@@ -412,7 +412,7 @@ exports.devices_get_v2 = (req, res, next) => {
             }
 
             for (var k = 0; k < deviceArray.length; k++) {
-                Hardware.update({ hardwareId: deviceArray[k].hardware.hardwareId }, { $set: { active: checkDeviceIsActive(deviceArray[k].hardware) } }).then(result => console.log("success updating harware")).catch(e => console.log("error updating harware :" + e));
+                Hardware.update({ hardwareId: deviceArray[k].hardware.hardwareId }, { $set: { active: checkDeviceIsActive(deviceArray[k].hardware) } }).then(result => { /*console.log("success updating harware")*/ }).catch(e => console.log("error updating harware :" + e));
             }
 
             i++
@@ -653,7 +653,7 @@ exports.devices_get_v3 = (req, res, next) => {
             }
 
             for (var k = 0; k < deviceArray.length; k++) {
-                Hardware.update({ hardwareId: deviceArray[k].hardware.hardwareId }, { $set: { active: checkDeviceIsActive(deviceArray[k].hardware) } }).then(result => console.log("success updating harware ")).catch(e => console.log("error updating harware :" + e));
+                Hardware.update({ hardwareId: deviceArray[k].hardware.hardwareId }, { $set: { active: checkDeviceIsActive(deviceArray[k].hardware) } }).then(result => { /*console.log("success updating harware")*/ }).catch(e => console.log("error updating harware :" + e));
             }
 
             i++
