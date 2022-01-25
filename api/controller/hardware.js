@@ -624,8 +624,8 @@ exports.hardware_update_hardware_v4 = (req, res, next) => {
             day = '0' + day;
 
         var date = year + '-' + month + '-' + day;
-        var chargeCapacity = req.body.e;
-        var dischargeCapacity = req.body.d;
+        var chargeCapacity = req.body[hardwareId].e;
+        var dischargeCapacity = req.body[hardwareId].d;
         var batteryCapacity = 0;
         var batteryLife = 0;
         var hardwareId = hardwareId;
