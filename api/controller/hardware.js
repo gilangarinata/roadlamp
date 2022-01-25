@@ -427,6 +427,17 @@ exports.hardware_update_hardware_v3 = (req, res, next) => {
             successlog.info("batteryLife : " + batteryLife);
             successlog.info("hardwareId : " + hardwareId);
             successlog.info("====================================");
+
+
+            console.log("====================================");
+            console.log("DATE : " + new Date());
+            console.log("chargeCapacity : " + chargeCapacity);
+            console.log("dischargeCapacity : " + dischargeCapacity);
+            console.log("batteryCapacity : " + batteryCapacity);
+            console.log("chargeCapacity : " + chargeCapacity);
+            console.log("batteryLife : " + batteryLife);
+            console.log("hardwareId : " + hardwareId);
+            console.log("====================================");
         }
 
 
