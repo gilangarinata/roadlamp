@@ -417,7 +417,7 @@ exports.hardware_update_hardware_v3 = (req, res, next) => {
         });
 
 
-        if (hardwareId === "A0111") {
+        if (hardwareId === "A0114") {
             successlog.info("====================================");
             successlog.info("DATE : " + new Date());
             successlog.info("chargeCapacity : " + chargeCapacity);
