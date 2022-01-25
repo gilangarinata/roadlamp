@@ -704,7 +704,7 @@ exports.hardware_update_hardware_v4 = (req, res, next) => {
     updateHardware(keys[i]);
 
     function updateHardware(hardwareId) {
-        console.log("apHid : " + apHid + "------------" + "hid : " + hardwareId);
+        // console.log("apHid : " + apHid + "------------" + "hid : " + hardwareId);
 
         Hardware.find({ hardwareId }).exec().then(resultHardware => {
             var temperature = "-";
@@ -966,9 +966,9 @@ function dummyReq(req) {
 }
 
 function self_update_v3(req) {
-    console.log("======body=====");
-    console.log(req.body);
-    console.log("===========");
+    // console.log("======body=====");
+    // console.log(req.body);
+    // console.log("===========");
 
     var hardwareId = req.body.f;
 
@@ -1260,7 +1260,7 @@ exports.hardware_update_hardware_v2_dev = (req, res, next) => {
     updateHardware(req.body[keys[i]].hardwareId);
 
     function updateHardware(hardwareId) {
-        console.log("apHid : " + apHid + "------------" + "hid : " + hardwareId);
+        // console.log("apHid : " + apHid + "------------" + "hid : " + hardwareId);
 
         Hardware.find({ hardwareId }).exec().then(resultHardware => {
             var temperature = "-";
@@ -1703,8 +1703,8 @@ function updateHardwareV2(resultHardware, temperature, humidity, req, res, hardw
                 const dateLastUpdate = resultHardware[0].lastUpdate;
                 const diffTime = Math.abs(dateNow - dateLastUpdate);
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                console.log(diffTime + " milliseconds");
-                console.log(diffDays + " days");
+                // console.log(diffTime + " milliseconds");
+                // console.log(diffDays + " days");
 
                 if (diffTime < TIME_LIMIT) { // if there is data updated less than 120 second 
                     isActive = true;
