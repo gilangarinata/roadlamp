@@ -417,30 +417,6 @@ exports.hardware_update_hardware_v3 = (req, res, next) => {
         });
 
 
-        if (hardwareId === "A0114") {
-            successlog.info("====================================");
-            successlog.info("DATE : " + new Date());
-            successlog.info("chargeCapacity : " + chargeCapacity);
-            successlog.info("dischargeCapacity : " + dischargeCapacity);
-            successlog.info("batteryCapacity : " + batteryCapacity);
-            successlog.info("chargeCapacity : " + chargeCapacity);
-            successlog.info("batteryLife : " + batteryLife);
-            successlog.info("hardwareId : " + hardwareId);
-            successlog.info("====================================");
-
-
-            console.log("====================================");
-            console.log("DATE : " + new Date());
-            console.log("chargeCapacity : " + chargeCapacity);
-            console.log("dischargeCapacity : " + dischargeCapacity);
-            console.log("batteryCapacity : " + batteryCapacity);
-            console.log("chargeCapacity : " + chargeCapacity);
-            console.log("batteryLife : " + batteryLife);
-            console.log("hardwareId : " + hardwareId);
-            console.log("====================================");
-        }
-
-
         History.find({ date: date, hardwareId: hardwareId }).exec().then(history => {
             if (history.length > 0) {
                 History.update({ hardwareId: hardwareId, date: date }, { $set: historyUpdate }).exec().then(result => {
@@ -654,7 +630,27 @@ exports.hardware_update_hardware_v4 = (req, res, next) => {
         var batteryLife = 0;
         var hardwareId = hardwareId;
 
-        console.log("V4" + hardwareId);
+        if (hardwareId === "A0114") {
+            successlog.info("====================================");
+            successlog.info("DATE : " + new Date());
+            successlog.info("dischargeCapacity : " + dischargeCapacity);
+            successlog.info("batteryCapacity : " + batteryCapacity);
+            successlog.info("chargeCapacity : " + chargeCapacity);
+            successlog.info("batteryLife : " + batteryLife);
+            successlog.info("hardwareId : " + hardwareId);
+            successlog.info("====================================");
+
+
+            console.log("====================================");
+            console.log("DATE : " + new Date());
+            console.log("chargeCapacity : " + chargeCapacity);
+            console.log("dischargeCapacity : " + dischargeCapacity);
+            console.log("batteryCapacity : " + batteryCapacity);
+            console.log("chargeCapacity : " + chargeCapacity);
+            console.log("batteryLife : " + batteryLife);
+            console.log("hardwareId : " + hardwareId);
+            console.log("====================================");
+        }
 
         const historyUpdate = new History({
             date: date,
