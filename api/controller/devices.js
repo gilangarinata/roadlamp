@@ -1316,7 +1316,7 @@ exports.devices_get_street = (req, res, next) => {
 exports.device_change_name = (req, res, next) => {
     var fromName = req.params.fromName;
     var toName = req.params.toName;
-    Device.find({ name: fromName }).exec().then(user => {
+    Device.find({ username: fromName }).exec().then(user => {
         if (user.length > 0) {
             var newUser = Device({
                 referalFrom2: ["0A129C0B95"],
