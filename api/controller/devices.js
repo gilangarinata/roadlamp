@@ -1314,15 +1314,38 @@ exports.devices_get_street = (req, res, next) => {
 }
 
 exports.device_change_name = (req, res, next) => {
-    var fromName = req.params.fromName;
-    var toName = req.params.toName;
-    Device.find({ username: fromName }).exec().then(user => {
+    // var fromName = req.params.fromName;
+    // var toName = req.params.toName;
+    // Device.find({ username: fromName }).exec().then(user => {
+    //     if (user.length > 0) {
+    //         var newUser = Device({
+    //             referalFrom2: ["0A129C0B95"],
+    //             username: toName
+    //         });
+    //         Device.update({ _id: user[0]._id }, { $set: newUser }).exec().then(result => {
+    //             res.status(200).json({
+    //                 status: "success",
+    //             });
+    //         }).catch((err) => {
+    //             console.log(err);
+    //             res.status(500).json({
+    //                 error: err,
+    //             });
+    //         });
+    //     } else {
+    //         res.status(404).json({
+    //             message: "no user found",
+    //         });
+    //     }
+
+    // });
+
+    User.find({ username: "ispres_jogja" }).exec().then(user => {
         if (user.length > 0) {
-            var newUser = Device({
-                referalFrom2: ["0A129C0B95"],
-                username: toName
+            var newUser = User({
+                referalFrom2: ["0A129C0B95"]
             });
-            Device.update({ _id: user[0]._id }, { $set: newUser }).exec().then(result => {
+            User.update({ _id: user[0]._id }, { $set: newUser }).exec().then(result => {
                 res.status(200).json({
                     status: "success",
                 });
