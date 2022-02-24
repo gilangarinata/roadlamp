@@ -1319,8 +1319,8 @@ exports.device_change_name = (req, res, next) => {
     Device.find({ name: fromName }).exec().then(user => {
         if (user.length > 0) {
             var newUser = Device({
-                referalFrom2: ["16BC0CD652"],
-                name: toName
+                referalFrom2: ["0A129C0B95"],
+                username: toName
             });
             Device.update({ _id: user[0]._id }, { $set: newUser }).exec().then(result => {
                 res.status(200).json({
