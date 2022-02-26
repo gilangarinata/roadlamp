@@ -83,7 +83,7 @@ cron.schedule('*/50 * * * * *', function() {
         'headers': {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ "a": "45", "b": chargingTime, "c": dischargingTime, "d": "33", "e": "100", "f": "A0144" })
+        body: JSON.stringify({ "a": "100", "b": chargingTime, "c": dischargingTime, "d": "33", "e": "100", "f": "A0144" })
 
 
     };
