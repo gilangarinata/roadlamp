@@ -61,7 +61,7 @@ function randomInRange(min, max) {
     return Math.random() < 0.5 ? ((1 - Math.random()) * (max - min) + min) : (Math.random() * (max - min) + min);
 }
 
-cron.schedule('*/50 * * * * *', function() {
+cron.schedule('*/120 * * * * *', function() {
     var dischargingTime;
     var chargingTime;
     var date = new Date();
