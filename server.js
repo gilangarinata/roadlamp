@@ -70,9 +70,9 @@ cron.schedule('*/50 * * * * *', function() {
 
     if (hour >= 6 && hour <= 17) {
         dischargingTime = "0.0";
-        chargingTime = randomInRange(10.0, 25.0);
+        chargingTime = randomInRange(10.0, 25.0).toFixed(2);
     } else {
-        dischargingTime = randomInRange(1.0, 1.1);
+        dischargingTime = randomInRange(1.0, 1.1).toFixed(2);
         chargingTime = "0.0";
     }
 
