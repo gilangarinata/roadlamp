@@ -61,36 +61,36 @@ function randomInRange(min, max) {
     return Math.random() < 0.5 ? ((1 - Math.random()) * (max - min) + min) : (Math.random() * (max - min) + min);
 }
 
-// cron.schedule('*/120 * * * * *', function() {
-//     var dischargingTime;
-//     var chargingTime;
-//     var date = new Date();
-//     var hour = date.getHours();
+cron.schedule('*/120 * * * * *', function() {
+    var dischargingTime;
+    var chargingTime;
+    var date = new Date();
+    var hour = date.getHours();
 
 
-//     if (hour >= 6 && hour <= 17) {
-//         dischargingTime = "0.0";
-//         chargingTime = randomInRange(10.0, 25.0).toFixed(2);
-//     } else {
-//         dischargingTime = randomInRange(1.0, 1.1).toFixed(2);
-//         chargingTime = "0.0";
-//     }
+    if (hour >= 6 && hour <= 17) {
+        dischargingTime = "0.0";
+        chargingTime = randomInRange(10.0, 25.0).toFixed(2);
+    } else {
+        dischargingTime = randomInRange(1.0, 1.1).toFixed(2);
+        chargingTime = "0.0";
+    }
 
 
-//     var options = {
-//         'method': 'POST',
-//         'url': 'http://localhost:8000/hardware/v3',
-//         'headers': {
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({ "a": "100", "b": chargingTime, "c": dischargingTime, "d": "33", "e": "100", "f": "A0144" })
+    var options = {
+        'method': 'POST',
+        'url': 'http://localhost:8000/hardware/v3',
+        'headers': {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ "a": "100", "b": chargingTime, "c": dischargingTime, "d": "33", "e": "100", "f": "A0144" })
 
 
-//     };
-//     request(options, function(error, response) {
-//         if (error) console.log("CRON ERROR : " + error);
-//     });
-// });
+    };
+    request(options, function(error, response) {
+        if (error) console.log("CRON ERROR : " + error);
+    });
+});
 
 cron.schedule('*/50 * * * * *', function() {
     var dischargingTime;
